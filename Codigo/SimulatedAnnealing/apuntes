@@ -1,0 +1,33 @@
+Buena descripcion de que voy a implementar:
+
+(seccion 3)
+
+We adopt for the VRP the non-monotonic SA cooling schedule introduced in
+Osman and Christofides [42], which requires specification of the following: (i) starting
+and final temperatures (Ts and Tf); (ii) decrement rule for updating the temperature
+Tk after each iteration k; (iii) update rule for temperature reset variables T, after the
+system freezes; (iv) stopping criterion R, which is the total number of temperature
+resets to be performed after the best solution was found. This implementation uses
+the 1-interchange mechanism to generate neighbouring solutions. The neighbourhoods
+are searched sequentially in the order indicated in (2) according to different random
+permutations o'of the tour's indices { 1, . . . . v}. These permutations are generated
+each time a cycle search is completed. This is in constrast to the local search
+descent methods, where o" is fixed to an order of { 1 . . . . . v}. Furthermore, the
+search for a given pair (R e, Rq) is systematic for all potential customer moves as
+in the descent methods. This cooling schedule and its implementation is in contrast
+to classical SA schemes that have recourse to random neighbourhood search, which
+can lead to pockets that remain unexplored for undesirable lengths of time. The best
+solution found, Sb, during the search is kept rather than the one at which the SA
+algorithm stops. The algorithm performs a single iteration (one attempted feasible
+move) at each temperature. Our experience with similar implementations to the
+CCP and GAP shows that using the non-monotonic cooling schedule with an ordered
+search outperforms other SA in the literature with different cooling schedules and
+random selection of moves. Note that the importance of systematic neighbourhood
+search and a different type of non-monotonic search have been discussed by Glover [22]
+as basic features of TS methods. In this sense, our SA method consists of a hybrid
+of SA and TS ideas. Further details on these relationships can be found in Osman
+and Christofides [42], and Glover [25].
+
+Despues de esto hay un pseudocodigo muy claro.
+
+en la seccion 2.3 hace un analisis de complejidad para la funcion C.

@@ -1,0 +1,10 @@
+printf "\033[36;1m + Pusheartu! + \033[0m\n"
+
+printf "\033[33;1m[*]\033[0m Agregando todo al repositorio local... "
+git add .
+
+read -p "Descripción del commit: " COMMIT
+git commit -m "$COMMIT"
+
+printf "\033[33;1m[*]\033[0m Pusheando...\n"
+git push

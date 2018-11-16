@@ -1,0 +1,145 @@
+
+***Simulated Annealing***
+(par)
+Simulated Annealing es una metaheurística que se utiliza para encontrar soluciones aproximadas a problemas que no poseen un algoritmo de resolución polinomial. Difieren de las heurísticas en que se basan en buscar la mejor solución de un conjunto de muchísimas soluciones posibles. Esta busqueda se puede realizar de muchas maneras, pero simulated Annealing utiliza una **búsqueda local**. A partir de una solución S definimos un conjunto de soluciones relacionadas llamadas el vecindario de S. Revisamos estas soluciones y con algún criterio decidimos tomar una solución vecina S' y calculamos su vecindario. Esto se repite hasta que decidamos dejar de buscar con otro criterio.  
+(par)
+
+(par)
+El párrafo anterior parece ser un poco vago, ya que dejamos sin especificar muchas partes importantes de una búsqueda local como qué vecindario se utiliza, el criterio con el cual elegimos una solución y con cuál dejamos de buscar. Esto es intencional ya que hay una enorme cantidad de variantes posibles y para no perder generalidad debemos analizar cada caso por separado.
+(par)
+
+(par)
+En el caso particular de Simulated Annealing buscamos una especie de híbrido entre explorar el conjunto de soluciones de manera de evitar los máximos locales (es decir, la mejor solución de un determinado conjunto de vecindarios que muy probablemente no sea la mejor solución global), pero aún así tender a seleccionar soluciones cada vez mejores para terminar encontrando una buena solución.
+(par)
+
+(par)
+Para dar esta variabilidad seleccionaremos la próxima solución en base a un parámetro llamado Temperatura (T) que comienza en un valor inicial (Ts) y decrece a medida que avanza la ejecución del programa. Este valor se utiliza como parámetro de una función de probabilidad P que decide si seleccionaremos una solución dada o no. Como regla general, se tiende a aceptar las soluciones mejores que la actual independientemente de la temperatura pero podemos aceptar soluciones peores si lo dicta nuestra función P. Como regla general, a menor temperatura es menor la probabilidad de selección de una solución inferior a la actual. También contamos con una función de energía E que nos permite comparar soluciones y en general depende del valor de la solución.
+(par)
+
+(par)
+Cómo disminuye la temperatura a lo largo de la ejecución se denomina **Cooling Schedule** y es fundamental para el desempeño del algoritmo. Hay muchas opciones posibles que varían en efectividad dependiendo del tipo de problema y de las instancias particulares.
+(par)
+
+(par)
+Veamos el pseudocódigo de un esquema de Simulated Annealing:
+(par)
+
+(par)
+*imagen del pseudocodigo de las diapos
+(par)
+
+(par)
+En nuestra implementación la función de vecindario que utilizaremos será **1-interchange**.El vecindario utilizando esta función está definido de la siguiente manera:
+Sean S y S' soluciones. S' \in N(S) <=> \existe i,j con i != j , i y j <= |rutas(S)|, existe c \in rutas(i), c != deposito tal que shift(rutas(S)[i],rutas(S)[j],c) == rutas(S') || existe c1 \in rutas(i) && c2 \in rutas(j), c1,c2 != deposito exchange(rutas(S)[i],rutas(S)[j],c1,c2) == rutas(S').
+
+shift(vector<Ruta> rutas ,Ruta ruta1, Ruta ruta2, cliente c){
+	if (rutas[ruta1][c].demanda + sum(de los i de ruta2) <= capacidad_total)
+	w* <- w \in rutas[ruta2] tal que minArg( distanciaEntre(rutas[ruta1][c], rutas[ruta2][w]) + distanciaEntre(rutas[ruta2][w+1],rutas[ruta1][c]))
+	rutas[ruta2] = rutas[ruta2][1..w] U rutas[ruta1][c] U rutas[ruta2][w+1..|rutas[ruta2|-1]
+	rutas[ruta1] = rutas[ruta1] - c
+}
+(todo)pseudocodigo formal para shift y exchange.(todo)
+codeblock: 
+exchange(vector<Ruta> rutas, Ruta ruta1, Ruta ruta2,c1,c2){
+	if(sum(de los i de ruta1) - rutas[ruta1][c1].demanda + rutas[ruta2][c2].demanda <= capacidad_total &&
+	sum(de los j de ruta2) - rutas[ruta2][c2].demanda + rutas[ruta1][c1] < capacidad_total){
+		temp = rutas[ruta1][c1]
+		rutas[ruta1][c1] = rutas[ruta2][c2]
+		rutas[ruta2][c2] = temp
+	}
+}
+
+siendo shift un procedimiento tal que dadas dos rutas de la solución, remueve un cliente de una ruta y lo inserta en otra (siempre que la demanda del cliente insertado no exceda la capacidad del camión que recorre esa ruta) y exchange un swap entre dos clientes de dos rutas (siempre que las capacidades de los camiones de ambas rutas no sea excedido).
+En la operación shift la inserción siempre se realizará de manera que la suma del costo de las aristas agregadas menos la arista removida sea mínimo.
+(par)
+(todo)aca deberia aclarar que el CS se eligió a partir de la experimentación. O bien podría poner todo esto (hasta "nuestra funcion de probabilidad" directamente en la parte de experimentación)(todo)
+(par)
+Como **Cooling Schedule** tendremos varias opciones con diferente efectividad. Más adelante realizaremos experimentos comparándolos entre sí. Las variantes que consideraremos serán CS0:  Ti = Ts - i*(Ts - Tf)/n, CS1: Ti = Ts * Tf/Ts^(i/n) y CS2: Ti =  ((Ts-Tf)/(1+e^(0.3*(i - n/2)))) + Tf siendo Ti la temperatura en la i-ésima iteración, Ts la temperatura inicial, Tf la temperatura final, i el número de iteración y n el total de iteraciones a realizar. Veamos a continuación gráficos de estas funciones para poder apreciarlas más tangiblemente:
+(par)
+
+()
+*imagen de los tres CS*
+(Forma aproximada de la función. Obviamente varía dependiendo de los parámetros)
+()
+
+(par)
+Nuestra función de probabilidad será P = e^-delta/Ti siendo delta = E(S') - E(S) siendo E la función de energía de una solución que en nuestro caso corresponde al valor de la solución, es decir, la suma total de la distancia recorrida por cada camión. Notemos que a medida que Ti disminuye el valor de P también lo hace, cumpliendo la regla general "a menos temperatura, menos aceptación" mencionada previamente. En P también tenemos en cuenta el valor de delta; si es negativo quiere decir que S' es menor que S y por lo tanto P dará un número mayor que uno de manera que aceptaremos S' como solución. En cambio si delta es positivo, su aceptación dependerá de su magnitud y de la temperatura, efectivamente cumpliendo que si S' es considerablemente peor que S sólo se acepte bajo altas temperaturas. 
+(par)
+
+(par)
+(todo)Esto es un lindo chamuyo, pero tendria que mostrarlo con un experimento. Si no mejor no decir nada(todo)
+El único parámetro que nos queda por explicar es S0. Para S0 se puede elegir cualquier heurística, pero en nuestra experiencia la que mejor resultados nos ha dado es la solución que llamaremos canónica; en la que tendremos la ruta de cada vehículo consiste únicamente en ir a un único cliente y volver al depósito. Suponemos que la razón por la cual esta heurística inicial nos provee de los mejores resultados se debe a que nuestro vecindario jamás aumenta la cantidad de vehículos, solo los mantiene constantes o los disminuye. Por este motivo es probable que si hay conjunto de buenas soluciones a una instancia del problema que utilizan k vehículos y utilizasemos otra heurística inicial que resulte en el uso de j < k camiones, jamás podríamos obtener una solución de dicho conjunto.
+(par)
+
+(par)
+De esta manera, demos un pseudocódigo completo para nuestra implementación de Simulated Annealing:
+(todo)Dar pseudocódigo completo (obviamente formal, pero usando P, CS y eso con sus valores reales)(todo)
+(par)
+
+**Analisis de complejidad**
+(par)
+(todo)explicarlo mejor con el pseudocódigo. No hay cota simple mas ajustada no?(todo) Dado que todas las operaciones se realizan en tiempo constante excepto shift que en su peor caso inserta en una ruta con todos los elementos menos uno, una cota muy brusca del peor caso sería n * v donde n es la cantidad de iteraciones y v es la cantidad de clientes. Es una cota muy brusca porque la probabilidad de inserciones en rutas grandes disminuye a medida que aumenta la cantidad de clientes, pero dar una cota más ajustada es complejo porque depende de la instancia particular.
+(par)
+
+(todo)Mostrar los graficos que muestran que el algoritmo es lineal en funcion del nro de iteraciones(todo)
+
+**Búsqueda de los parámetros óptimos**
+(par)
+Busquemos el valor óptimo de los parámetros de nuestro algoritmo de Simulated Annealing para casos aleatorios. Es decir, queremos encontrar el valor de los parámetros que mejores resultados obtiene en el promedio de muchos casos aleatorios, lo cual es útil para tener una noción general de qué valores tienden a obtener mejores resultados.
+(par)
+
+(par)
+Para esto realizaremos una serie de experimentos, comenzando por un análisis de cómo el número de iteraciones realizadas (Nit) afecta el resultado. Sabemos que mientras más iteraciones realizemos mejor será el resultado ya que a fin de cuentas estamos realizando una búsqueda local, pero la pregunta que intentaremos responder es ¿Cuántas iteraciones tiene sentido medir? ¿Hay un punto a partir del cual la mejora obtenida de realizar más iteraciones no justifica el costo en tiempo de ejecución?
+(par)
+
+(par)
+El experimento consistirá en medir el ahorro porcentual promedio obtenido luego de Nit iteraciones para 400 instancias aleatorias del problema (todo)aclarar como fueron generadas las instancias, supongo que lo voy a aclarar una sola vez!(todo), con un varios n fijos. La diferencia en efectividad observada utilizando las tres variantes de Cooling schedule dieron resultados muy similares, por lo que decidimos utilizar un único Cooling Schedule para la medición por practicidad. A continuación mostramos los resultados obtenidos:
+(par)
+
+(todo)poner graficos variando Nit para n=103, n= 503 y podria hacer otro mas de n=303(todo)
+
+(par)
+Como podemos apreciar en los gráficos nuestras predicciones fueron correctas. A medida que aumenta Nit el porcentaje de ahorro también aumenta. Notemos tambien que en ambos el pocentaje ahorrado aumenta rápidamente hasta las tres mil iteraciones y luego crece más lentamente. Esto se cumple en todos los grafos, pero a medida que aumenta el n el porcentaje ahorrado crece más rápidamente.
+(par)
+
+(par)
+(todo)aclarar como son "las instancias"(todo)
+Teniendo en cuenta las caracteristicas instancias que mediremos y que no disponemos de tiempo ilimitado para realizar las mediciones, decidimos que Nit = 10.000 es suficientemente grande para ser representativo del resultado del algoritmo y suficientemente pequeño para poder realizar el resto de las mediciones en un tiempo razonable.
+(par)
+
+(par)
+A continuación queremos averiguar el valor óptimo para la temperatura inicial Ts para cada Cooling Schedule. El experimento que realizaremos para encontrarlo será un similar al anterior; promediaremos el porcentaje de ahorro de 400 instancias para cada valor de temperatura inicial desde 2 hasta 202 (haciendo saltos de a 10), para cada Cooling Schedule. El tamaño de las instancias será de un n fijo (usaremos varios tamaños diferentes) y  Nit = 10000 acorde a los resultados previos. Presentamos a continuación los resultados:
+(par)
+
+(par)
+(todo)graficos porcentaje de ahorro para cada Ts, para cada CS(todo)
+(par)
+
+(par)
+(todo)Capaz completar graficos con Ts = 1, 1.2, 1.4, 1.6, 1.8, porque el 2 queda medio falopa ahi flotando(todo)
+Como podemos observar, la temperatura inicial Ts óptima para las tres alternativas de Cooling Schedule propuestas es Ts = 2 para todos los tamaños de grafo evaluados. Como parece respetarse esto independientemente del tamaño del grafo, podemos afirmar con bastante seguridad que Ts = 2 es óptimo.
+(par)
+
+(par)
+Habiendo obtenido los valores óptimos para Ts y NIt, realizemos la comparación entre el porcentaje de ahorro de las tres funciones Cooling Schedule en funcion del tamaño de la instancia. Realizando saltos de a 50, para cada n desde 3 hasta 1003 calculamos el ahorro promedio de 400 instancias de tamaño n, con Ts = 2 y NIt = 10.000. Estos son los resultados obtenidos:
+(par)
+
+(todo)Insertar grafico(todo)
+(par)
+Se puede ver que CS0 y CS1 se comportan de manera identica excepto por los mayores n en los que resultó un poco mejor. CS2 resultó consistentemente en un peor ahorro, por lo que no sería nuestra elección de Cooling Schedule para una instancia aleatoria de la que no tenemos información.
+(par)
+
+(par)
+Es importante destacar que a medida que aumenta n, todos las variantes de Cooling Schedule bajan en efectividad. Esto puede deberse al número de iteraciones, que como vimos anteriormente, debería ser mayor para dar mejores resultados en instancias de mayor tamaño. Otra hipótesis es que el algoritmo en grafos de mayor tamaño es más propenso a diverger a malas soluciones, dado que como el grafo es mayor, el vecindario es mayor y es menos probable que demos pasos en la dirección del óptimo o de buenas soluciones. La raíz de este problema es que nuestro algoritmo no tienen ninguna forma de volver hacía soluciones previas; una vez que da un paso, aunque sea un paso que empeore nuestra solución, no hay vuelta atrás.
+(par)
+
+(par)
+Una alternativa para solucionar este inconveniente es implementar Resets o reinicios. La idea general es tener un criterio de reinicio que nos indica cuándo es momento de volver a una solución previa, ya que la actual es mucho peor que ésta. Generalmente la solución a la que se vuelve es la mejor solución que hemos encontrado en toda la ejecución del algoritmo hasta este punto.
+(par)
+
+**Desempeño del algoritmo en diversas instancias**
+Para las instancias chicas anda bien.
+Para las medianas anda bastante bien.
+Para las grandes anda bastante mal.
+En todos los casos requiere muchas iteraciones.
+Acá corro SA variando CS, Ts y n. La idea sería que los resultados obtenidos validen todo lo que escribí arriba (no deberia haber mucho problema con eso).
