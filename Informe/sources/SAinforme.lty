@@ -24,14 +24,14 @@ Cómo disminuye la temperatura a lo largo de la ejecución se denomina **Cooling
 Veamos el pseudocódigo de un esquema de Simulated Annealing:
 (par)
 
-(par)
-*imagen del pseudocodigo de las diapos
-(par)
+(todo) poner la imagen del pseudocodigo de las diapos (todo)
 
 (par)
-(todo)Explicar las estructuras de una solucion. O sea, una solucion es una matriz, o un set de sets de clientes.(todo)
+(todo)Esto asume que ya explicamos como está compuesta una solucion. O sea, que es un vector de vectores de clientes.(todo)
 En nuestra implementación la función de vecindario que utilizaremos será **1-interchange**. El vecindario utilizando esta función está definido de la siguiente manera:
 (par)
+
+(todo)se puede escribir esto de manera mas linda (a nivel formato)(todo)
 
 (par)
 Sean S y S' soluciones. S' ∈ N(S) <=> ∃ i,j con i != j , i y j <= |rutas(S)|, ∃ c ∈ rutas(i), c != deposito tal que shift(rutas(S)[i],rutas(S)[j],c) == rutas(S') ∨ existe c1 ∈ rutas(i) ∧ c2 ∈ rutas(j), c1,c2 != deposito exchange(rutas(S)[i],rutas(S)[j],c1,c2) == rutas(S'). 
@@ -103,7 +103,7 @@ Demos un pseudocódigo completo para nuestra implementación de Simulated Anneal
 (todo)Mostrar los graficos que muestran que el algoritmo es lineal en funcion del nro de iteraciones(todo)
 
 ***Búsqueda de parámetros óptimos***
-**caso aleatorio**
+**Caso aleatorio**
 (par)
 Busquemos el valor óptimo de los parámetros de nuestro algoritmo de Simulated Annealing para el casos aleatorio. Es decir, queremos encontrar el valor de los parámetros que mejores resultados obtiene en el promedio de muchos casos aleatorios, lo cual es útil para tener una noción general de qué valores tienden a obtener mejores resultados.
 (par)
@@ -112,8 +112,10 @@ Busquemos el valor óptimo de los parámetros de nuestro algoritmo de Simulated 
 Para esto realizaremos una serie de experimentos, comenzando por un análisis de cómo el número de iteraciones realizadas (__Nit__) afecta el resultado. Sabemos que mientras más iteraciones realizemos mejor será el resultado ya que a fin de cuentas estamos realizando una búsqueda local, pero la pregunta que intentaremos responder es ¿Cuántas iteraciones tiene sentido medir? ¿Hay un punto a partir del cual la mejora obtenida de realizar más iteraciones no justifica el costo en tiempo de ejecución?
 (par)
 
+(todo)aclarar como fueron generadas las instancias, supongo que lo voy a aclarar una sola vez!(todo)
+
 (par)
-El experimento consistirá en medir el ahorro porcentual con respecto a la solución canónica  promedio obtenido luego de __Nit__ iteraciones para 400 instancias aleatorias del problema (todo)aclarar como fueron generadas las instancias, supongo que lo voy a aclarar una sola vez!(todo), con un varios n fijos. Decidimos comparar con la solución canónica para poder comparar los resultados de diferentes n más claramente. La diferencia en efectividad observada utilizando las tres variantes de Cooling schedule dieron resultados muy similares, por lo que decidimos utilizar un único Cooling Schedule para la medición por practicidad. A continuación mostramos los resultados obtenidos:
+El experimento consistirá en medir el ahorro porcentual con respecto a la solución canónica  promedio obtenido luego de __Nit__ iteraciones para 400 instancias aleatorias del problema ), con un varios n fijos. Decidimos comparar con la solución canónica para poder comparar los resultados de diferentes n más claramente. La diferencia en efectividad observada utilizando las tres variantes de Cooling schedule dieron resultados muy similares, por lo que decidimos utilizar un único Cooling Schedule para la medición por practicidad. A continuación mostramos los resultados obtenidos:
 (par)
 
 (ps)
@@ -144,11 +146,9 @@ A continuación queremos averiguar el valor óptimo para la temperatura inicial 
 (ps)
     (p50)
         (img)SAVariandoTS(n=103).png(img)
-        (caption)Ahorro porcentual de la solución canónica en función de NIt, __n__ = 103(caption)
     (/p50)
     (p50)
         (img)SAVariandoTs(n=503).png(img)
-        (caption)Ahorro porcentual de la solución canónica en función de NIt, __n__ = 503caption)
     (/p50)
 (/ps)
 
@@ -191,7 +191,7 @@ La configuración óptima resultante fue como Cooling Schedule CS1, como tempera
 **Parámetros óptimos para Set X**
 (par)
 (todo)Explicar como son las instancias del set X (a menos que se haga antes en el informe)(todo)
-Busquemos los parámetros óptimos para el set de instancias "Set X" propuesto por Uchoa et al. en 2014. Lo haremos de manera análoga a como lo hicimos para el Set A en la sección (todo)nro. seccion anterior(todo).
+Busquemos los parámetros óptimos para el set de instancias "Set X" propuesto por Uchoa et al. en 2014. Lo haremos de manera análoga a como lo hicimos para el Set A previamente.
 (par)
 
 (par)
@@ -200,7 +200,7 @@ Los resultados obtenidos fueron como Cooling Schedule __CS1__, __Ts__ = 20 y __N
 
 (img)SAdistOptimoX.png(img)
 
-**Conclusiones de la experimentación**
+***Conclusiones de la experimentación***
 
 (par)
 De la búsqueda de parámetros óptimos para diferentes sets de instancias podemos extraer una serie de conclusiones acerca de como varía el comportamiento del algoritmo en función de los parámetros de entrada. En primer lugar es importante destacar el rol del número de iteraciones en el rendimiento del algoritmo. Si bien lo mencionamos previamente y es bastante sencillo entender su relevancia, no podemos dejarlo fuera de las conclusiones. No creemos que sea casualidad que los mejores resultados para todos los sets de instancias utilizados se obtuvieron para el mayor número de iteraciones probado. 

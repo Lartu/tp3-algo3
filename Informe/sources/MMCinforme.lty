@@ -1,0 +1,68 @@
+***Heurística Constructiva Golosa "Merge más cercanos"***
+
+(par)
+La heurística que hemos llamado Merge más cercanos consiste en unir rutas en función de la cercanía de sus puntos. Se parte desde la solución canónica al problema para obtener rutas iniciales y luego se van realizando uniones entre las rutas que contengan los dos puntos más cercanos que no pertenecen a la misma ruta. 
+(par)
+
+(par)
+Veamos el pseudocódigo de "Merge más cercanos":
+(par)
+
+/codeblock.
+MergeMasCercanos(G grafo):
+rutas = solucionCanonica(G)
+pares = paresDePuntosPorDistancia(G)
+while (pares != vacio):
+    (a,b) = pares.primero()
+    rutaA = rutaALaQuePertenece(a)
+    rutaB = rutaALaQuePertenece(b)
+    if(sumatoriaDemandas(rutaA) + sumatoriaDemandas(rutaB) <= capacidad)
+        rutas[rutaA] = rutaA U rutaB
+		rutas = rutas - rutaB
+    pares.desencolar()
+return rutas
+.codeblock/
+
+(par)
+Como podemos ver, el algoritmo es muy simple. Una aclaración importante es que la union entre las rutas une el último elemento no depósito de la rutaA con el primer elemento no depósito de la rutaB y luego descarta estos depósitos de manera que la ruta obtenida sea una ruta válida. Tampoco es menor enfatizar que no importa que nodos conformen el par más cercano entre sí; la unión será siempre entre el último nodo de la ruta del primer elemento y el primer elemento de la ruta del segundo elemento.
+(par)
+
+***Análisis de complejidad temporal***
+
+(par)
+Descompongamos el pseudocódigo en pasos:
+(par)
+
+(li)La solución Canónica se puede obtener fácilmente en O(n).(li)
+(li)Dado que el grafo de entrada está implementado como una Matriz de Distancias, la manera menos costosa de obtener todos los pares de puntos ordenados por distancia es recorrer toda la matriz formando los pares y colocandolos en un vector, y luego ordenar el vector con algún algoritmo eficiente. Esto nos cuesta O(n^2) para recorrer la matriz y O(n^2 * log(n^2)) para ordenarla, por lo tanto todo el procedimiento es O(n^2 * log(n^2)).(li)
+(li)Como el ``while`` se utiliza sobre una estructura que contiene n^2 elementos en la que para cada uno llamamos a ``rutaALaQuePertenece``, y dado que nuestra implementación actual de esta función es una búsqueda lineal, el procedimiento  es O(|rutas|). O(|rutas|) puede ser O(n) en el caso en el que no es posible realizar ningún merge, por lo que el while sin tener en cuenta el merge es O(n^3) en el peor caso. Los merge no cambian esta complejidad asíntotica dado que la complejidad de la unión entre rutaA y rutaB es O(|rutaA|), que pertenece a O(n).(li)
+(li)Podemos concluir entonces que el algoritmo pertenece a O(n^3)(li)
+
+(par)
+Comprobemoslo realizando las mediciones directamente. Generamos 400 instancias de grafo de para cada tamaño desde n = 3 hasta n = 453, con saltos de a 50 y promediamos el tiempo obtenido. Los resultados se pueden ver a continuación: 
+(par)
+
+(img)Tgolosa.png(img)
+
+***Rendimiento para diferentes sets de instancias ***
+
+(todo)hablar de los resultados(todo)
+
+(par)
+Veamos el rendimiento del algoritmo propuesto para los sets A, X y un set aleatorio de nuestra autoría. El set aleatorio consta de 400 instancias de grafo para cada tamaño desde n = 3 hasta n = 503, con saltos de a 50. Para las instancias aleatorias expresaremos el rendimiento como porcentaje ahorrado en promedio desde la solución canónica y en los sets en los que se conoce el óptimo lo haremos como porcentaje de la solución óptima.
+(par)
+
+(img)MMCCasoAleatorio.png(img)
+(img)MMCdistOptimoA.png(img)
+(img)MMCdistOptimoX.png(img)
+
+(todo) Explicación detallada y ejemplo del caso patológico(todo)
+***Caso patológico***
+
+(par)
+Detengámonos a analizar un caso de Grafo para el cual la heurística propuesta resulta en malas soluciones. La posibilidad de tener casos patológicos se debe al hecho de que si bien estamos utilizando los pares de clientes más cercanos, la unión entre las rutas se da entre el último elemento de una ruta y el primero de la otra, por lo que si estos dos elementos son lejanos, se generará una ruta con una arista muy larga. 
+(par)
+
+(par)
+
+(par)
