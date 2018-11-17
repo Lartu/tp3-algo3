@@ -1,4 +1,4 @@
-#include "../estructuras.h"
+#include "estructuras.h"
 
 //Función que marca como no visitable un nodo en la matriz de distancias
 void l_tacharNodo(Matriz & distancias, int nodo)

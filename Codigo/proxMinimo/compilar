@@ -1,1 +1,2 @@
-make proxMinimo -B && ./proxMinimo $@
+make proxMinimo -B
+make proxMinimoMediciones -B
