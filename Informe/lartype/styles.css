@@ -1,0 +1,328 @@
+/*TODO:
+Para agregar los bordes de debug con js habría que 
+hacer un archivo debug.css que tenga solo los objetos 
+que tienen borde con sus bordes (y nada más) y se 
+agregue desde js cuando sea necesario.*/
+
+body{
+	font-family: "Times New Roman";
+	font-size:15px;
+	text-align:justify;
+	padding:20px;
+	background:white;
+	color:black;
+	/*max-width:595px; Ancho A4 en 72dpi*/
+	max-width:100%;
+	margin-left:auto;
+	margin-right:auto;
+	overflow:hidden;
+    padding-bottom:0px;
+    margin-bottom:0px;
+}
+
+pre{
+	white-space: pre-wrap;
+}
+
+.pagebreak {
+	page-break-before: always !important;
+}
+
+.section{
+	padding:0px;
+	margin:0px;
+	margin-top:0px;
+	margin-bottom:20px;
+	/*border:1px solid #17c0eb;*/
+}
+
+.li{
+	padding:0px;
+	margin:0px;
+	margin-left:12px;
+	margin-top:10px;
+	margin-bottom:10px;
+}
+
+.code_section{
+	page-break-inside: avoid !important;
+	display:block;
+	text-align:left;
+	padding:5px;
+	font-size: 12px;
+	background: #dadeea;
+	color: #192a56;
+	margin: 10px;
+	margin-top:0px;
+	margin-bottom:20px;
+}
+
+img{
+	margin:auto;
+	margin-top:0px;
+	margin-bottom:20px;
+	max-width:100%;
+}
+
+.right img{
+	margin:initial;
+	margin-left:auto;
+}
+
+.image{
+	page-break-inside: avoid !important;
+	display:block;
+	max-width: 100%;
+}
+
+.image_mid{
+	page-break-inside: avoid !important;
+	display:block;
+	max-width: 80%;
+}
+
+.image_small{
+	page-break-inside: avoid !important;
+	display:block;
+	max-width: 60%;
+}
+
+.image_tiny{
+	page-break-inside: avoid !important;
+	display:block;
+	max-width: 30%;
+}
+
+.image_inline{
+	display:inline-block;
+	max-height:3em;
+	margin:0px;
+	width:auto;
+	vertical-align:middle;
+}
+
+.right{
+	text-align:right;
+	margin:0px;
+}
+
+.center{
+	text-align:center;
+	margin:0px;
+}
+
+.size_4{
+	font-size:26px;
+	margin:0px;
+}
+
+.size_3{
+	font-size:20px;
+	margin:0px;
+}
+
+.size_2{
+	font-size:17px;
+	margin:0px;
+}
+
+.size_1{
+	font-size:14px;
+	margin:0px;
+}
+
+.size_0{
+	font-size:10px;
+	margin:0px;
+}
+
+.ref{
+	font-size:12px;
+	margin:0px;
+}
+
+.halfbreak{
+	margin:0px;
+	height:10px;
+	padding:0px;
+	/*border: 1px solid #ff4d4d;*/
+}
+
+.quarterbreak{
+	margin:0px;
+	height:5px;
+	padding:0px;
+	/*border: 1px solid #ff4d4d;*/
+}
+
+.break{
+	margin:0px;
+	height:20px;
+	padding:0px;
+	/*border: 1px solid #ff3838;*/
+}
+
+hr{
+	border-bottom:1px solid black;
+	margin-top:10px;
+	margin-bottom:10px;
+}
+
+code{
+	display:inline-block;
+	font-family:"Droid Sans Mono";
+	font-size:12px;
+	color: #d63031;
+	background:#ffe5e9;
+}
+
+.ref code{
+    font-size:10px;
+}
+
+sup{
+    margin-right:2px;
+    font-size:10px;
+}
+
+sub{
+    font-size:10px;
+    margin-right:4px;
+}
+
+.ref sup{
+    font-size:8px;
+}
+
+.image_footer{
+    margin-left:10px;
+    margin-right:10px;
+	margin-top:-15px;
+	font-size:0.8em;
+	text-align:center;
+	margin-bottom:20px;
+}
+
+table{
+	width: 100%;
+	margin:0px;
+	/*border: 1px solid #c56cf0;*/
+    overflow:hidden;
+    font-size:inherit;
+}
+
+.tabla{
+    margin: auto;
+    margin-top:0px;
+	margin-bottom:20px;
+    border: 1px solid black;
+    overflow:hidden;
+	font-size:0.8em;
+}
+
+td{
+	vertical-align:top;
+	text-align: justify;
+	overflow: hidden;
+	/*border: 1px solid #ffaf40;*/
+}
+
+td .code_section{
+	page-break-inside: initial !important;
+	font-size: 13px;
+    overflow:hidden;
+}
+
+.parallel90{
+	width: 90%;
+    overflow:hidden;
+}
+
+.parallel80{
+	width: 80%;
+    overflow:hidden;
+}
+
+.parallel70{
+	width: 70%;
+    overflow:hidden;
+}
+
+.parallel60{
+	width: 60%;
+    overflow:hidden;
+}
+
+.parallel50{
+	width: 50%;
+    overflow:hidden;
+}
+
+.parallel40{
+	width: 40%;
+    overflow:hidden;
+}
+
+.parallel33{
+	width: 33%;
+    overflow:hidden;
+}
+
+.parallel30{
+	width: 30%;
+    overflow:hidden;
+}
+
+.parallel25{
+	width: 25%;
+    overflow:hidden;
+}
+
+.parallel20{
+	width: 20%;
+    overflow:hidden;
+}
+
+.parallel10{
+	width: 10%;
+    overflow:hidden;
+}
+
+.sideblock-right{
+	width: 50%;
+    overflow:hidden;
+    float:right;
+    vertical-align:top;
+}
+
+.sideblock-left{
+	width: 50%;
+    overflow:hidden;
+    float:left;
+    vertical-align:top;
+}
+
+.sideblock-right *{
+	page-break-inside: always;
+    overflow:hidden;
+    margin: 0px;
+    margin-left: 5px;
+    margin-top: 2px;
+}
+
+.sideblock-left *{
+	page-break-inside: always;
+    overflow:hidden;
+    margin: 0px;
+    margin-right: 5px;
+    margin-top: 2px;
+}
+
+.todo{
+	font-family:"Droid Sans Mono";
+	font-size:12px;
+	color: #e67e22;
+	background:#ffeaa7;
+	margin-top:0px;
+	margin-bottom:20px;
+}
