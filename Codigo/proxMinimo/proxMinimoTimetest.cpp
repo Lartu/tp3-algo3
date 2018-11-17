@@ -1,4 +1,5 @@
 #include "estructuras.h"
+#include <chrono>
 
 //Función que marca como no visitable un nodo en la matriz de distancias
 void l_tacharNodo(Matriz & distancias, int nodo)
@@ -315,23 +316,29 @@ int main(int argc, char** argv)
     // - creo el grafo -
     S_CVRP grafo = S_CVRP(archivo);
     
+    // - Inicializo el timer -
+    auto tiempo_inicio = chrono::steady_clock::now();
+    auto tiempo_fin = chrono::steady_clock::now();
+    auto tiempo_diferencia = (tiempo_fin - tiempo_inicio);
+    
     // - Obtengo lo que me costaría sin optimizar -
+    tiempo_inicio = chrono::steady_clock::now();
     double costeSinOptimizar = l_costeSinOptimizar(grafo);
-    cout << "\033[1;36mCoste sin optimizar\033[m: ";
-    cout << costeSinOptimizar << endl;
+    tiempo_fin = chrono::steady_clock::now();
+    cout << "@CosteSinOptimizar: ";
+    cout << costeSinOptimizar;
+    cout << " (duración: " << chrono::duration <double, milli> (tiempo_diferencia).count() << " ms)" << endl;
     
     // - Obtengo una solución heurística por proxMinimo -
+    tiempo_inicio = chrono::steady_clock::now();
     p_solucion l_sol = l_heuristicaProxMinimo(grafo);
-    
-    // - Imprimo las rutas de la solución -
-    l_sol.imprimirRutas();
+    tiempo_fin = chrono::steady_clock::now();
+    cout << "@CosteOptimizado: ";
+    cout << l_sol.costoTotal;
+    cout << " (duración: " << chrono::duration <double, milli> (tiempo_diferencia).count() << " ms)" << endl;
     
     // - Imprimo mejora porcentual -
     double porcentaje = l_sol.costoTotal * 100 / costeSinOptimizar;
-    cout << "\033[1;37mPorcentaje de coste final\033[m: ";
+    cout << "@PorcentajeCosteFinal: ";
     cout << porcentaje << "%" << endl;
-    
-    // - Reviso que la solución sea válida -
-    cout << "Es solución: ";
-    cout << (l_sol.esSolucion(grafo) ? "sí" : "no") << endl;
 }
