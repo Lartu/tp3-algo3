@@ -187,7 +187,6 @@ p_solucion l_heuristicaProxMinimo(const S_CVRP & grafo)
                     
                     // - Guardo lo que todavía no recorrí en la otra -
                     else{
-                        if(k == 1) cout << "Parto en 0. Demanda " << demandaNodo  << endl;
                         nuevaRuta2.push_back(rutas[j][k]);
                     }
                 }
@@ -219,7 +218,6 @@ p_solucion l_heuristicaProxMinimo(const S_CVRP & grafo)
         
         //TODO poner linda esta parte
         // - Veo si es posible combinar rutas -  (n^2)
-        cout << "[*] Busco rutas combinables..." << endl;
         vector<pair<double, pair<int, int>>> posiblesCombinaciones; //Peso, camino 1 - camino 2
         for(int i = 0; i < cargas.size(); ++i)
         {
@@ -243,7 +241,6 @@ p_solucion l_heuristicaProxMinimo(const S_CVRP & grafo)
         }
         
         reduje = true;
-        cout << "=> Selecciono rutas de esas que sean mutualmente excluyentes..." << endl;
         double ahorroTotal = 0;
         if(!posiblesCombinaciones.empty()){
             //TODO poner linda esta parte
@@ -258,22 +255,17 @@ p_solucion l_heuristicaProxMinimo(const S_CVRP & grafo)
                 {
                     combinacionesHechas[primerCamino] = true;
                     combinacionesHechas[segundoCamino] = true;
-                    cout << " - Los caminos " << comb.second.first << " y " << comb.second.second << " son combinables";
-                    cout << " - Me ahorro: " << comb.first << ". Los combino." << endl;
                     l_combinarCaminos(rutas, primerCamino, segundoCamino);
                     reduje = true;
                     ahorroTotal += comb.first;
                 }
             }
             
-            cout << "[*] Me ahorré " << ahorroTotal << ", soy re capo" << endl;
-            
             //TODO poner esto lindo
             //Borro rutas que dejé vacías
             auto it = rutas.begin();
             while(it != rutas.end()){
                 if(it->empty()){
-                    cout << " - Borro un camino vacío dejado por el paso anterior..." << endl;
                     rutas.erase(it);
                     it = rutas.begin();
                 }else{
@@ -287,11 +279,8 @@ p_solucion l_heuristicaProxMinimo(const S_CVRP & grafo)
             {
                 cargas.push_back(l_calcularCosteRuta(grafo, rutaActual));
             }
-            
-            cout << "[*] Busco de nuevo." << endl;
         }
     }while(!reduje);
-    cout << "[*] Listo, optimizado como se pudo." << endl;
     
     // - Calculo la distancia total recorrida -
     double costoTotal = 0;
@@ -325,7 +314,8 @@ int main(int argc, char** argv)
     tiempo_inicio = chrono::steady_clock::now();
     double costeSinOptimizar = l_costeSinOptimizar(grafo);
     tiempo_fin = chrono::steady_clock::now();
-    cout << "@CosteSinOptimizar: ";
+    tiempo_diferencia = (tiempo_fin - tiempo_inicio);
+    cout << "@CosteCanonico: ";
     cout << costeSinOptimizar;
     cout << " (duración: " << chrono::duration <double, milli> (tiempo_diferencia).count() << " ms)" << endl;
     
@@ -333,6 +323,7 @@ int main(int argc, char** argv)
     tiempo_inicio = chrono::steady_clock::now();
     p_solucion l_sol = l_heuristicaProxMinimo(grafo);
     tiempo_fin = chrono::steady_clock::now();
+    tiempo_diferencia = (tiempo_fin - tiempo_inicio);
     cout << "@CosteOptimizado: ";
     cout << l_sol.costoTotal;
     cout << " (duración: " << chrono::duration <double, milli> (tiempo_diferencia).count() << " ms)" << endl;
