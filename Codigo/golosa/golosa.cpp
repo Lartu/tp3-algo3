@@ -97,7 +97,10 @@ p_solucion p_golosa(const S_CVRP &G){
 			}
 		}
 	}
-	sort(pares.begin(),pares.end(), [](vector<int> &a, vector<int> &b){ return a[2] < b[2];});
+	sort(pares.begin(),pares.end(), [](vector<int> &a, vector<int> &b){ return a[2] < b[2]? true : a[0] < b[0];});
+	//debug
+	//cout << pares << endl;
+	//debug
 	int k = 0;
 	int j = 0;
 	while(k < G.getMatrizConst().size()-1 && j < pares.size()){
@@ -106,6 +109,7 @@ p_solucion p_golosa(const S_CVRP &G){
 			int rutaPrimerElemento = p_rutaPertenece(pares[j][0], S.rutas);
 			int rutaSegundoElemento = p_rutaPertenece(pares[j][1], S.rutas);
 			if((rutaPrimerElemento != rutaSegundoElemento) && S.cargas[rutaPrimerElemento] + S.cargas[rutaSegundoElemento] <= G.getCapacidad()){
+				cout << "merge entre: " << pares[j][0] << "y " << pares[j][1] << endl;
 				p_mergeRutas(G,S,rutaPrimerElemento,rutaSegundoElemento);
 				insertado = true;
 			}
@@ -170,6 +174,16 @@ void p_medirResultadosGolosaConocido(pair<S_CVRP,double> &instancia,ofstream& of
 	ofs << instancia.first.getNodos().size() << "," << porcentajeAhorrado << ":" << endl;
 }
 
+void p_medirPatologicoCanYReal(pair<S_CVRP,double> &instancia,ofstream& ofs){
+	p_solucion sol = p_golosa(instancia.first);
+	p_solucion canonica = p_solucion(instancia.first);
+	//double porcentajeAhorrado = (sol.costoTotal - canonica.costoTotal)*(100/ canonica.costoTotal);
+	cout << "canonica: " << canonica.costoTotal << endl;
+	cout << "obtenida: "<< sol.costoTotal << endl; 
+	sol.imprimirRutas();
+	//ofs << instancia.first.getNodos().size() << "," << porcentajeAhorrado << ":" << endl;
+}
+
 void p_generarVectoresDeInstancias(int nStart, int nEnd, int numeroMediciones,ofstream& ofs1, void(*fMedicion)(vector<S_CVRP>&,ofstream&)){
 	//geteo todas las instancias de a un n por vez(por si son demasiadas)
 	for(int i = nStart; i <= nEnd; i++){
@@ -202,8 +216,8 @@ void p_correrInstanciasConocidasDeAUnaG(int nStart, int nEnd,ofstream& ofs1, voi
 			string j_string = to_string(j);
 			cout << i_string << endl;
 			//Ruta a getear. Cambienla si necesitan. No la pase por parametro porque es bien fea
-			string rutaVRP = "serieA/A-n" + i_string + ".vrp";
-			string rutaSol = "serieA/A-n" + i_string + ".sol";
+			string rutaVRP = "patologicos/P-n" + i_string + ".vrp";
+			string rutaSol = "patologicos/P-n" + i_string + ".sol";
 			ifstream stream(rutaVRP, ios::in);
 			ifstream streamSol(rutaSol, ios::in);
 			if(stream.ios::good()){
@@ -230,9 +244,16 @@ int main(int argc, char** argv){
 	/*TspData archivo = cargarTSP(fileName);
     S_CVRP G = S_CVRP(archivo);
     p_golosa(G);*/
-    /*ofstream Tgolosa("Tgolosa", ios::out);
-    p_generarVectoresDeInstancias(3,1003,400,Tgolosa,p_medirYPromediarGolosa);*/
-	ofstream Tgolosa("ResGolosaSerieA", ios::out);
-    p_correrInstanciasConocidasDeAUnaG(20,80,Tgolosa,p_medirResultadosGolosaConocido);
+    //Aleatorias
+    //ofstream Tgolosa("Tgolosa", ios::out);
+    //p_generarVectoresDeInstancias(3,1003,400,Tgolosa,p_medirYPromediarGolosa);
+
+    //instancias conocidas
+	//ofstream Tgolosa("ResGolosaSerieA", ios::out);
+    //p_correrInstanciasConocidasDeAUnaG(100,700,Tgolosa,p_medirResultadosGolosaConocido);
+
+    //caso patologicos
+    ofstream patologica1("patologica1", ios::out);
+    p_correrInstanciasConocidasDeAUnaG(1,10,patologica1,p_medirPatologicoCanYReal);    
 	return 0;
 }
