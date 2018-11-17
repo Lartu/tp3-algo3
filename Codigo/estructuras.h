@@ -66,20 +66,6 @@ public:
             vector<double> fila;
             for(int j = 0; j < tsp.dimension(); ++j){
                 fila.push_back(distancia(nodos[i].coordenadas, nodos[j].coordenadas, nodos[i].id, nodos[j].id));
-                if(distancia(nodos[i].coordenadas, nodos[j].coordenadas,nodos[i].id, nodos[j].id) == numeric_limits<double>::max() && i != j){
-                    cout << "CABE" << endl;
-                    cout << "NODO "<< i << endl;
-                    cout << "x: "<< nodos[i].coordenadas.x << endl;
-                    cout << "y: "<< nodos[i].coordenadas.y << endl;
-                    cout << "id: " << nodos[i].id << endl;
-                    cout << "demanda: " << nodos[i].demanda << endl;
-                    cout << "==============" << endl;
-                    cout << "NODO"<< j << endl;
-                    cout << "x: "<< nodos[j].coordenadas.x << endl;
-                    cout << "y: "<< nodos[j].coordenadas.y << endl;
-                    cout << "id: " << nodos[j].id << endl;
-                    cout << "demanda: " << nodos[j].demanda << endl;
-                } 
             }
             matriz.push_back(fila);
         }
