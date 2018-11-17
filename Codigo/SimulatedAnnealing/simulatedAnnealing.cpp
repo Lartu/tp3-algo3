@@ -309,67 +309,79 @@ void p_medirResultadosVariandoTs(vector<S_CVRP> &instancias, ofstream &cs0, ofst
 	}
 }
 
-void p_medirPorcentajeEntreCanYOpt(vector<pair<S_CVRP,double>> &instancias,double Ts, int n,int cs, ofstream& ofs){
-	counter++;
-	cout << "medir: "<< counter<< endl; 
-	for(auto &instancia : instancias){
+double p_medirPorcentajeAlOpt(pair<S_CVRP,double> &instancia,double Ts, int n,int cs, ofstream& ofs){
+	//counter++;
+	//cout << "medir: "<< counter<< endl; 
 		p_solucion solCanonica(instancia.first);
 		double costoCanonico = solCanonica.costoTotal;
 		p_solucion solSA = p_simulatedAnnealing(instancia.first,Ts,n,cs);
-		double porcentajeAhorrado = 100 - (solSA.costoTotal - instancia.second)*100/(costoCanonico - instancia.second);
+		double porcentajeAhorrado = (solSA.costoTotal - instancia.second)*(100/ instancia.second);
 		ofs << instancia.first.getNodos().size() << "," << porcentajeAhorrado<< ":" << endl;
-	}
+		return porcentajeAhorrado;
+		//ofs << instancia.first.getNodos().size() << "," << porcentajeAhorrado<< ":" << endl;
 }
 
-void p_distanciaDelOptimo(vector<pair<S_CVRP,double>> &instancias, ofstream& ofs){
-	p_medirPorcentajeEntreCanYOpt(instancias,2,10000,0,ofs);
+void p_medirPorcentajeAlOptWrapper(pair<S_CVRP,double> &instancia, ofstream& ofs){
+	p_medirPorcentajeAlOpt(instancia,2,15000,1,ofs);
 }
 
-double p_medirConocidasNIt(vector<pair<S_CVRP,double>> &instancias,double Ts, int n,int cs, ofstream& ofs){
+double p_medirConocidasNIt(pair<S_CVRP,double> &instancia,double Ts, int n,int cs, ofstream& ofs){
 	counter++;
-	cout << "medir: "<< counter<< endl; 
-	for(auto &instancia : instancias){
+	if(counter == 1000){
+		//cout << "medir: "<< counter<< endl;
+		counter = 0;
+	}
+
 		p_solucion solCanonica(instancia.first);
 		double costoCanonico = solCanonica.costoTotal;
 		p_solucion solSA = p_simulatedAnnealing(instancia.first,Ts,n,cs);
 		return (1 - (solSA.costoTotal/costoCanonico)) * 100;
 		//ofs << instancias[0].first.getNodos().size() << "@" << Ts << "{}" << n << "," << (1 - (solSA.costoTotal/costoCanonico)) * 100<< ":" << endl;
-	}
 }
 
 //LO CORRO CON UN SOLO CS PORQUE LA EXPERIMENTACION PREVIA DETERMINO QUE EL 
 //VALOR OPTIMO PARA EL Nit se respeta para los 3 CS en la gran gran mayoria
 //de los casos. salvo en algunas excepciones, pero la diferencia no fue
 //tampoco tan significativa.
-void p_conocidasTodo(vector<pair<S_CVRP,double>> &instancias, ofstream& ofs){
-	ofs << instancias[0].first.getNodos().size() << endl;
+void p_parametrosOptimosConocidas(vector<pair<S_CVRP,double>> &instancias, ofstream& ofs){
+	double minimo = numeric_limits<double>::max();
+	int maxNIt = 0;
+	int maxTs = 0;
+	int maxCS = -1;
 	for(int k = 0; k <= 2; k++){
-		double maximo = 0;
-		int maxNIt = 0;
-		int maxTs = 0;
-		for(int i = 1000; i <= 15000; i+= 500){
+		for(int i = 1000; i <= 15000; i+= 2000){
+			cout << "CS:" << k << ", " << "NIt: "<<i << endl;
 			for(int j = 2; j <= 9; j++){
-				double actual = p_medirConocidasNIt(instancias,j,i,k,ofs);
-				if(actual > maximo){
-					maximo = actual;
+				double total = 0;
+				for(int w = 0; w < instancias.size();w++){
+					double actual = p_medirPorcentajeAlOpt(instancias[w],j,i,k,ofs);
+					total += actual;
+				}
+				if(total < minimo){
+					minimo = total;
 					maxNIt = i;
 					maxTs = j;
-				}			
+					maxCS = k;
+				}		
 			}
 			for(int j = 10; j <= 100; j+=10){
-				double actual = p_medirConocidasNIt(instancias,j,i,k,ofs);
-				if(actual > maximo){
-					maximo = actual;
+				double total = 0;	
+				for(int w = 0; w < instancias.size(); w++){
+					double actual = p_medirPorcentajeAlOpt(instancias[w],j,i,k,ofs);
+					total += actual;
+				}
+				if(total < minimo){
+					minimo = total;
 					maxNIt = i;
 					maxTs = j;
-				}						
+					maxCS = k;
+				}	
 			}
 		}
-		ofs << "CS: "<< k <<" maximo:" << maximo << " maxNIt: "<< maxNIt << " maxTs: " << maxTs << endl;
 	}
-
+	ofs << "CS" <<maxCS<<" NIt: " << maxNIt << " Ts: " << maxTs << endl;
 }
-
+/*
 void p_conocidasTs(vector<pair<S_CVRP,double>> &instancias, ofstream& ofs){
 	for(int i = 0; i <= 9; i++){
 		p_medirConocidasNIt(instancias,i,10000,0,ofs);
@@ -377,7 +389,7 @@ void p_conocidasTs(vector<pair<S_CVRP,double>> &instancias, ofstream& ofs){
 	for(int i = 10; i<=200; i+=10){
 		p_medirConocidasNIt(instancias,i,10000,0,ofs);
 	}
-}
+}*/
 
 void p_generarVectoresDeInstancias(int nStart, int nEnd, int numeroMediciones,ofstream& ofs1,ofstream& ofs2,ofstream& ofs3, void(*fMedicion)(vector<S_CVRP>&,ofstream&,ofstream&,ofstream&)){
 
@@ -401,17 +413,18 @@ void p_generarVectoresDeInstancias(int nStart, int nEnd, int numeroMediciones,of
 	}
 }
 
-void p_correrInstanciasConocidas(int nStart, int nEnd, int numeroMediciones,ofstream& ofs1, void(*fMedicion)(vector<pair<S_CVRP,double>>&,ofstream&)){
+void p_correrInstanciasConocidasDeAUna(int nStart, int nEnd,ofstream& ofs1, void(*fMedicion)(pair<S_CVRP,double>&,ofstream&)){
 
 	//geteo todas las instancias de a un n por vez(por si son demasiadas)
 	for(int i = nStart; i <= nEnd; i++){
 		vector<pair<S_CVRP,double>> instancias = vector<pair<S_CVRP,double>>();
 		string i_string = to_string(i);
-		for(int j = 1; j <= numeroMediciones; j++){
+		for(int j = 1; j <= 1; j++){
 			string j_string = to_string(j);
+			cout << i_string << endl;
 			//Ruta a getear. Cambienla si necesitan. No la pase por parametro porque es bien fea
-			string rutaVRP = "serieA/A-n" + i_string + ".vrp";
-			string rutaSol = "serieA/A-n" + i_string + ".sol";
+			string rutaVRP = "serieX/X-n" + i_string + ".vrp";
+			string rutaSol = "serieX/X-n" + i_string + ".sol";
 			ifstream stream(rutaVRP, ios::in);
 			ifstream streamSol(rutaSol, ios::in);
 			if(stream.ios::good()){
@@ -424,8 +437,34 @@ void p_correrInstanciasConocidas(int nStart, int nEnd, int numeroMediciones,ofst
 			}
 		}
 		//Aca llamen a su funcion para hacer las mediciones (la mia es p_medirTiempos)
-		if(!instancias.empty()) fMedicion(instancias, ofs1);//p_medirTiempos(instancias,cs0,cs1,cs2);
+		if(!instancias.empty()) fMedicion(instancias[0], ofs1);//p_medirTiempos(instancias,cs0,cs1,cs2);
 	}
+}
+
+void p_correrInstanciasConocidasJuntas(int nStart, int nEnd, ofstream& ofs1, void(*fMedicion)(vector<pair<S_CVRP,double>>&,ofstream&)){
+	vector<pair<S_CVRP,double>> instancias = vector<pair<S_CVRP,double>>();
+	//geteo todas las instancias de a un n por vez(por si son demasiadas)
+	for(int i = nStart; i <= nEnd; i++){
+		string i_string = to_string(i);
+		for(int j = 1; j <= 1; j++){
+			string j_string = to_string(j);
+			//Ruta a getear. Cambienla si necesitan. No la pase por parametro porque es bien fea
+			string rutaVRP = "serieX/X-n" + i_string + ".vrp";
+			string rutaSol = "serieX/X-n" + i_string + ".sol";
+			ifstream stream(rutaVRP, ios::in);
+			ifstream streamSol(rutaSol, ios::in);
+			if(stream.ios::good()){
+				TspData archivo = cargarTSP(rutaVRP);
+				S_CVRP G = S_CVRP(archivo);
+				string solString;
+				getline(streamSol,solString,'\n');
+				double sol = stod(solString);
+				instancias.push_back(make_pair(G,sol));
+			}
+		}
+		//Aca llamen a su funcion para hacer las mediciones (la mia es p_medirTiempos)
+	}
+	if(!instancias.empty()) fMedicion(instancias, ofs1);//p_medirTiempos(instancias,cs0,cs1,cs2);
 }
 /*
 p_medir(int nStart, int nEnd, int numeroInstancias, ofstream& ofs1, ofstream& ofs2, ofstream& ofs3){
@@ -503,10 +542,11 @@ int main(int argc, char** argv){
 	//NIt optima (COMO NO ESTOY PROMEDIANDO, EL OPTIMO PARA CADA INSTANCIA ES DISTINTO!)
 	//NO SE CUMPLE QUE A MAS NIt MEJOR ANDA, DEPENDE DE LA INSTANCIA PARTICULAR!
 	//TENGO QUE ENCONTRAR EL NIt OPTIMO PARA CADA INSTANCIA!
-	ofstream conocidasNIt("conocidasNIt",ios::out);
-	p_correrInstanciasConocidas(32,80,1,conocidasNIt,p_conocidasTodo);
+	//ofstream conocidasNIt("encontrando_optimos",ios::out);
+	//p_correrInstanciasConocidasJuntas(32,80,conocidasNIt,p_conocidasTodo);
 	//Ts optima
-
+	ofstream XconParamA("XconParamA", ios::out);
+	p_correrInstanciasConocidasDeAUna(100,700,XconParamA,p_medirPorcentajeAlOptWrapper);
 	return 0;
 }
 

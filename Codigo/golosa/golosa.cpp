@@ -4,7 +4,7 @@
 #include <limits>
 #include <algorithm>
 #include "../estructuras.h"
-//#include "../SimulatedAnnealing/simulatedAnnealing.h"
+#include "../SimulatedAnnealing/simulatedAnnealing.h"
 #include <chrono>
 int counter = 0;
 typedef vector<int> ruta;
@@ -22,6 +22,19 @@ void p_mergeRutas(const S_CVRP &G, p_solucion &S,int numeroRuta1, int numeroRuta
 	double nuevaCarga = S.cargas[numeroRuta1] + S.cargas[numeroRuta2];
 	//calculo el nuevo costo total
 	double nuevoCostoTotal = S.costoTotal + G.distanciaEntre(primerElemento,segundoElemento) - G.distanciaEntre(primerElemento,G.getDeposito()) - G.distanciaEntre(segundoElemento,G.getDeposito());
+	if(nuevoCostoTotal == numeric_limits<double>::max()){
+		cout << "INF" << endl;
+		cout << "ruta1: " << ruta1 << endl;
+		cout << "ruta2: " << ruta2 << endl;
+		cout << "costoTotal: " << S.costoTotal << endl;
+		cout << "primerElemento: " << primerElemento << endl;
+		cout << "segundoElemento: " << segundoElemento << endl;
+		cout << "numeroRuta1: " << numeroRuta1 << endl;
+		cout << "numeroRuta2: " << numeroRuta2 << endl;
+		cout << "Dist Prim elem, segund elem: " << G.distanciaEntre(primerElemento,segundoElemento) << endl;
+		cout << "Dist prim elem, deposito: " << G.distanciaEntre(primerElemento,G.getDeposito()) << endl;
+		cout << "Dist segund elem, deposito: " << G.distanciaEntre(segundoElemento,G.getDeposito()) << endl;
+	}
 	//actualizo la ruta1. Primero, saco el deposito al final de la ruta1
 	ruta1.erase(ruta1.end() - 1);
 	//saco el deposito al principio de la ruta2
@@ -44,6 +57,27 @@ int p_rutaPertenece(int elem, vector<ruta> &rutas){
 		}
 	}
 	return -1;
+}
+
+bool p_invarianteMatriz(const S_CVRP &G){
+	bool result = true;
+	vector<pair<int,int>> paresInf = vector<pair<int,int>>();
+	for(int i = 0; i < G.getMatrizConst().size(); i++){
+		for(int j = 0; j < G.getMatrizConst().size(); j++){
+			if(G.distanciaEntre(i,j) == numeric_limits<double>::max()){
+				if(i != j){
+					result = false;
+				}
+				paresInf.push_back(make_pair(i,j));
+			}
+		}
+	}
+	cout << "{";
+	for(int i = 0; i < paresInf.size(); i++){
+		cout << "("<< paresInf[i].first << "," << paresInf[i].second << "), "<< endl;	
+	}
+	cout << "}";
+	return result;
 }
 
 p_solucion p_golosa(const S_CVRP &G){
@@ -77,15 +111,11 @@ p_solucion p_golosa(const S_CVRP &G){
 			}
 			j++;
 		}
-		/*if(!S.esSolucion(G)) {
-			cout << "NO ES SOLUCION" << endl;
-			return S;
-		}else{
-			//S.imprimirRutas();
-		}*/
+
 		k++;
 	}
 	//cout << S.costoTotal << endl;
+	//S.imprimirRutas();
 	return S;
 }
 
@@ -132,6 +162,13 @@ void p_medirYPromediarResultadoGolosa(vector<S_CVRP> &instancias,ofstream& ofs){
 	ofs << instancias[0].getNodos().size() << "," << promedio << ":"<< varianza << endl;
 }
 
+void p_medirResultadosGolosaConocido(pair<S_CVRP,double> &instancia,ofstream& ofs){
+	p_solucion sol = p_golosa(instancia.first);
+	double porcentajeAhorrado = (sol.costoTotal - instancia.second)*(100/ instancia.second);
+	cout << "optima: " << instancia.second << endl;
+	cout << "obtenida: "<< sol.costoTotal << endl; 
+	ofs << instancia.first.getNodos().size() << "," << porcentajeAhorrado << ":" << endl;
+}
 
 void p_generarVectoresDeInstancias(int nStart, int nEnd, int numeroMediciones,ofstream& ofs1, void(*fMedicion)(vector<S_CVRP>&,ofstream&)){
 	//geteo todas las instancias de a un n por vez(por si son demasiadas)
@@ -154,10 +191,40 @@ void p_generarVectoresDeInstancias(int nStart, int nEnd, int numeroMediciones,of
 	}
 }
 
+
+void p_correrInstanciasConocidasDeAUnaG(int nStart, int nEnd,ofstream& ofs1, void(*fMedicion)(pair<S_CVRP,double>&,ofstream&)){
+
+	//geteo todas las instancias de a un n por vez(por si son demasiadas)
+	for(int i = nStart; i <= nEnd; i++){
+		vector<pair<S_CVRP,double>> instancias = vector<pair<S_CVRP,double>>();
+		string i_string = to_string(i);
+		for(int j = 1; j <= 1; j++){
+			string j_string = to_string(j);
+			cout << i_string << endl;
+			//Ruta a getear. Cambienla si necesitan. No la pase por parametro porque es bien fea
+			string rutaVRP = "serieA/A-n" + i_string + ".vrp";
+			string rutaSol = "serieA/A-n" + i_string + ".sol";
+			ifstream stream(rutaVRP, ios::in);
+			ifstream streamSol(rutaSol, ios::in);
+			if(stream.ios::good()){
+				TspData archivo = cargarTSP(rutaVRP);
+				S_CVRP G = S_CVRP(archivo);
+				cout << p_invarianteMatriz(G) << endl;
+				string solString;
+				getline(streamSol,solString,'\n');
+				double sol = stod(solString);
+				instancias.push_back(make_pair(G,sol));
+			}
+		}
+		//Aca llamen a su funcion para hacer las mediciones (la mia es p_medirTiempos)
+		if(!instancias.empty()) fMedicion(instancias[0], ofs1);//p_medirTiempos(instancias,cs0,cs1,cs2);
+	}
+}
+
 int main(int argc, char** argv){
 
 	//recibo ruta del archivo
-	string fileName(argv[1]);
+	//string fileName(argv[1]);
 
 	//parseo el archivo con tsplib.h y lo guardo.
 	/*TspData archivo = cargarTSP(fileName);
@@ -165,7 +232,7 @@ int main(int argc, char** argv){
     p_golosa(G);*/
     /*ofstream Tgolosa("Tgolosa", ios::out);
     p_generarVectoresDeInstancias(3,1003,400,Tgolosa,p_medirYPromediarGolosa);*/
-	ofstream Tgolosa("ResGolosa", ios::out);
-    p_generarVectoresDeInstancias(3,503,400,Tgolosa,p_medirYPromediarResultadoGolosa);
+	ofstream Tgolosa("ResGolosaSerieA", ios::out);
+    p_correrInstanciasConocidasDeAUnaG(20,80,Tgolosa,p_medirResultadosGolosaConocido);
 	return 0;
 }

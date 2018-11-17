@@ -29,16 +29,18 @@ Veamos el pseudocódigo de un esquema de Simulated Annealing:
 (par)
 
 (par)
+(todo)Explicar las estructuras de una solucion. O sea, una solucion es una matriz, o un set de sets de clientes.(todo)
 En nuestra implementación la función de vecindario que utilizaremos será **1-interchange**.El vecindario utilizando esta función está definido de la siguiente manera:
-Sean S y S' soluciones. S' \in N(S) <=> \existe i,j con i != j , i y j <= |rutas(S)|, existe c \in rutas(i), c != deposito tal que shift(rutas(S)[i],rutas(S)[j],c) == rutas(S') || existe c1 \in rutas(i) && c2 \in rutas(j), c1,c2 != deposito exchange(rutas(S)[i],rutas(S)[j],c1,c2) == rutas(S').
+Sean S y S' soluciones. S' \in N(S) <=> \existe i,j con i != j , i y j <= |rutas(S)|, existe c \in rutas(i), c != deposito tal que shift(rutas(S)[i],rutas(S)[j],c) == rutas(S') || existe c1 \in rutas(i) && c2 \in rutas(j), c1,c2 != deposito exchange(rutas(S)[i],rutas(S)[j],c1,c2) == rutas(S'). Siendo shift y exchange los siguientes procedimientos:
 
+codeblock:
 shift(vector<Ruta> rutas ,Ruta ruta1, Ruta ruta2, cliente c){
 	if (rutas[ruta1][c].demanda + sum(de los i de ruta2) <= capacidad_total)
 	w* <- w \in rutas[ruta2] tal que minArg( distanciaEntre(rutas[ruta1][c], rutas[ruta2][w]) + distanciaEntre(rutas[ruta2][w+1],rutas[ruta1][c]))
 	rutas[ruta2] = rutas[ruta2][1..w] U rutas[ruta1][c] U rutas[ruta2][w+1..|rutas[ruta2|-1]
 	rutas[ruta1] = rutas[ruta1] - c
 }
-(todo)pseudocodigo formal para shift y exchange.(todo)
+
 codeblock: 
 exchange(vector<Ruta> rutas, Ruta ruta1, Ruta ruta2,c1,c2){
 	if(sum(de los i de ruta1) - rutas[ruta1][c1].demanda + rutas[ruta2][c2].demanda <= capacidad_total &&
@@ -52,7 +54,7 @@ exchange(vector<Ruta> rutas, Ruta ruta1, Ruta ruta2,c1,c2){
 siendo shift un procedimiento tal que dadas dos rutas de la solución, remueve un cliente de una ruta y lo inserta en otra (siempre que la demanda del cliente insertado no exceda la capacidad del camión que recorre esa ruta) y exchange un swap entre dos clientes de dos rutas (siempre que las capacidades de los camiones de ambas rutas no sea excedido).
 En la operación shift la inserción siempre se realizará de manera que la suma del costo de las aristas agregadas menos la arista removida sea mínimo.
 (par)
-(todo)aca deberia aclarar que el CS se eligió a partir de la experimentación. O bien podría poner todo esto (hasta "nuestra funcion de probabilidad" directamente en la parte de experimentación)(todo)
+
 (par)
 Como **Cooling Schedule** tendremos varias opciones con diferente efectividad. Más adelante realizaremos experimentos comparándolos entre sí. Las variantes que consideraremos serán CS0:  Ti = Ts - i*(Ts - Tf)/n, CS1: Ti = Ts * Tf/Ts^(i/n) y CS2: Ti =  ((Ts-Tf)/(1+e^(0.3*(i - n/2)))) + Tf siendo Ti la temperatura en la i-ésima iteración, Ts la temperatura inicial, Tf la temperatura final, i el número de iteración y n el total de iteraciones a realizar. Veamos a continuación gráficos de estas funciones para poder apreciarlas más tangiblemente:
 (par)
@@ -78,14 +80,15 @@ De esta manera, demos un pseudocódigo completo para nuestra implementación de 
 
 **Analisis de complejidad**
 (par)
-(todo)explicarlo mejor con el pseudocódigo. No hay cota simple mas ajustada no?(todo) Dado que todas las operaciones se realizan en tiempo constante excepto shift que en su peor caso inserta en una ruta con todos los elementos menos uno, una cota muy brusca del peor caso sería n * v donde n es la cantidad de iteraciones y v es la cantidad de clientes. Es una cota muy brusca porque la probabilidad de inserciones en rutas grandes disminuye a medida que aumenta la cantidad de clientes, pero dar una cota más ajustada es complejo porque depende de la instancia particular.
+(todo)explicarlo mejor con el pseudocódigo. No hay cota simple mas ajustada no?(todo) Dado que todas las operaciones se realizan en tiempo constante excepto shift que en su peor caso inserta en una ruta con todos los elementos menos uno, una cota simple del peor caso sería n * NIt donde n es la cantidad de nodos del grafo y NIt es la cantidad de iteraciones. Es una cota brusca porque la probabilidad de inserciones en rutas grandes disminuye a medida que aumenta la cantidad de clientes (porque mientras más clientes tiene una ruta, menos probable es que siga teniendo espacio), pero dar una cota más ajustada es complejo porque depende de la instancia particular.
 (par)
 
 (todo)Mostrar los graficos que muestran que el algoritmo es lineal en funcion del nro de iteraciones(todo)
 
-**Búsqueda de los parámetros óptimos**
+***Búsqueda de parámetros óptimos***
+**caso aleatorio**
 (par)
-Busquemos el valor óptimo de los parámetros de nuestro algoritmo de Simulated Annealing para casos aleatorios. Es decir, queremos encontrar el valor de los parámetros que mejores resultados obtiene en el promedio de muchos casos aleatorios, lo cual es útil para tener una noción general de qué valores tienden a obtener mejores resultados.
+Busquemos el valor óptimo de los parámetros de nuestro algoritmo de Simulated Annealing para el casos aleatorio. Es decir, queremos encontrar el valor de los parámetros que mejores resultados obtiene en el promedio de muchos casos aleatorios, lo cual es útil para tener una noción general de qué valores tienden a obtener mejores resultados.
 (par)
 
 (par)
@@ -93,7 +96,7 @@ Para esto realizaremos una serie de experimentos, comenzando por un análisis de
 (par)
 
 (par)
-El experimento consistirá en medir el ahorro porcentual promedio obtenido luego de Nit iteraciones para 400 instancias aleatorias del problema (todo)aclarar como fueron generadas las instancias, supongo que lo voy a aclarar una sola vez!(todo), con un varios n fijos. La diferencia en efectividad observada utilizando las tres variantes de Cooling schedule dieron resultados muy similares, por lo que decidimos utilizar un único Cooling Schedule para la medición por practicidad. A continuación mostramos los resultados obtenidos:
+El experimento consistirá en medir el ahorro porcentual con respecto a la solución canónica  promedio obtenido luego de Nit iteraciones para 400 instancias aleatorias del problema (todo)aclarar como fueron generadas las instancias, supongo que lo voy a aclarar una sola vez!(todo), con un varios n fijos. Decidimos comparar con la solución canónica para poder comparar los resultados de diferentes n más claramente. La diferencia en efectividad observada utilizando las tres variantes de Cooling schedule dieron resultados muy similares, por lo que decidimos utilizar un único Cooling Schedule para la medición por practicidad. A continuación mostramos los resultados obtenidos:
 (par)
 
 (todo)poner graficos variando Nit para n=103, n= 503 y podria hacer otro mas de n=303(todo)
@@ -104,7 +107,7 @@ Como podemos apreciar en los gráficos nuestras predicciones fueron correctas. A
 
 (par)
 (todo)aclarar como son "las instancias"(todo)
-Teniendo en cuenta las caracteristicas instancias que mediremos y que no disponemos de tiempo ilimitado para realizar las mediciones, decidimos que Nit = 10.000 es suficientemente grande para ser representativo del resultado del algoritmo y suficientemente pequeño para poder realizar el resto de las mediciones en un tiempo razonable.
+Teniendo en cuenta las caracteristicas de las instancias que mediremos y que no disponemos de tiempo ilimitado para realizar las mediciones, decidimos que Nit = 10.000 es suficientemente grande para ser representativo del resultado del algoritmo y suficientemente pequeño para poder realizar el resto de las mediciones en un tiempo razonable.
 (par)
 
 (par)
@@ -116,7 +119,6 @@ A continuación queremos averiguar el valor óptimo para la temperatura inicial 
 (par)
 
 (par)
-(todo)Capaz completar graficos con Ts = 1, 1.2, 1.4, 1.6, 1.8, porque el 2 queda medio falopa ahi flotando(todo)
 Como podemos observar, la temperatura inicial Ts óptima para las tres alternativas de Cooling Schedule propuestas es Ts = 2 para todos los tamaños de grafo evaluados. Como parece respetarse esto independientemente del tamaño del grafo, podemos afirmar con bastante seguridad que Ts = 2 es óptimo.
 (par)
 
@@ -126,20 +128,59 @@ Habiendo obtenido los valores óptimos para Ts y NIt, realizemos la comparación
 
 (todo)Insertar grafico(todo)
 (par)
-Se puede ver que CS0 y CS1 se comportan de manera identica excepto por los mayores n en los que resultó un poco mejor. CS2 resultó consistentemente en un peor ahorro, por lo que no sería nuestra elección de Cooling Schedule para una instancia aleatoria de la que no tenemos información.
+Se puede ver que CS0 y CS1 se comportan de manera identica excepto por los mayores n en los que CS1 resultó un poco mejor. CS2 resultó consistentemente en un peor ahorro, por lo que no sería nuestra elección de Cooling Schedule para una instancia aleatoria de la que no tenemos información.
 (par)
 
 (par)
-Es importante destacar que a medida que aumenta n, todos las variantes de Cooling Schedule bajan en efectividad. Esto puede deberse al número de iteraciones, que como vimos anteriormente, debería ser mayor para dar mejores resultados en instancias de mayor tamaño. Otra hipótesis es que el algoritmo en grafos de mayor tamaño es más propenso a diverger a malas soluciones, dado que como el grafo es mayor, el vecindario es mayor y es menos probable que demos pasos en la dirección del óptimo o de buenas soluciones. La raíz de este problema es que nuestro algoritmo no tienen ninguna forma de volver hacía soluciones previas; una vez que da un paso, aunque sea un paso que empeore nuestra solución, no hay vuelta atrás.
+Es importante destacar que a medida que aumenta n, todos las variantes de Cooling Schedule bajan en efectividad. Esto puede deberse al número de iteraciones, que como vimos anteriormente, debería ser mayor para dar mejores resultados en instancias de mayor tamaño.
+(par)
+
+**parámetro óptimos para Set A**
+(todo)Explicar como son las instancias del set A (a menos que se haga antes en el informe)(todo)
+(par)
+Busquemos ahora los parámetros óptimos para el set de instancias "Set A" propuesto por Augerat en 1995. Son instancias en las que se conoce el óptimo, por lo que en vez de medir los resultados como ahorro porcentual de la solución canónica los mediremos como distancia porcentual de la solución óptima; es decir, cuánto porciento mayor es nuestra solución comparada a la solución óptima. Esta manera de medir los resultados nos resulta más significativa que el ahorro porcentual de la solución canónica , que si bien es una medida aceptable para los casos aleatorios porque no tenemos información del óptimo, no es una medida de qué tan buena es la solución con respecto al mejor resultado posible.
 (par)
 
 (par)
-Una alternativa para solucionar este inconveniente es implementar Resets o reinicios. La idea general es tener un criterio de reinicio que nos indica cuándo es momento de volver a una solución previa, ya que la actual es mucho peor que ésta. Generalmente la solución a la que se vuelve es la mejor solución que hemos encontrado en toda la ejecución del algoritmo hasta este punto.
+La búsqueda de los parámetros óptimos se realizó calculando la distancia porcentual al óptimo para cada instancia del set, para cada variante de Cooling Schedule, para NIt desde 1000 hasta 15000 con saltos de a 500, y con cada Ts entero desde 2 hasta 100. Para cada configuración se calculó la suma del porcentaje ahorrado para cada instancia y se escogió la configuración que maximize esa suma. Elegimos la suma del porcentaje total ahorrado como medida de optimalidad por encima de la minimizacion de la suma directa de los resultados ya que esta última favorece configuraciones buenas para instancias de mayor tamaño. Con nuestra medida de optimalidad estamos valuando todas las instancias con el mismo nivel de importancia.
+(par) 
+
+(par)
+La configuración óptima resultante fue como Cooling Schedule CS1, como temperatura inicial Ts = 8 y número de iteraciones NIt = 15000. Veamos a continuación la distancia porcentual al óptimo para cada instancia del set con la configuración óptima:
 (par)
 
-**Desempeño del algoritmo en diversas instancias**
-Para las instancias chicas anda bien.
-Para las medianas anda bastante bien.
-Para las grandes anda bastante mal.
-En todos los casos requiere muchas iteraciones.
-Acá corro SA variando CS, Ts y n. La idea sería que los resultados obtenidos validen todo lo que escribí arriba (no deberia haber mucho problema con eso).
+(todo)Meter grafiquito aca(todo)
+
+**Parámetros óptimos para Set X**
+(par)
+(todo)Explicar como son las instancias del set X (a menos que se haga antes en el informe)(todo)
+Busquemos los parámetros óptimos para el set de instancias "Set X" propuesto por Uchoa et al. en 2014. Lo haremos de manera análoga a como lo hicimos para el Set A en la sección (todo)nro. seccion anterior(todo).
+(par)
+
+(par)
+Los resultados obtenidos fueron como Cooling Schedule CS1, Ts = 20 y NIt = 15000. Presentamos a continuación la distancia porcentual al óptimo para cada instancia del set con ésta configuración:
+(par)
+
+(todo)Meter grafiquito(todo)
+
+**Conclusiones de la experimentación**
+
+(par)
+De la búsqueda de parámetros óptimos para diferentes sets de instancias podemos extraer una serie de conclusiones acerca de como varía el comportamiento del algoritmo en función de los parámetros de entrada. En primer lugar es importante destacar el rol del número de iteraciones en el rendimiento del algoritmo. Si bien lo mencionamos previamente y es bastante sencillo entender su relevancia, no podemos dejarlo fuera de las conclusiones. No creemos que sea casualidad que los mejores resultados para todos los sets de instancias utilizados se obtuvieron para el mayor número de iteraciones probado. 
+(par)
+
+(par)
+Sin embargo es importante destacar que si bien a mayor número de iteraciones se tiende a obtener mejores resultados, esto es una tendencia y no se cumple para todas las instancias. Buscando los parámetros óptimos para cada instancia encontramos muchos ejemplos en lo que no se cumplía. Esto no inválida la tendencia pero es importante tenerlo en cuenta a la hora de utilizar el algoritmo para la resolución de instancias. Si se utiliza una única instancia maximizar el número de iteraciones podría no resultar en el mejor rendimiento, pero si se quiere obtener el mejor rendimiento para una serie probablemente sí resulte en él. 
+(par)
+
+(par)
+Otra conclusion es que el parámetro Ts afecta de manera distinta a la solución obtenida en función del Cooling Schedule que se utilize. Como podemos ver en el gráfico "Porcentaje de ahorro para diferentes valores de Ts", la variación de Ts afecta a los tres Cooling Schedule de manera muy distinta. CS0 decrece en efectividad linealmente en función de Ts, CS2 decrece rápidamente para algunos valores y luego aparenta mantenerse constante y CS1 no parece verse afectado en lo absoluto.
+(par)
+
+(par)
+Es importante mencionar la baja efectividad del algoritmo para grafos de gran tamaño. Si bien los grafos de mayor tamaño necesitan un mayor número de iteraciones para dar soluciones de igual calidad que grafos menores (Como muestra la serie de gráficos "Porcentaje de ahorro para N iteraciones"), tenemos otra hipótesis acerca de este fenómenos. Esta es que el algoritmo en grafos de mayor tamaño es más propenso a diverger a malas soluciones dado que su vecindario es mayor y es menos probable dar pasos en la dirección del óptimo o de un vecindario de buenas soluciones. La raíz de este problema es que el algoritmo no tienen ninguna forma de volver hacía soluciones previas; una vez que da un paso, aunque sea un paso que empeore nuestra solución, no hay vuelta atrás.
+(par)
+
+(par)
+Una alternativa para solucionar este inconveniente es implementar Resets o reinicios. La idea general es tener un criterio de reinicio que nos indica cuándo es momento de volver a una solución previa, ya que la actual es mucho peor que ésta. Generalmente la solución a la que se vuelve es la mejor solución que hemos encontrado en toda la ejecución del algoritmo hasta este punto. Esto es meramente una hipótesis y debería experimentarse y confirmarse debidamente para poder hacer afirmaciones al respecto.
+(par)
