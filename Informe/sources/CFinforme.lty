@@ -7,7 +7,7 @@ en particular. Pasamos a explicar los detalles de cada procedimiento.
 (par)
 
 (par)
-Cluster-First mediante sweep algorithm:
+**Cluster-First mediante sweep algorithm:**
 Nuestro criterio para clusterizar, en este caso, va a estar basado en los ángulos que se forman entre distintos pares de nodos. Esto significa que, vamos a elegir un par de nodos arbitrario (uno de ellos va a ser siempre el deposito) y en base a ese vector que acabamos de generar, calculamos los ángulos que hay entre este y los otros vectores que se forman entre el depósito y los demás nodos del grafo.
 (par)
 
@@ -17,12 +17,12 @@ no excede la capacidad de nuestros camiones.
 (par)
 
 (par)
-Cluster-First por ejes inconsistentes:
+**Cluster-First por ejes inconsistentes:**
 Como segunda opción de clusterización, vamos a usar el algoritmo ya implementado en nuestro previo trabajo de investigación [1], el cual clusteriza transformando el grafo original en un AGM y chequeando que si un eje de nuestro AGM es "mucho mas largo" que sus vecinos este mismo se elimina quedando dos partes del grafo claramente separadas. Cabe aclarar que en caso de haber generado clusters que exceden la capacidad máxima de nuestros camiones, estos mismos van a ser reclusterizados hasta que los nuevos clusters cumplan con la restricción.
 (par)
 
 (par)
-Route-Second:
+**Route-Second:**
 La segunda parte de la heurística va a ser común para los dos algoritmos de clusterizado. Como sabemos que ningún cluster generado excede la capacidad máxima de nuestros camiones, vamos a "asignarle" un camión a cada cluster. Dado que nuestro objetivo es hacer la ruta mas corta posible por cada camión, vamos a correr un algoritmo de TSP para cada uno de ellos. Como bien sabemos, no se conocen algoritmos polinomiales para resolver un problema de TSP de manera óptima por lo que vamos a usar una heurística nuevamente.
 (par)
 
@@ -34,6 +34,8 @@ Para la resolución del TSP, elegimos utilizar nearest neighbour la cual es una 
 (par)
 Pasamos a mostrar los pseudocódigos de los algoritmos implementados para este caso.
 (par)
+
+***Sweep:***
 
 /codeblock.
 calcularAngulos(vector(Nodo) v, int puntoComienzo) → vector(Nodo):
@@ -50,13 +52,13 @@ calcularAngulos(vector(Nodo) v, int puntoComienzo) → vector(Nodo):
 .codeblock/
 
 (par)
-Correctitud:
+**Correctitud:**
 El algoritmo itera por todos los nodos del grafo calculando los ángulos entre el vector (deposito, puntoComienzo) y
 vector(deposito, a) para terminar ordena de menor a mayor los nodos según los ángulos calculados
 (par)
 
 (par)
-Complejidad:
+**Complejidad:**
 Se itera por un vector de tamaño n haciendo operaciones constantes tomando O(n) en total y ordenando el vector en O(n log n) tomando un total de O(n log n)
 (par)
 
@@ -86,13 +88,14 @@ clusterizarNodos(Grafo G, vector(Nodo) v) → vector(Cluster):
 .codeblock/
 
 (par)
+**Correctitud:**
 En este caso iteramos sobre el vector v que está ordenado en base a los ángulos calculados previamente, tenemos una variable peso que va a llevar registro de la suma de las demandas de los nodos que pertenecen a un cluster, una vector donde vamos a guardar los clusters calculados, y una variable i la cual usamos para iterar los elementos de v. El primer while se encarga de crear un nuevo cluster, setear la variable peso a cero y guardar el cluster calculado en el while interno.
 Como dijimos anteriormente el while interno va a ir guardando nodos en el cluster creado anteriormente siempre y cuando el nodo agregado no haga que la demanda total del cluster se pase de la capacidad de nuestros camiones. De ser así, salimos del while y agregamos el cluster a nuestro vector de clusters (es importante aclarar que el cluster agregado no contiene al nodo que rompía el invariante de nuestros clusters).
 Al salir de los dos while podemos ver que en nuestro vector de clusters tenemos agrupados a nuestros nodos en clusters que no exceden la capacidad de nuestros camiones y que están cerca en nuestro grafo (esto se debe a que los nodos estan ordenados en base a sus ángulos). 
 (par)
 
 (par)
-Complejidad:
+**Complejidad:**
 Al tener dos whiles anidados, se podría pensar a priori que la complejidad de este algoritmo es O(n^2) pero es importante observar que los dos whiles terminan si ya iteramos todos los elementos del vector v. Aclarado esto, vemos que en los dos ciclos hacemos operaciones que toman tiempo constante por lo que podemos afirmar que nuestro algoritmo toma tiempo lineal.
 (par)
 
@@ -118,19 +121,19 @@ tsp(Grafo G, vector(Nodo) n) → vector(Nodo):
 .codeblock/
 
 (par)
-Correctitud:
+**Correctitud:**
 En este caso tenemos un vector donde vamos a guardar los nodos en el orden a recorrer, tenemos una variable deposito donde nos guardamos el deposito de nuestro grafo.
 Como tenemos que empezar nuestros recorridos desde el deposito, lo agregamos a nuestra solución. El próximo paso a realizar consiste en crear una variable de tipo Nodo la cual va a representar el próximo nodo que tenemos que agregar a la solución. Para esto tenemos una función que nos devuelve el nodo mas cercano al que le pasamos como parámetro y que además no está en el vector solución. Esto lo hacemos para no repetir nodos en nuestro camino. El primer nodo a agregar que buscamos es el que está mas cercano al depósito para luego agregarlo a nuestra solución. Luego iteramos sobre el vector de nodos y calculamos el nodo que está mas cerca a nuestro nodoAgregar para luego agregarlo a la solución. Para finalizar agregamos el depósito a nuestra solición ya que además de empezar desde allí, tenemos que terminar en el mismo.
 (par)
 
 (par)
-Complejidad:
+**Complejidad:**
 Sabiendo que nuestra función nodoMasCercano toma tiempo lineal, podemos ver que hacemos un llamado a la función por cada nodo de nuestro vector n por lo que efectivamente tsp tarda O(n^2) en el caso de que tuviesemos un solo cluster.
 (par)
 
 /codeblock.
 
-resolverCVRP_Sweep(Grafo G, int puntoInicial) ← ???:
+resolverCVRP_Sweep(Grafo G, int puntoInicial) ← double:
     vector(Cluster) caminos
     costoTotal ← 0.0
     
@@ -145,6 +148,22 @@ resolverCVRP_Sweep(Grafo G, int puntoInicial) ← ???:
 
 .codeblock/
 
+(par)
+**Correctitud:**
+La función empieza creando un vector de caminos vacío, e inicializa la variable que va a representar el costo total de resolver el problema.
+Luego ordena los nodos del grafo en base a sus ángulos para despues clusterizarlos con esta información.
+Terminado este proceso se aplica tsp a cada cluster, lo cual nos deja con un vector de caminos a recorrer para cada cluster.
+Por último se calcula el costo total de cada camino y se lo suma a la variable costoTotal, calculando efectivamente el costo de cada camión utilizado.
+(par)
+
+(par)
+**Complejidad:**
+Sabemos que calcularAngulos toma O(n log n) para cualquier caso y clusterizarNodos toma tiempo cuadrático para cualquier caso. Si el grafo quedara clusterizado en un solo conjunto,
+estariamos resolviendo tsp en tiempo cuadrático para luego calcular el costo total del problema en tiempo lineal por lo que esta función en peor caso tarda O(n^2). De no pasar esto,
+y tener clusters separados, el proceso de ordenar todos los nodos en O(n log n) ganaría y esto sería lo que tardaría nuestro algoritmo.
+(par)
+
+***Ejes Inconsistentes***
 
 (par)
 Aclaración: Dado que el segundo método de clusterización, como mencionamos anteriormente, ya fue tratado en otro trabajo de investigación realizado por nosotros solamente vamos a 
@@ -172,7 +191,7 @@ partirCluster(Grafo G, Cluster c) ← vector(Cluster):
 
 
 (par)
-Correctitud:
+**Correctitud:**
 En este caso, luego de clusterizar los nodos mediante el clusterizador de ejes inconsistentes, partimos los clusters generados para que los mismos cumplan con el requerimiento de las cargas de los
 camiones, ya que el clusterizador no toma en cuenta las demandas de los nodos.
 (par)
@@ -182,7 +201,7 @@ Las particiones p1 y p2 generadas, las guardamos en nuestro vector de particione
 (par)
 
 (par)
-Complejidad:
+**Complejidad:**
 En este caso tenemos que pesoDeCluster toma O(n), partir el cluster en dos mitades también toma O(n) los appends cuestan O(n) tambien y la llamada recursiva, por teorema maestro, vemos que cuesta 
 O(n log n) (partimos el problema en dos subproblemas de igual tamaño y las otras funciones toman O(n)). Por lo que esta función toma O(n log n).
 (par)
@@ -201,14 +220,14 @@ clusterizadorEjesInconsistentes(Grafo G) ← vector(Cluster):
 .codeblock/
 
 (par)
-Correctitud:
+**Correctitud:**
 Como dijimos anteriormente no vamos a explicar por qué prim y detectarYEliminarEjesInconsistentes son correctas
 ya que lo hemos hecho en un trabajo previo. Luego de clusterizar el grafo lo único que resta hacer es
 recorrer los clusters generados y partirlos en clusters validos para luego retornar un vector de clusters validos.
 (par)
 
 /codeblock.
-resolverCVRP_EI(Grafo G) ← ???:
+resolverCVRP_EI(Grafo G) ← double:
     costoTotal ← 0.0
     Matriz m ← matriz(G)
     vector(Cluster) caminos
@@ -218,8 +237,6 @@ resolverCVRP_EI(Grafo G) ← ???:
     clusters ← eliminarDeposito(G, clusters)
     for cluster in clusters:
 	caminos ← tsp(G,cluster)
-
-
 
     return costoTotal
 .codeblock/
@@ -232,7 +249,8 @@ los caminos que tienen que recorrer cada uno de nuestros camiones en los cluster
 (par)
 
 (par)
-Complejidad:
+**Complejidad:**
+En el caso de que solo tengamos un cluster armardo, vamos a clusterizar en O(n^2) además de copiar la matriz en el mismo tiempo. Eliminar el depósito nos va a tomar tiempo lineal (es recorrer todos los nodos del grafo hasta encontrar el deposito) y luego vamos a aplicar tsp en tiempo cuadrático. Por lo que esta función toma O(n^2) en terminar.
 
 (par)
 
@@ -246,7 +264,7 @@ Los dos algoritmos fueron ejecutados con instancias aleatorias de un rango de ta
 
 (par)
 **Sweep:**
-(img)sweepPerfo.png(img)(img)ejesPerfo.png(img)
+(img)sweepPerfo.png(img)
 Podemos ver que el algoritmo a simple vista tiene el aspecto de tomar tiempo lineal. Esto sería un problema ya que estaría falsando fuertemente nuestra hipotesis inicial
 de que pertenece a O(n^2). Ahora al dividir por una función lineal vemos que no resulta en una función constante (img)sweepPerfoDivN.png(img) así que podemos descartar esta posibilidad.
 Por otro lado vemos que al dividir el algoritmo por una función cuadrática obtenemos el resultado esperado, (img)sweepPerfoDivNN.png(img) pero podemos acotar la complejidad un poco más, ya que 
@@ -386,8 +404,7 @@ En cuanto a costos, el algoritmo no tiene una performance deseable para ninguna 
 ***Sweep:***
 Podemos ver que sweep tiene una performance relativamente buena tanto en tiempo como en costos, el algoritmo corre considerablemente mas rápido que nuestra otra opción de CF-RS, y da soluciones mucho
 mas cercanas al óptimo y alejadas del peor caso. Como mostramos anteriormente tenemos un caso donde el algoritmo funciona de manera ineficiente ya que priorizamos clusterizar nodos que no se pasen de la demanda sin tener en cuenta sus distancias. Si es posible analizar la instancia previamente y nos damos cuenta que estamos en este caso sería preferible usar el algoritmo de ejes inconsistentes u otro que a costas de usar más camiones nos de una solución mejor
-(siempre que el uso de muchos camiones no sea un problema).
-
+(siempre que el uso de muchos camiones no sea un problema).En cualquier otro caso, si el problema se va a resolver con una heurística de CF-RS, en base a el análisis hecho, es preferible usar este algoritmo al otro.
 (par)
 
 
