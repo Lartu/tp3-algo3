@@ -1,5 +1,10 @@
+(pagebreak)
 
-*****Cluster-First Route-Second*****
+****3.3. Cluster-First & Route-Second****
+
+(todo) Poner bien los títulos. Usar solo títulos de tres asteriscos. Dos asteriscos es texto en negrita. (todo)
+
+***3.3.1. El algoritmo***
 (par)
 Cluster-First Route-Second es una heurística constructiva la cual vamos a usar para resolver el problema planteado de forma polinómica. Como lo indica su nombre la heurística tiene dos procedimientos
 bien marcados. Uno es el de clusterizar los nodos del grafo, esto significa agruparlos en base a cierto criterio y el otro es el de resolver los problemas de ruteo propiamente dichos para cada cluster
@@ -30,12 +35,12 @@ La segunda parte de la heurística va a ser común para los dos algoritmos de cl
 Para la resolución del TSP, elegimos utilizar nearest neighbour la cual es una heurística que va eligiendo el eje más cercano al nodo en el cual nuestro camión esta posicionado sin repetir nodos ya visitado.
 (par)
 
-****Pseudocódigos****
+***3.3.2. Pseudocódigos***
 (par)
 Pasamos a mostrar los pseudocódigos de los algoritmos implementados para este caso.
 (par)
 
-***Sweep:***
+***3.3.2.1. Sweep:***
 
 /codeblock.
 calcularAngulos(vector(Nodo) v, int puntoComienzo) → vector(Nodo):
@@ -61,8 +66,6 @@ vector(deposito, a) para terminar ordena de menor a mayor los nodos según los �
 **Complejidad:**
 Se itera por un vector de tamaño n haciendo operaciones constantes tomando O(n) en total y ordenando el vector en O(n log n) tomando un total de O(n log n)
 (par)
-
-
 
 /codeblock.
 
@@ -163,7 +166,7 @@ estariamos resolviendo tsp en tiempo cuadrático para luego calcular el costo to
 y tener clusters separados, el proceso de ordenar todos los nodos en O(n log n) ganaría y esto sería lo que tardaría nuestro algoritmo.
 (par)
 
-***Ejes Inconsistentes***
+***3.3.2.2. Ejes Inconsistentes***
 
 (par)
 Aclaración: Dado que el segundo método de clusterización, como mencionamos anteriormente, ya fue tratado en otro trabajo de investigación realizado por nosotros solamente vamos a 
@@ -254,7 +257,7 @@ En el caso de que solo tengamos un cluster armardo, vamos a clusterizar en O(n^2
 
 (par)
 
-****Experimentación****
+***3.3.3. Experimentación***
 
 **Perfomance:**
 
@@ -271,6 +274,7 @@ Por otro lado vemos que al dividir el algoritmo por una función cuadrática obt
 el peor caso de nuestro algoritmo se da cuando nos queda todo el grafo en un solo cluster y esto en realidad no pasa usualmente, asi que dividiendo por n log n podemos ver que nuestra función resulta
 en una constante asi que en el caso promedio nuestro algoritmo toma O (n log n).
 (img)sweepPerfoDivNLogN.png(img)
+(par)
 
 
 (par)
@@ -289,7 +293,8 @@ hace que un camión no pueda realizar el recorrido. Entonces, si nosotros tenemo
 (par)
 
 
-//insertar imagen
+(todo)insertar imagen(todo)
+
 (par)
 Este grafo es un ejemplo del caso patológico mencionado. Si por ejemplo, nuestros camiones tuviesen una capacidad de 100 y todos nuestros nodos una demanda de 1, el algoritmo nos diría que solo tenemos que usar un camión para resolver este problema. Esto implica que (como nuestro camión no vuelve al depósito) va a viajar desde el nodo de un cluster hasta el otro cuando volver al depósito y usar otro camión devolvería una solución más eficiente en términos de costos.
 (par)

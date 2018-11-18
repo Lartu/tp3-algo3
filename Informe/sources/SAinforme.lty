@@ -1,5 +1,9 @@
+(pagebreak)
 
-*****Simulated Annealing*****
+
+****3.4. Simulated Annealing****
+
+***3.4.1. El algoritmo***
 (par)
 Simulated Annealing es una metaheurística que se utiliza para encontrar soluciones aproximadas a problemas que no poseen un algoritmo de resolución polinomial. Difieren de las heurísticas en que se basan en buscar la mejor solución de un conjunto de muchísimas soluciones posibles. Esta busqueda se puede realizar de muchas maneras, pero simulated Annealing utiliza una **búsqueda local**. A partir de una solución __S__ definimos un conjunto de soluciones relacionadas llamadas el vecindario de __S__. Revisamos estas soluciones y con algún criterio decidimos tomar una solución vecina __S'__ y calculamos su vecindario. Esto se repite hasta que decidamos dejar de buscar con otro criterio.  
 (par)
@@ -39,7 +43,6 @@ Sean S y S' soluciones. S' ∈ N(S) <=> ∃ i,j con i != j , i y j <= |rutas(S)|
 
 (par)
 Siendo ``shift`` y ``exchange`` los siguientes procedimientos:
-(par)
  
 /codeblock.
 shift(vector<Ruta> rutas ,Ruta ruta1, Ruta ruta2, cliente c, Grafo G)
@@ -95,15 +98,16 @@ Demos un pseudocódigo completo para nuestra implementación de Simulated Anneal
 (todo)Dar pseudocódigo completo (obviamente formal, pero usando P, CS y eso con sus valores reales)(todo)
 (par)
 
-**Analisis de complejidad**
+
+***3.4.2. Analisis de complejidad***
 (par)
 (todo)explicarlo mejor con el pseudocódigo. No hay cota simple mas ajustada no?(todo) Dado que todas las operaciones se realizan en tiempo constante excepto shift que en su peor caso inserta en una ruta con todos los elementos menos uno, una cota simple del peor caso sería __n__ * __NIt__ donde n es la cantidad de nodos del grafo y __NIt__ es la cantidad de iteraciones. Es una cota brusca porque la probabilidad de inserciones en rutas grandes disminuye a medida que aumenta la cantidad de clientes (porque mientras más clientes tiene una ruta, menos probable es que siga teniendo espacio), pero dar una cota más ajustada es complejo porque depende de la instancia particular.
 (par)
 
 (todo)Mostrar los graficos que muestran que el algoritmo es lineal en funcion del nro de iteraciones(todo)
 
-***Búsqueda de parámetros óptimos***
-**Caso aleatorio**
+***3.4.3. Búsqueda de parámetros óptimos: caso aleatorio***
+
 (par)
 Busquemos el valor óptimo de los parámetros de nuestro algoritmo de Simulated Annealing para el casos aleatorio. Es decir, queremos encontrar el valor de los parámetros que mejores resultados obtiene en el promedio de muchos casos aleatorios, lo cual es útil para tener una noción general de qué valores tienden a obtener mejores resultados.
 (par)
@@ -172,7 +176,7 @@ Es importante destacar que a medida que aumenta n, todos las variantes de Coolin
 
 (todo)Explicar como son las instancias del set A (a menos que se haga antes en el informe)(todo)
 
-**Parámetros óptimos para Set A**
+***3.4.4. Búsqueda de parámetros óptimos: Set A***
 
 (par)
 Busquemos ahora los parámetros óptimos para el set de instancias "Set A" propuesto por Augerat en 1995. Son instancias en las que se conoce el óptimo, por lo que en vez de medir los resultados como ahorro porcentual de la solución canónica los mediremos como distancia porcentual de la solución óptima; es decir, cuánto porciento mayor es nuestra solución comparada a la solución óptima. Esta manera de medir los resultados nos resulta más significativa que el ahorro porcentual de la solución canónica , que si bien es una medida aceptable para los casos aleatorios porque no tenemos información del óptimo, no es una medida de qué tan buena es la solución con respecto al mejor resultado posible.
@@ -188,7 +192,8 @@ La configuración óptima resultante fue como Cooling Schedule CS1, como tempera
 
 (img)SAdistOptimoA.png(img)
 
-**Parámetros óptimos para Set X**
+***3.4.5. Búsqueda de parámetros óptimos: Set X***
+
 (par)
 (todo)Explicar como son las instancias del set X (a menos que se haga antes en el informe)(todo)
 Busquemos los parámetros óptimos para el set de instancias "Set X" propuesto por Uchoa et al. en 2014. Lo haremos de manera análoga a como lo hicimos para el Set A previamente.
@@ -200,7 +205,7 @@ Los resultados obtenidos fueron como Cooling Schedule __CS1__, __Ts__ = 20 y __N
 
 (img)SAdistOptimoX.png(img)
 
-***Conclusiones de la experimentación***
+***3.4.5. Conclusiones de la experimentación***
 
 (par)
 De la búsqueda de parámetros óptimos para diferentes sets de instancias podemos extraer una serie de conclusiones acerca de como varía el comportamiento del algoritmo en función de los parámetros de entrada. En primer lugar es importante destacar el rol del número de iteraciones en el rendimiento del algoritmo. Si bien lo mencionamos previamente y es bastante sencillo entender su relevancia, no podemos dejarlo fuera de las conclusiones. No creemos que sea casualidad que los mejores resultados para todos los sets de instancias utilizados se obtuvieron para el mayor número de iteraciones probado. 

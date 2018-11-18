@@ -1,7 +1,11 @@
-***Heurística Constructiva Golosa "Merge más cercanos"***
+(pagebreak)
+
+****3.2.Heurística constructiva golosa: __Merge Más Cercanos__****
+
+***3.2.1. El algoritmo***
 
 (par)
-La heurística que hemos llamado Merge más cercanos consiste en unir rutas en función de la cercanía de sus puntos. Se parte desde la solución canónica al problema para obtener rutas iniciales y luego se van realizando uniones entre las rutas que contengan los dos puntos más cercanos que no pertenecen a la misma ruta. 
+La heurística constructiva golosa que hemos llamado Merge más cercanos consiste en unir rutas en función de la cercanía de sus puntos. Se parte desde la solución canónica al problema para obtener rutas iniciales y luego se van realizando uniones entre las rutas que contengan los dos puntos más cercanos que no pertenecen a la misma ruta. 
 (par)
 
 (par)
@@ -27,7 +31,7 @@ return rutas
 Como podemos ver, el algoritmo es muy simple. Una aclaración importante es que la union entre las rutas une el último elemento no depósito de la rutaA con el primer elemento no depósito de la rutaB y luego descarta estos depósitos de manera que la ruta obtenida sea una ruta válida. Tampoco es menor enfatizar que no importa que nodos conformen el par más cercano entre sí; la unión será siempre entre el último nodo de la ruta del primer elemento y el primer elemento de la ruta del segundo elemento.
 (par)
 
-***Análisis de complejidad temporal***
+***3.2.2. Análisis de complejidad temporal***
 
 (par)
 Descompongamos el pseudocódigo en pasos:
@@ -44,7 +48,7 @@ Comprobemoslo realizando las mediciones directamente. Generamos 400 instancias d
 
 (img)Tgolosa.png(img)
 
-***Rendimiento para diferentes sets de instancias ***
+***3.2.3. Rendimiento para diferentes sets de instancias ***
 
 (todo)hablar de los resultados(todo)
 
@@ -57,7 +61,7 @@ Veamos el rendimiento del algoritmo propuesto para los sets A, X y un set aleato
 (img)MMCdistOptimoX.png(img)
 
 (todo) Explicación detallada y ejemplo del caso patológico(todo)
-***Caso patológico***
+***3.2.4. Caso patológico***
 
 (par)
 Detengámonos a analizar un caso de Grafo para el cual la heurística propuesta resulta en malas soluciones. La posibilidad de tener casos patológicos se debe al hecho de que si bien estamos utilizando los pares de clientes más cercanos, la unión entre las rutas se da entre el último elemento de una ruta y el primero de la otra, por lo que si estos dos elementos son lejanos, se generará una ruta con una arista muy larga. 
