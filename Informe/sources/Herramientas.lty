@@ -4,15 +4,30 @@
 
 ****2.1. Equipo utilizado****
 (todo)
-    Equipo utilizado en las mediciones de cada punto
+    Ver si vale la pena poner acá lo de ley de grandes números o se explicita en cada punto.
 (todo)
+(par)
+    Las mediciones presentadas en los experimentos que se presentarán en las próximas secciones fueron llevadas a cabo en un equipo que consta de las siguientes prestaciones: procesador AMD FX-6300 a 3.6GHz, 8.14 GB de memoria RAM y sistema operativo OpenSUSE Leap 15.0.
+(par)
 
-****2.2. Generador de instancias****
+****2.2. Generador de clusters****
 (todo)
-    Explicar cómo generamos instancias
+    Adaptar esto al tp3
 (todo)
+(par)
+Los datasets que utilizaremos para testear y analizar los algoritmos implementados para este problema (sobre los cuales experimentaremos en las **secciones 3.3**, **3.4** y **3.5**) fueron obtenidos del sitio __cs.joensuu.fi/sipu/datasets__, bajo el subtítulo de __Shape Sets__. Dado que el formato en el que se encuentran disponibles los conjuntos no es compatible con el formato de entrada pedido por la cátedra, hemos desarrollado un conversor que nos permite transformar los txts descargables a archivos legibles por nuestro programa. Si se lo desea examinar, se encuentra en el directorio ``ejercicio_1/Formateador`` adjunto junto a este documento. Para ejecutarlo, se debe utilizar el comando ``php formatear.php <archivo a formatear>``. Un archivo compatible será creado en el directorio ``DatasetsFormateados`` con el mismo nombre que el archivo original.
+(par)
 
-****2.3. Generador de clusters****
+(rightblock)
+(img)generador_datasets.png(img)
+(caption)Generador de datasets propio(caption)
+(rightblock)
+
+(par)
+Dado que los conjuntos disponibles no nos parecieron suficientes para testear el potencial de los algoritmos en situaciones particulares, y a raíz que nos fuera informado que los algoritmos probablemente no fueran, dada su naturaleza, a producir los resultados pronosticados en el sitio web mencionado en el párrafo anterior para los datasets provistos, fue decidido implementar un generador propio de datasets. El mismo se encuentra en el directorio ``ejercicio_1/Generador_Datasets``. Para ejecutarlo se debe abrir con un navegador web el archivo ``generador.html``. Para usarlo no hace falta más que hacer click en el lugar donde se quiera colocar un punto. La coordenada del punto será añadida al área de texto debajo del gráfico, que luego podrá ser copiada a un archivo de texto y provista al ejecutable del trabajo práctico por entrada estándar.
+(par)
+
+****2.3. Generador de instancias****
 (todo)
-    Copypastear el generador de clusters del TP2
+    Hablar del generador de instancias random y de qué clase de instancias genera
 (todo)
