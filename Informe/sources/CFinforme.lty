@@ -278,7 +278,7 @@ Podemos ver que el algoritmo a simple vista tiene el aspecto de tomar tiempo lin
  así que podemos descartar que pertenezca a __O(n)__.
 Por otro lado vemos que al dividir el algoritmo por una función cuadrática obtenemos el resultado esperado, pero podemos acotar la complejidad un poco más, ya que 
 el peor caso de nuestro algoritmo se da cuando nos queda todo el grafo en un solo cluster y esto en realidad no pasa usualmente, asi que dividiendo por n log n podemos ver que nuestra función resulta
-en una constante asi que en el caso promedio nuestro algoritmo toma __O(n log n)__.
+en una constante asi para este set de instancias nuestro algoritmo toma __O(n log n)__.
 
 (par)
 
