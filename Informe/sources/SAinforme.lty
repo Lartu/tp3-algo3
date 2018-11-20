@@ -28,17 +28,30 @@ Cómo disminuye la temperatura a lo largo de la ejecución se denomina función 
 Veamos el pseudocódigo de un esquema de Simulated Annealing:
 (par)
 
-(img)esquemaSArec.png(img)
+/codeblock.
+Entrada:
+S0: solución inicial, E: función energía, N: vecindario
+Ts: Temperatura inicial, Tf: Temperatura final, CS: función que enfría
+la temperatura, P: función de probabilidad de aceptación de una transición.
 
+S* ← S0
+S ← S*
+T ← Ts
+while(T > Tf)
+    Tomar S'∈ N(S)
+    if P(S, S', T) >= random(0,1):
+        S ← S'
+    if E(S) <= E(S*) : S* ← S
+    enfriar(T)
+return S*
+.codeblock/
 (par)
 (todo)Esto asume que ya explicamos como está compuesta una solucion. O sea, que es un vector de vectores de clientes.(todo)
 En nuestra implementación la función de vecindario que utilizaremos será **1-interchange**. El vecindario utilizando esta función está definido de la siguiente manera:
 (par)
 
-(todo)se puede escribir esto de manera mas linda (a nivel formato)(todo)
-
 (par)
-Sean S y S' soluciones. S' ∈ N(S) <=> ∃ i,j con i != j , i y j <= |rutas(S)|, ∃ c ∈ rutas(i), c != deposito tal que shift(rutas(S)[i],rutas(S)[j],c) == rutas(S') ∨ existe c1 ∈ rutas(i) ∧ c2 ∈ rutas(j), c1,c2 != deposito exchange(rutas(S)[i],rutas(S)[j],c1,c2) == rutas(S'). 
+Sean S y S' soluciones. S' ∈ N(S) <=> ∃ i, j con i != j , i y j <= |rutas(S)|, ∃ c ∈ rutas[i], c != deposito(S) tal que shift(rutas(S)[i], rutas(S)[j], c) == rutas(S') ∨ ∃ c1 ∈ rutas[i] ∧ c2 ∈ rutas[j], c1,c2 != deposito(S) exchange(rutas(S)[i], rutas(S)[j], c1, c2) == rutas(S'). 
 (par)
 
 (par)
@@ -46,10 +59,10 @@ Siendo ``Shift`` y ``Exchange`` los siguientes procedimientos:
  
 /codeblock.
 Shift(vector<Ruta> rutas ,Ruta ruta1, Ruta ruta2, cliente c, Grafo G)
-    if (rutas[ruta1][c].demanda + Σ(demandas(ruta2)) <= G.capacidad_total)
-	    w* <- w ∈ rutas[ruta2] / minArg(G.distanciaEntre(rutas[ruta1][c], rutas[ruta2][w]) + G.distanciaEntre(rutas[ruta2][w+1],rutas[ruta1][c]))
-	    rutas[ruta2] = rutas[ruta2][1..w] ∪ rutas[ruta1][c] ∪ rutas[ruta2][w+1..|rutas[ruta2|-1]
-	    rutas[ruta1] = rutas[ruta1] - c
+    if (rutas[ruta1][c].demanda + Σ(demandas(ruta2)) <= G.capacidad_total):
+	    w* ← w ∈ rutas[ruta2] / minArg(G.distanciaEntre(rutas[ruta1][c], rutas[ruta2][w]) + G.distanciaEntre(rutas[ruta2][w+1],rutas[ruta1][c]))
+	    rutas[ruta2] ← rutas[ruta2][1..w] ∪ rutas[ruta1][c] ∪ rutas[ruta2][w+1..|rutas[ruta2|-1]
+	    rutas[ruta1] ← rutas[ruta1] - c
     return rutas
 .codeblock/
 
@@ -57,10 +70,10 @@ Shift(vector<Ruta> rutas ,Ruta ruta1, Ruta ruta2, cliente c, Grafo G)
 /codeblock. 
 Exchange(vector<Ruta> rutas, Ruta ruta1, Ruta ruta2,c1,c2, Grafo G)
 	if(Σ(demandas(ruta1)) - rutas[ruta1][c1].demanda + rutas[ruta2][c2].demanda <= G.capacidad_total &&
-	Σ(demandas(ruta2)) - rutas[ruta2][c2].demanda + rutas[ruta1][c1] < G.capacidad_total)
-        temp = rutas[ruta1][c1]
-        rutas[ruta1][c1] = rutas[ruta2][c2]
-        rutas[ruta2][c2] = temp
+	Σ(demandas(ruta2)) - rutas[ruta2][c2].demanda + rutas[ruta1][c1] < G.capacidad_total):
+        temp ← rutas[ruta1][c1]
+        rutas[ruta1][c1] ← rutas[ruta2][c2]
+        rutas[ruta2][c2] ← temp
     return rutas
 .codeblock/
 
@@ -118,12 +131,28 @@ Para corroborar esta cota, veamos que Simulated Annealing es lineal en función 
         (img)SAtiempo1000.png(img)
     (/p33)
     (p33)
-        (img)SAtiempo10000.png(img)
+        (img)SATiempo10000.png(img)
     (/p33)
 (/ps)
 
-(todo)Mostrar los graficos que muestran que el algoritmo es lineal en funcion del nro de iteraciones (fijo n, vario NIt)(todo)
+(par)
+Fijando __NIt__ en un valor constante, vemos como el algoritmo es lineal en función de __n__.
+(par)
+(ps)
+    (p33)
+        (img)SATiempoVariandoNIt103.png(img)
+    (/p33)
+    (p33)
+        (img)SATiempoVariandoNIt203.png(img)
+    (/p33)
+    (p33)
+        (img)SATiempoVariandoNIt303.png(img)
+    (/p33)
+(/ps)
 
+(par)
+Fijando __n__ en un valor constante, vemos como el algoritmo es lineal en función de __NIt__.
+(par)
 ***3.4.3. Búsqueda de parámetros óptimos: caso aleatorio***
 
 (par)
@@ -147,7 +176,7 @@ El experimento consistirá en medir el ahorro porcentual con respecto a la soluc
     (/p50)
     (p50)
         (img)SANIt503.png(img)
-        (caption)Ahorro porcentual de la solución canónica en función de NIt, __n__ = 503caption)
+        (caption)Ahorro porcentual de la solución canónica en función de NIt, __n__ = 503(caption)
     (/p50)
 (/ps)
 
@@ -207,7 +236,7 @@ La búsqueda de los parámetros óptimos se realizó calculando la distancia por
 (par)
 La configuración óptima resultante fue como Cooling Schedule CS1, como temperatura inicial __Ts__ = 8 y número de iteraciones __NIt__ = 15000. Veamos a continuación la distancia porcentual al óptimo para cada instancia del set con la configuración óptima:
 (par)
-
+(todo)achicar porfi(todo)
 (img)SAdistOptimoA.png(img)
 
 ***3.4.5. Búsqueda de parámetros óptimos: Set X***
@@ -220,7 +249,7 @@ Busquemos los parámetros óptimos para el set de instancias "Set X" propuesto p
 (par)
 Los resultados obtenidos fueron como Cooling Schedule __CS1__, __Ts__ = 20 y __NIt__ = 15000. Presentamos a continuación la distancia porcentual al óptimo para cada instancia del set con ésta configuración:
 (par)
-
+(todo)achicar porfi(todo)
 (img)SAdistOptimoX.png(img)
 
 ***3.4.5. Conclusiones de la experimentación***
