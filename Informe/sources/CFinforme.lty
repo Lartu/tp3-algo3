@@ -43,8 +43,8 @@ Pasamos a mostrar los pseudocódigos de los algoritmos implementados para este c
 /codeblock.
 calcularAngulos(vector(Nodo) v, int puntoComienzo) → vector(Nodo):
   for a in v:
-    producto ← v[puntoComienzo].x * v[a].x - v[puntoComienzo].y * v[a].y
-    determinante ← v[puntoComienzo].x * v[a].y + v[puntoComienzo].y * v[a].x
+    producto ← v___puntoComienzo___(x) * v___a___(x) - v___puntoComienzo___(y) * v___a___(y)
+    determinante ← v___puntoComienzo___(x) * v___a___(y) + v___puntoComienzo___(y) * v___a___(x)
     angulo ← arcoTangente(determinante, producto)
 
     angulos ← angulo //En grados
@@ -77,11 +77,11 @@ clusterizarNodos(Grafo G, vector(Nodo) v) → vector(Cluster):
 	Cluster cluster
         peso ← 0
 	while (peso < capacidad(G) && i < |v|):
-	    if(peso + demanda(v[i]) > capacidad(G)):
+	    if(peso + demanda(v___i___) > capacidad(G)):
 		peso ← capacidad(G)
 	    else:
-		peso ← demanda(v[i])
-    		cluster ← v[i]
+		peso ← demanda(v___i___)
+    		cluster ← v___i___
 		i ← i + 1 
 	clusters ← cluster
 
