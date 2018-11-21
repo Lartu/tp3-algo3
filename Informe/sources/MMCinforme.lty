@@ -16,7 +16,7 @@ Veamos el pseudocódigo de "Merge más cercanos":
 MergeMasCercanos(G grafo):
 rutas ← solucionCanonica(G)
 pares ← paresDePuntosPorDistancia(G)
-while (pares != vacio):
+while (pares != ∅):
     (a,b) ← pares.primero()
     rutaA ← rutaALaQuePertenece(a)
     rutaB ← rutaALaQuePertenece(b)
@@ -28,7 +28,7 @@ return rutas
 .codeblock/
 
 (par)
-Como podemos ver, el algoritmo es muy simple. Una aclaración importante es que la union entre las rutas une el último elemento no depósito de ``rutaA`` con el primer elemento no depósito de ``rutaB`` y luego descarta estos depósitos de manera que la ruta obtenida sea una ruta válida. Tampoco es menor enfatizar que no importa qué nodos conformen el par más cercano, la unión será siempre entre el último nodo de la ruta del primer elemento y el primer nodo de la ruta del segundo elemento.
+Como podemos ver, el algoritmo es muy simple. Una aclaración importante es que la unión entre las rutas une el último elemento no depósito de ``rutaA`` con el primer elemento no depósito de ``rutaB`` y luego descarta estos depósitos de manera que la ruta obtenida sea una ruta válida. Tampoco es menor enfatizar que no importa qué nodos conformen el par más cercano, la unión será siempre entre el último nodo de la ruta del primer elemento y el primer nodo de la ruta del segundo elemento.
 (par)
 
 ***3.2.2. Análisis de complejidad temporal***

@@ -163,7 +163,7 @@ Para esto realizaremos una serie de experimentos, comenzando por un análisis de
 (par)
 
 (par)
-El experimento consistirá en medir el ahorro porcentual con respecto a la solución canónica  promedio obtenido luego de __Nit__ iteraciones para 400 instancias aleatorias del problema ), con un varios n fijos. Decidimos comparar con la solución canónica para poder comparar los resultados de diferentes n más claramente. La diferencia en efectividad observada utilizando las tres variantes de Cooling schedule dieron resultados muy similares, por lo que decidimos utilizar un único Cooling Schedule para la medición por practicidad. A continuación mostramos los resultados obtenidos:
+El experimento consistirá en medir el ahorro porcentual con respecto a la solución canónica  promedio obtenido luego de __Nit__ iteraciones para 400 instancias aleatorias del problema ), con un varios n fijos. Decidimos comparar con la solución canónica para poder comparar los resultados de instancias de tamaños diferentes más claramente. La diferencia en efectividad observada utilizando las tres variantes de Cooling schedule dieron resultados muy similares, por lo que decidimos utilizar un único Cooling Schedule para la medición por practicidad. A continuación mostramos los resultados obtenidos:
 (par)
 
 (ps)
@@ -183,7 +183,11 @@ Como podemos apreciar en los gráficos nuestras predicciones fueron correctas. A
 (par)
 
 (par)
+<<<<<<< HEAD
 Teniendo en cuenta las caracteristicas de las instancias que mediremos y que no disponemos de tiempo ilimitado para realizar las mediciones, decidimos que __Nit__ = 10.000 es suficientemente grande para ser representativo del resultado del algoritmo y suficientemente pequeño para poder realizar el resto de las mediciones en un tiempo razonable.
+=======
+Teniendo en cuenta que no disponemos de tiempo ilimitado para realizar las mediciones, decidimos que __Nit__ = 10.000 es suficientemente grande para ser representativo del resultado del algoritmo y suficientemente pequeño para poder realizar el resto de las mediciones en un tiempo razonable.
+>>>>>>> 419812510afcca07d1b4e26995dcd1d9e254468b
 (par)
 
 (par)
@@ -217,12 +221,11 @@ Se puede ver que __CS0__ y __CS1__ se comportan de manera identica excepto por l
 Es importante destacar que a medida que aumenta n, todos las variantes de Cooling Schedule bajan en efectividad. Esto puede deberse al número de iteraciones, que como vimos anteriormente, debería ser mayor para dar mejores resultados en instancias de mayor tamaño.
 (par)
 
-(todo)Explicar como son las instancias del set A (a menos que se haga antes en el informe)(todo)
-
 ***3.4.4. Búsqueda de parámetros óptimos: Set A***
 
+(todo)Si antes se aclara cómo medimos, esta aclaracion esta al pedo, puedo referenciar a lo otro.(todo)
 (par)
-Busquemos ahora los parámetros óptimos para el set de instancias "Set A" propuesto por Augerat en 1995. Son instancias en las que se conoce el óptimo, por lo que en vez de medir los resultados como ahorro porcentual de la solución canónica los mediremos como distancia porcentual de la solución óptima; es decir, cuánto porciento mayor es nuestra solución comparada a la solución óptima. Esta manera de medir los resultados nos resulta más significativa que el ahorro porcentual de la solución canónica , que si bien es una medida aceptable para los casos aleatorios porque no tenemos información del óptimo, no es una medida de qué tan buena es la solución con respecto al mejor resultado posible.
+Busquemos ahora los parámetros óptimos para el set de instancias "Set A" propuesto por Augerat en 1995. Consta de aproximadamente 20 instancias pequeñas que poseen entre 30 y 80 puntos distribuidos aleatoriamente, muy similar la generadas por nuestro generador. Al ser instancias en las que se conoce el óptimo, en vez de medir los resultados como ahorro porcentual de la solución canónica los mediremos como distancia porcentual de la solución óptima; es decir, cuánto porciento mayor es nuestra solución comparada a la solución óptima. Esta manera de medir los resultados nos resulta más significativa que el ahorro porcentual de la solución canónica , que si bien es una medida aceptable para los casos aleatorios porque no tenemos información del óptimo, no es una medida de qué tan buena es la solución con respecto al mejor resultado posible.
 (par)
 
 (par)
@@ -237,7 +240,6 @@ La configuración óptima resultante fue como Cooling Schedule CS1, como tempera
 ***3.4.5. Búsqueda de parámetros óptimos: Set X***
 
 (par)
-(todo)Explicar como son las instancias del set X (a menos que se haga antes en el informe)(todo)
 Busquemos los parámetros óptimos para el set de instancias "Set X" propuesto por Uchoa et al. en 2014. Lo haremos de manera análoga a como lo hicimos para el Set A previamente.
 (par)
 

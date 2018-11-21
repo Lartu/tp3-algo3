@@ -28,3 +28,7 @@ Dado que los conjuntos disponibles no nos parecieron suficientes para testear el
 (todo)
     Hablar del generador de instancias random y de qué clase de instancias genera
 (todo)
+
+(todo)
+	Estaria bueno hablar del equipo utilizado y de las mediciones. tambien deberiamos aclarar por qué medimos como medimos, es decir, por que en los casos aleatorios medimos como ahorro porcentual de la solución canónica y en los casos conocidos como porcentaje respecto del óptimo.
+(todo)
