@@ -57,7 +57,7 @@ Los puntos de los casos generados se encuentran distribuidos aleatoriamente y he
     Nos parece importante recalcar que no solo nos interesa llevar a cabo un análisis sobre las instancias conocidas cuyos valores óptimos se tienen presentes, sino también sobre instancias generadas al azar de las cuales no se conoce nada. Creemos que un caso real podría tener condiciones similares (no saber nada) y, por lo tanto, es relevante el saber de una solución, aunque sea parcial, que pueda correr eficientemente sobre dichas situaciones. Claro es que no esperamos que una misma heurística sea la mejor para cada caso evaluado, pero sí esperamos encontrar una que, en promedio, se comporte mejor que todas las demás.
 (par)
 
-****1.5. Caso Canónico****
+****1.5. Caso canónico****
 (rightblock)
     (img)canonico.png(img)
     (caption)Ejemplo de caso canónico(caption)
