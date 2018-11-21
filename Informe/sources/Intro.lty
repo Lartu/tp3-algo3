@@ -58,6 +58,14 @@ Los puntos de los casos generados se encuentran distribuidos aleatoriamente y he
 (par)
 
 ****1.5. Caso Canónico****
-(todo)
-    Explicar qué es el caso canónico, que lo vamos a usar para evaluar instancias desonocidas, poner grafiquitos, etc, etc.
-(todo)
+(rightblock)
+    (img)canonico.png(img)
+    (caption)Ejemplo de caso canónico(caption)
+(rightblock)
+(par)
+    Para facilitar la comunicación de nuestras ideas y, por lo tanto, la lectura de este documento, hemos definido el __caso canónico__. El caso canónico no es más que la solución trivial a un problema de CVRP, que consiste en tantas rutas como clientes haya, enviando un camión a cada cliente, que entrega la mercadería y regresa al depósito.
+(par)
+
+(par)
+    La importancia del caso canónico radica en que es la peor solución posible a un problema de CVRP como los que estamos tratando y es además evidente. Nos intereza porque podemos utilizarla como parámetro para analizar la eficacia de una heurística sobre un caso del que no se sabe nada: podremos desconocer el óptimo, pero podemos calcular y afirmar que nuestra heurística es __n%__ mejor que el caso canónico. Esto da entonces lugar a que una heurística absolutamente inútil sea __0%__ mejor que el caso canónico (es decir que tardó el __100%__ de lo que tardó el caso canónico), mientras que una muy buena pueda ahorrar un __99%__ de la distancia del caso canónico (es decir, ejecutarse en el __1%__ del tiempo que tarda la solución trivial).
+(par)

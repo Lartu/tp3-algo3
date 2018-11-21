@@ -65,8 +65,8 @@ Asi como está lo paso muy por arriba el por qué de como medimos. Lo tengo bien
 (par)
 Veamos el rendimiento del algoritmo propuesto para los sets A, X y un set aleatorio de nuestra autoría. El set aleatorio consta de 400 instancias de grafo para cada tamaño desde __n__ = 3 hasta __n__ = 503, con saltos de a 50. Para las instancias aleatorias expresaremos el rendimiento como porcentaje ahorrado en promedio desde la solución canónica y en los sets en los que se conoce el óptimo lo haremos como porcentaje de la solución óptima.
 (par)
-(todo)achicar porfi(todo)
-(img)MMCCasoAleatorio.png(img)
+
+/imagesmall.MMCCasoAleatorio.png.imagesmall/
 
 (par)
 Como podemos apreciar, para la mayoría de los tamaños probados el porcentaje de ahorro ronda el 35%, y no parece depender fuertemente del número de clientes de la instancia. Sin embargo suponer  que su rendimiento sí depende de la distribución de los puntos en el plano ya __n__ = 153 resultó en un rendimiento muy pobre. Esto nos da un indicio de la posibilidad de casos patológicos, ya que como calculamos el porcentaje de ahorro de 400 instancias diferentes y resultó ser tan malo, debe haber varias distribuciones posibles de clientes que resulten en malos rendimientos.
@@ -79,8 +79,7 @@ Dudamos que el mal rendimiento esté relacionado puntualmente a los grafos de __
 (par)
 Veamos ahora los rendimientos para el Set A:
 (par)
-(todo)achicar porfi(todo)
-(img)MMCdistOptimoA.png(img)
+/imagesmall.MMCdistOptimoA.png.imagesmall/
 
 (par)
 La distancia porcentual al óptimo va entre 25% y 40% para la mayoría de las instancias, lo cual no parece ser particularmente buen rendimiento dado que son instancias de tamaño pequeño. Sin embargo, dado que las instancias de A son generadas aleatoriamente sin ninguna especie de patrón o criterio particular, es entendible que el rendimiento no sea muy bueno.
@@ -97,8 +96,7 @@ Por último analizemos los resultados del algoritmo aplicado al Set X:
 (par)
 Con este set de instancias obtuvimos resultados bastante mejores que con el Set A. Hay una gran cantidad de instancias rondando el 15% del óptimo y otra rondando el 30%. Sigue habiendo casos muy poco eficientes, notablemente __n__ = 120 que ronda el 70% de distancia porcentual al óptimo. 
 (par)
-(todo)achicar porfi(todo)
-(img)MMCdistOptimoX.png(img)
+/imagesmall.MMCdistOptimoX.png.imagesmall/
 
 ***3.2.4. Caso patológico***
 
@@ -109,8 +107,7 @@ Dada la abundante evidencia de que hay casos para los cuales la heurística tien
 (par)
 Veamos paso a paso la ejecución del algoritmo en un caso de estas características:
 (par)
-(todo)achicar porfi(todo)
-/imagemid.SAcaso_patologico_0.png.imagemid/
+/imagesmall.SAcaso_patologico_0.png.imagesmall/
 
 (par)
 En esta instancia de problema tenemos un depósito identificado con el color negro y cuatro clientes que son el resto de los nodos del grafo. De ahora en más los llamaremos por la inicial del color que los identifica, es decir, serán R para el Rojo, N para el Naranja, A para el Azul y M para el marrón. El valor de sus demandas no es de importancia, lo único que nos importa es que un sólo vehículo pueda cargar con la suma de las cuatro demandas.
@@ -119,8 +116,8 @@ En esta instancia de problema tenemos un depósito identificado con el color neg
 (par)
 Acorde al primer paso del algoritmo calculamos la solución canónica, formando las siguientes rutas:
 (par)
-(todo)achicar porfi(todo)
-/imagemid.SAcaso_patologico_1.png.imagemid/
+/imagesmall.SAcaso_patologico_1.png.imagesmall/
+
 
 (par)
 Es importante aclarar que la trayectoria que determinan las curvas utilizadas para mostrar las rutas no son representaciones adecuadas de los movimientos del vehículo, si no que las dibujamos de esta manera para que sean más fácilmente distinguibles. La trayectoria de los camiones será una línea recta.
@@ -129,14 +126,12 @@ Es importante aclarar que la trayectoria que determinan las curvas utilizadas pa
 (par)
 Ahora ordenamos los pares de nodos por distancia de menor a mayor. Estos serán (R,A),(R,N),(A,N), (A,M),(R,M) y (M,N). Como R y A son el par de menor distancia, no pertenecen a la misma ruta y cumplen que la suma de sus demandas es menor que la capacidad del camión, realizamos un merge entre sus rutas, de la siguiente manera:
 (par)
-(todo)achicar porfi(todo)
-/imagemid.SAcaso_patologico_2.png.imagemid/
+/imagesmall.SAcaso_patologico_2.png.imagesmall/
 
 (par)
 Seguimos iterando por la lista de pares. El próximo par es (R,N). Como no pertenecen a la misma ruta y la suma de las demandas lo permite, mergeamos la ruta que pasa por R y A con la ruta que pasa por N. Por cómo está definido el merge, uniremos el último nodo de la primer ruta con el primero de la segunda ruta, resultando en lo siguiente:
 (par)
-(todo)achicar porfi(todo)
-/imagemid.SAcaso_patologico_3.png.imagemid/
+/imagesmall.SAcaso_patologico_3.png.imagesmall/
 
 (par)
 Es una ruta que sale del depósito pasando primero por R, luego por A y finalmente por N antes de regresar al depósito.
@@ -145,8 +140,7 @@ Es una ruta que sale del depósito pasando primero por R, luego por A y finalmen
 (par)
 Viendo nuestra lista de pares, el siguiente en línea es (A,N), pero ambos ya pertenecen a la misma ruta, por lo que seguimos con (A,M). Realizando el merge, unimos el último elemento de la primera ruta con el primero de la segunda, generando el siguiente grafo:
 (par)
-(todo)achicar porfi(todo)
-/imagemid.SAcaso_patologico_4.png.imagemid/
+/imagesmall.SAcaso_patologico_4.png.imagesmall/
 
 (par)
 Luego de esta iteración, no habrá más cambios a las rutas dado que como todos los nodos pertenecen a la misma ruta, no hay más merge posibles.Como se puede observar, generamos una ruta muy ineficiente para un recorrido fácilmente realizable con recorridos más cortos. Por ejemplo, se podrían haber utilizado dos vehículos (uno que pase por A y M y otro por R y N) para dar una solución mejor.

@@ -1,2 +1,2 @@
-php generador.php 100 400 70 150;
+php generador.php 200 1000 70 150;
 echo "Listo el pollo";

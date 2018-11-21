@@ -298,7 +298,7 @@ Por otro lado vemos que al dividir el algoritmo por una función cuadrática obt
 (par)
 
 
-***Caso patológico en algoritmo de sweep:****
+***Caso patológico en algoritmo de sweep:***
 
 (par)
 Es relativamente fácil ver que este algoritmo tiene un problema y es que aunque clusterice en base a proximidad de puntos, el mismo solamente deja definido un cluster cuando agregar un nodo mas a este
@@ -409,6 +409,7 @@ Teniendo en cuenta que el dataset __X__, como dijimos anteriormente, tiene insta
 (par)
 ***Ejes inconsistentes:***
 (par)
+
 (par)
 Teniendo en cuenta todo el análisis previo podemos ver que en __EI__ tanto para la serie A como para la __serie X__ usamos el mismo __d__. Esto se debe a que aunque los datasets difieran en el tamaño de sus instancias por casi mil unidades, los tamaños de estos grafos no son tan significativos para el parámetro __d__, tener en cuenta nodos que estan a dos ejes de distancia estamos cubriendo bien nuestros grafos. Aumentar el __d__ en este caso solo aumentaría lo que tarda el programa y no la calidad de su solución. Por otro lado el __f_t__ aumenta para la __serie X__, esto se debe a que la cantidad de puntos aumenta por lo que nuestro criterio para determinar si un eje es inconsistente debe ser mas riguroso.
 (par)

@@ -1,14 +1,192 @@
 *****3. Soluciones Aproximadas*****
 
-****3.1. Introducción****
+****3.a. Introducción****
 (todo)
     Explicar qué hacemos con estas soluciones y eso
 (todo)
 
+****3.b. tsplib.h****
+(todo)explicar(todo)
+
+****3.c. S_CVRP****
+(todo)explicar(todo)
+
+****3.d. p_solucion****
 (todo)
 Explicar como está compuesta una solución al problema y como la vamos a representar (conjunto de conjuntos de clientes).
 (todo)
+
+(pagebreak)
+
 ****3.1. Heurística basada en __Savings__: __Heurística del Próximo Mínimo__****
+
+***3.1.1. El algoritmo***
 (todo)
-    Explicar esta heurística
+   poner nombre del paper de savings
 (todo)
+
+(par)
+    La heurística del próximo mínimo surge del precepto de que, a partir la unión de caminos cortos, podemos formar caminos cortos. Si bien este argumento es meramente hipotético, hemos tomado del paper de __Savings__ la idea de formar caminos minimales a partir de la unión de caminos preexistentes como la base para diseñar esta heurística. Esta consiste en tres pasos: __armado de caminos__, __corte de caminos__ y __unión de caminos__.
+(par)
+
+/codeblock.
+nodo: cliente o depósito
+heuristicaDelProximoMinimo:
+    rutas ← armarCaminos(nodos)
+    rutas ← cortarCaminos(rutas)
+    rutas ← unirCaminos(rutas)
+.codeblock/
+
+(par)
+    El paso de __armado de caminos__ consiste en, desde un punto __A__ -que inicialmente es el depósito-, evaluar cuál es el próximo nodo al que podramos llegar en la menor distancia, sin tener en cuenta (aún) las demandas de dicho nodo ni la capacidad de mi vehículo. Se elige este nodo como destino y se mueve el vehículo a esta locación. Luego el proceso se repite nuevamente y se elige un nuevo objetivo. Si nuestro destino fuera a ser el depósito, se considera como que este camión ha vuelto a destino y el proceso se repite nuevamente con otro vehículo. Por precepto del problema, una vez que se ha visitado un nodo no se lo considera dentro de los posibles objetivos, a menos que dicho nodo sea el depósito, el cual se puede visitar múltiples veces.
+(par)
+
+(par)
+    Por la forma en la que la asignación de camiones funciona, al haber recorrido todos los nodos, encontrándonos parados en el último nodo __B__ (cosa que siempre ocurre ya que, en el caso de nunca haber caminos más chicos que ir desde el depósito hasta un cliente y volver -es decir, de no poder combinar caminos- caemos en el caso canónico), siempre existirá todavía como posibilidad el camino de vuelta al depósito. De esta forma, el algoritmo de armado de caminos terminará cuando nos encontremos en el depósito y no haya más nodos por visitar. Hecho esto, tendremos tantas listas de destinos como camiones hayamos usado, y estas listas serán la unión de posibles rutas del caso canónico.
+(par)
+
+/codeblock.
+armarCaminos(nodos):
+    rutas ← ∅
+    rutaActual ← ∅
+    nodoActual ← obtenerDepósito(nodos)
+    mientras quedanClientesSinVisitar(nodos):
+        objetivo ← elegiNodoMásCercanoA(nodoActual)
+        rutaActual ← rutaActual ∪ {objetivo}
+        nodoActual ← objetivo
+        si esDepósito(nodoActual):
+            rutas ← rutas ∪ {rutaActual}
+            rutaActual ← ∅
+    devolver rutas
+.codeblock/
+
+(par)
+    No se ha tenido en cuenta hasta este punto, sin embargo, la demanda de los clientes en contraste a la capacidad de nuestros camiones. Por tanto, el lector agudo habrá observado que, para un camión cualquiera, es posible que su ruta a recorrer supere su capacidad. Es por esto que se entra a la segunda parte del algoritmo: __el corte de caminos__.
+(par)
+
+(par)
+    El corte de caminos consiste en analizar cada camino individualmente, revisando que la demanda de todos los nodos examinados hasta el momento sumen una demanda menor o igual a la capacidad de nuestros vehículos. De hacerlo, examinamos el siguiente nodo y así sucesivamente, agregando su demanda a la suma. De no hacerlo (y teniendo en cuenta que la demanda de cualquier cliente es menor o igual a la capacidad de un caminón), cortamos el camino antes de este nodo, uniendo ambos extremos del corte al depósito, de forma que acabamos con dos caminos que empiezan y terminan en nuestro depósito. Al terminar de cortar todos los caminos devueltos por el paso anterior, acabaremos con un conjunto de caminos -un camino por camión, con lo cual la necesidad de camiones habrá muy probablemente aumentado con este paso- tales que la demanda de cada uno de sus clientes será suplible por un solo camión.
+(par)
+
+/codeblock.
+cortarCaminos(rutas):
+    paraCada rutaActual en rutas:
+        costeTotal ← 0
+        paraCada nodo en rutaActual:
+            si costeTotal + demanda(nodo) < capacidadCamiones:
+                costeTotal ← costeTotal + demanda(nodo)
+            sino:
+                ruta1 ← rutaActual desde inicio hasta anterior a nodo
+                ruta2 ← rutaActual desde nodo hasta fin
+                rutas ← rutas - {rutaActual}
+                unirADepósito(ruta1)
+                unirADepósito(ruta2)
+                rutas ← rutas ∪ {ruta1} ∪ {ruta2}
+                break
+    devolver rutas
+.codeblock/
+
+(par)
+    Una vez que la subrutina presentada sobre este párrafo termina de ejecutar, en `rutas` tenemos un conjunto construídas siguiendo las instrucciones de la primera parte del algoritmo, pero cortadas de forma tal que cada ruta presenta una demanda menor a la de un camión. La heurística podría cortarse acá: en las primeras etapas de experimentación dio resultados positivos de mejora frente al caso canónico. Sin embargo, esta etapa de la heurística presenta un problema. Supóngase que en total contamos con cuatro nodos, para los cuales `armarCaminos` ha devuelto dos rutas: {__depósito__, __nodo1__, __nodo2__, __depósito__}, {__depósito__, __nodo3__, __nodo4__, __depósito__}. Esto puede haber ocurrido porque la distancia entre el depósito y el __nodo1__ era menor a la del depósito con el resto de los nodos, la distancia del __nodo1__ al __nodo2__ era menor que la distancia entre __nodo1__ y el resto de los nodos, incluído el depósito, pero la distancia entre el __nodo2__ y el resto de los clientes era mayor a la del nodo con el depósito. Si suponemos que cada camino tiene una demanda mayor a la suplible con un camión, es fácil ver que la separación de los caminos acabaría nuevamente en el caso canónico. Sin embargo -y aunque esto es trivial para casos chicos como el presentado, es muy significativo en casos mayores o de clientes muy alejados al depósito- supongamos que la demanda del __nodo2__ sumada a la del __nodo3__ es menor a la de un camión. Podríamos analizar entonces qué pasaría si, aunque no estuvieran inicialmente cerca, uniéramos el camino __{depósito, nodo2, depósito}__ con el camino __{depósito, nodo3, depósito}__. Si la distancia a recorrer de la unión de ambos fuera menor a la de los dos por separado (cosa que por desigualdad triangular es cierta), podríamos unirlos formando un nuevo camino que reduzca la distancia total a recorrer.
+(par)
+
+(par)
+    El último paso de la heurística consiste en hacer precisamente esto. Revisamos, para cada camino existente (a lo sumo __n__ caminos, que será el caso canónico), si existe otro camino (__candidato__) con el que se lo pueda unir de forma que la demanda de ambos sumada no supere a la de un vehículo y de forma tal que la distancia a recorrer de su unión sea menor a la de la suma se cada uno por separado. De encontrar caminos que sean candidatos a unirse, nos quedamos con todos los pares que más minimicen la distancia tales que dados dos pares __p___1_____ y __p___2_____, __∀ i ∈ p___1___, i ∉ p___2_____ (es decir, pares disjuntos uno a uno). Este proceso requiere, cuando mucho, __n^^2^^__ repeticiones.
+(par)
+
+(par)
+    Una vez que hemos unido los mejores caminos candidatos es menester volver a analizar si no es posible volver a unir rutas, dado que las rutas han cambiado. Esto implica volver a repetir el proceso del párrafo anterior, con lo cual este paso acaba teniendo una complejidad de __O(n^^3^^)__.
+(par)
+
+/codeblock.
+unirCaminos(rutas):
+    posiblesUniones ← ∅
+    hacer:
+        paraCada ruta en rutas:
+            candidatos ← obtenerCandidatosDeRutasAUnirCon(ruta)
+            paraCada candidato en candidatos:
+                posiblesUniones ← posiblesUniones ∪ {<ruta, candidato>}
+                
+        //ordeno de mayor a menor las distancias ahorrables por los pares
+        ordenarPorDistanciaAhorrada(posiblesUniones)
+        //Filtro, del peor al mejor, los pares no disjuntos.
+        //Es decir, si existe un par que tiene un elemento que tenga
+        //otro par, elimino aquel cuya unión ahorre menos distancia.
+        filtrarDeAtrasHaciaAdelanteParesNoDisjuntos(posiblesUniones)
+        unirPares(posiblesUniones)
+    repetir si se unieron caminos
+    devolver rutas
+.codeblock/
+
+(par)
+    Hecho esto, tenemos en rutas una serie de caminos que cumplen con la capacidad de los camiones y cuya distancia es igual o menor a la del caso canónico. Cada ruta es disjunta con cualquier otra ruta (a excepción de los depósitos) y la cantidad de camiones a utilizar es la misma que la cantidad de rutas a recorrer.
+(par)
+
+***3.1.2. Análisis de complejidad temporal***
+(par)
+    Partiendo de las secciones del algoritmo explicitadas en la **sección 3.1.1**, analicemos la complejidad de la heurística.
+(par)
+
+(par)
+    Se tiene que la complejidad total del algoritmo será la suma de las complejidades de cada una de sus subsecciones: ``armarCaminos``, ``cortarCaminos`` y ``unirCaminos``. En la sección mencionada ya vimos que la ``unirCaminos`` pertenece a la clase __O(n^^3^^)__, dado que repite __n__ veces una serie de operaciones cuadráticas (buscar candidatos, ordenar los candidatos) y lineales (filtrar candidatos, unir caminos).
+(par)
+
+(par)
+    La complejidad de ``armarCaminos`` es cuadrática, ya que para cada nodo tengo que revisar cada otro nodo comparando su distancia para encontrar a qué punto moverme. El resto de las operaciones que se realizan de forma cíclica es constante, por lo que no hacen al coste del algoritmo. Obtener los depósitos a partir de una serie de nodos es una operación lineal, por lo que ``armarCaminos`` pertenece a la clase __O(n^^2^^)__.
+(par)
+
+(par)
+    La complejidad de ``cortarCaminos`` depende de la cantidad de rutas armadas por el paso anterior. Como todas las operaciones son constantes pero se repiten por cada nodo en cada ruta, se podría afirmar que la complejidad de este paso es también cuadrática: como mucho tengo siempre __n__ nodos y, de caer en el caso canónico, tendré como mucho __n__ caminos. Sin embargo, es importante observar que conforme la cantidad de caminos crece, la cantidad de nodos a recorrer por camino decrece. Si bien es válido, entonces, afirmar que ``cortarCaminos`` pertenece a la clase __O(n^^2^^)__, es posible que su coste final sea menor. No es relevante esto para saber el coste final del algoritmo y, por tanto, no nos detendremos a analizarlo.
+(par)
+
+(par)
+    Dado que de los tres pasos, ``unirCaminos`` es el más costoso, la complejidad de esta heurística acaba siendo __O(n^^3^^)__.
+(par)
+
+***3.1.3. Rendimiento para instancias predefinidas***
+(todo)
+    Hacer
+(todo)
+
+***3.1.4. Rendimiento para instancias aleatorias***
+
+(par)
+    Para estabilizar la medición, la heurística fue ejecutada sobre ciento noventa y ocho mil instancias generadas aleatoriamente por el generador mencionado en la **sección 2.3**, __1000__ para cada cantidad de nodos entre __3__ y __200__. Se midió el tiempo de ejecución de la heurística para cada caso evaluado y se plasmó el resultado en el gráfico presentado a la derecha de este párrafo. La medición total, en el equipo mencionado en la **sección 2.1** llevó aproximadamente una hora y cuarenta minutos.
+(par)
+
+(ps)
+    (p50)
+        (img)pm_tie.png(img)
+        (caption)Tiempo de ejecución de la heurística del próximo mínimo en relación a la cantidad de puntos del grafo.(caption)
+    (/p50)
+    (p50)
+        (img)pm_por.png(img)
+        (caption)Ahorro porcentual de la heurística del próximo mínimo con respecto al coste de la solución canónica.(caption)
+    (/p50)
+(/ps)
+
+(par)
+    Si bien las mediciones fueron dispares -por la naturaleza del algoritmo es natural que existan instancias que sean evaluadas mucho más rápidamente que otras (como por ejemplo cuando no es necesario cortar caminos o existen muy pocos caminos a evaluar en el paso de unir caminos)- en general puede observarse una tendencia creciente levemente aparabolada. Estimamos que, de realizar más mediciones y evaluar hasta casos de mayor cantidad de nodos, esta parábola será visible más fácilmente.
+(par)
+
+(par)
+    En lo que respecta a la calidad de las soluciones, para el caso aleatorio el ahorro porcentual representó, en promedio, un 37% de ahorro con respecto a la solución canónica. En los mejores casos este ahorro fue del 41%, mientras que en los casos más patológicos -presentados principalmente cuando la instancia contaba con poca cantidad de nodos- el ahorro fue nulo.
+(par)
+
+***3.1.5. Caso patológico***
+(todo)
+    Poner dibujitos
+(todo)
+
+(par)
+    Está claro por la sección **3.1.1** que, en el peor caso, esta heurística devolverá el caso canónico. Si no se tiene en cuenta las demandas de los clientes, esto podría suceder en casos donde se tenga dos nodos enfrentados en lados opuestos del depósito únicamente, ya que de haber por lo menos un nodo más por desigualdad triangular será más eficiente unir dos de ellos. En el caso con dos nodos mencionado, unirlos o presentar la solución canónica implica el mismo impacto en el trayecto a recorrer.
+(par)
+
+(par)
+    Cuando la capacidad de los camiones comienza a entrar en juego, sin embargo, se presentan una serie más de casos que pueden acabar en la solución canónica, y es cuando no es posible unir caminos de nodos de forma que su demanda sea menor a la capacidad de nuestro camión. Esto significa que todo par de nodos __i__, __j__ cumple que __i + j > capacidad__, entonces nos encontraremos en un peor caso. Esto ocurre cuando para cada nodo __i__ vale que __demanda(i) > capacidad / 2__.
+(par)
+
+***3.1.6. Conclusiones***
+(par)
+    La __heurística del próximo mínimo__ ejecuta en tiempo que escala de forma razonable al tamaño de su entrada y resulta en buenas soluciones si los puntos a visitar se encuentran cerca entre sí y sus demandas son bajas (llegando a costar el 59% del coste ofrecido por el caso canónico) y en soluciones aceptables para el promedio de los casos (aproximadamente el 63% de la solución canónica). Es sencillo de comprender y fácil de implementar, por lo que lo convierte en un acercamiento inicial tentador a la búsqueda de soluciones combinatorias para el CVRP.
+(par)

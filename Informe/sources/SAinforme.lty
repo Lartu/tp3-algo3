@@ -46,7 +46,6 @@ while(T > Tf)
 return S*
 .codeblock/
 (par)
-(todo)Esto asume que ya explicamos como está compuesta una solucion. O sea, que es un vector de vectores de clientes.(todo)
 En nuestra implementación la función de vecindario que utilizaremos será **1-interchange**. El vecindario utilizando esta función está definido de la siguiente manera:
 (par)
 
@@ -163,8 +162,6 @@ Busquemos el valor óptimo de los parámetros de nuestro algoritmo de Simulated 
 Para esto realizaremos una serie de experimentos, comenzando por un análisis de cómo el número de iteraciones realizadas (__Nit__) afecta el resultado. Sabemos que mientras más iteraciones realizemos mejor será el resultado ya que a fin de cuentas estamos realizando una búsqueda local, pero la pregunta que intentaremos responder es ¿Cuántas iteraciones tiene sentido medir? ¿Hay un punto a partir del cual la mejora obtenida de realizar más iteraciones no justifica el costo en tiempo de ejecución?
 (par)
 
-(todo)aclarar como fueron generadas las instancias, supongo que lo voy a aclarar una sola vez!(todo)
-
 (par)
 El experimento consistirá en medir el ahorro porcentual con respecto a la solución canónica  promedio obtenido luego de __Nit__ iteraciones para 400 instancias aleatorias del problema ), con un varios n fijos. Decidimos comparar con la solución canónica para poder comparar los resultados de diferentes n más claramente. La diferencia en efectividad observada utilizando las tres variantes de Cooling schedule dieron resultados muy similares, por lo que decidimos utilizar un único Cooling Schedule para la medición por practicidad. A continuación mostramos los resultados obtenidos:
 (par)
@@ -186,7 +183,6 @@ Como podemos apreciar en los gráficos nuestras predicciones fueron correctas. A
 (par)
 
 (par)
-(todo)aclarar como son "las instancias"(todo)
 Teniendo en cuenta las caracteristicas de las instancias que mediremos y que no disponemos de tiempo ilimitado para realizar las mediciones, decidimos que __Nit__ = 10.000 es suficientemente grande para ser representativo del resultado del algoritmo y suficientemente pequeño para poder realizar el resto de las mediciones en un tiempo razonable.
 (par)
 
@@ -236,8 +232,7 @@ La búsqueda de los parámetros óptimos se realizó calculando la distancia por
 (par)
 La configuración óptima resultante fue como Cooling Schedule CS1, como temperatura inicial __Ts__ = 8 y número de iteraciones __NIt__ = 15000. Veamos a continuación la distancia porcentual al óptimo para cada instancia del set con la configuración óptima:
 (par)
-(todo)achicar porfi(todo)
-(img)SAdistOptimoA.png(img)
+/imagesmall.SAdistOptimoA.png.imagesmall/
 
 ***3.4.5. Búsqueda de parámetros óptimos: Set X***
 
@@ -249,8 +244,7 @@ Busquemos los parámetros óptimos para el set de instancias "Set X" propuesto p
 (par)
 Los resultados obtenidos fueron como Cooling Schedule __CS1__, __Ts__ = 20 y __NIt__ = 15000. Presentamos a continuación la distancia porcentual al óptimo para cada instancia del set con ésta configuración:
 (par)
-(todo)achicar porfi(todo)
-(img)SAdistOptimoX.png(img)
+/imagesmall.SAdistOptimoX.png.imagesmall/
 
 ***3.4.5. Conclusiones de la experimentación***
 
