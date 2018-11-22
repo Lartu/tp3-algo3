@@ -1,2 +1,0 @@
-g++ savings.cpp -std=c++11 -o savings.o
-./savings.o

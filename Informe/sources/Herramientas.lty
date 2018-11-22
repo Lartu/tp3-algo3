@@ -15,7 +15,7 @@
 (rightblock)
 
 (par)
-Los datasets que utilizaremos para testear y analizar los heurísticas basdas en clustering (sobre las cuales hablaremos en la **sección 3.3**) fueron generadas utilizando un generador propio de datasets, diseñado para poder diseñar instancias a mano. El mismo se encuentra en el directorio ``Generador_Datasets_Cluster``. Para ejecutarlo se debe abrir con un navegador web el archivo ``generador.html``. Para usarlo no hace falta más que hacer click en el lugar donde se quiera colocar un punto. La coordenada del punto será añadida al área de texto debajo del gráfico, que luego podrá ser copiada a un archivo de texto, parseada, reestructurada conforme al estándar especificado por la TSPLib y provista al ejecutable del trabajo práctico por ``stdin``.
+    Los datasets que utilizaremos para testear y analizar los heurísticas basdas en clustering (sobre las cuales hablaremos en la **sección 3.3**) fueron generadas utilizando un generador propio de datasets, diseñado para poder diseñar instancias a mano. El mismo se encuentra en el directorio ``Generador_Datasets_Cluster``. Para ejecutarlo se debe abrir con un navegador web el archivo ``generador.html``. Para usarlo no hace falta más que hacer click en el lugar donde se quiera colocar un punto. La coordenada del punto será añadida al área de texto debajo del gráfico, que luego podrá ser copiada a un archivo de texto, parseada, reestructurada conforme al estándar especificado por la TSPLib y provista al ejecutable del trabajo práctico por ``stdin``.
 (par)
 
 ****2.3. Generador de instancias****

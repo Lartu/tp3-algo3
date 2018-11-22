@@ -142,18 +142,17 @@ public:
     // - Imprimo las rutas para poder verlas -
     void imprimirRutas()
     {
-        cout << "\033[1;33mRutas de esta solución\033[m: " << endl;
+        cout << rutas.size() << endl;
         for(ruta rutaActual : rutas)
         {
-            cout << "\033[1;35m *\033[m ";
-            for(int i = 0; i < rutaActual.size(); ++i){
-                if(i != 0) cout << " \033[1;34m->\033[m ";
+            for(int i = 1; i < rutaActual.size()-1; ++i){
+                if(i != 1) cout << " ";
                 cout << rutaActual[i];
             }
             cout << endl;
         }
         
-        cout << "\033[1;32mCosto total\033[m: " << costoTotal << endl;
+        cout << costoTotal << endl;
     }
 
     bool esSolucion(const S_CVRP &G) const{
