@@ -62,7 +62,7 @@ Para representar correctamente una solución al problema a nivel implementativo 
 ***3.1.1. El algoritmo***
 
 (par)
-    La heurística del próximo mínimo surge del precepto de que, a partir la unión de caminos cortos, podemos formar caminos cortos. Si bien este argumento es meramente hipotético, hemos tomado del paper __Scheduling of Vehicles from a Central Depot to a Number of Delivery Points__, de G. Clarke y J. W. Wright (__savings__) la idea de formar caminos minimales a partir de la unión de caminos preexistentes como la base para diseñar esta heurística. El resto ha sido __completamente diseñado por nosotros__. Esta consiste en tres pasos: __armado de caminos__, __corte de caminos__ y __unión de caminos__.
+    La heurística del próximo mínimo surge del precepto de que, a partir la unión de caminos cortos, podemos formar caminos cortos. Si bien este argumento es meramente hipotético, hemos tomado del paper __Scheduling of Vehicles from a Central Depot to a Number of Delivery Points__, de G. Clarke y J. W. Wright (__savings__) la idea de formar caminos minimales a partir de la unión de caminos preexistentes como la base para diseñar esta heurística. El resto ha sido completamente diseñado por nosotros. Esta consiste en tres pasos: __armado de caminos__, __corte de caminos__ y __unión de caminos__.
 (par)
 
 /codeblock.
