@@ -188,9 +188,6 @@ unirCaminos(rutas):
 
 (par)
     La heurística fue corrida sobre cada test válido disponible en el sitio provisto en la **sección 1.3**. A continuación se adjuntan tablas con cuatro resultados por cada grupo (a excepción del grupo F donde solo era válida una entrada). Debajo de cada tabla se indica el tamaño de la muestra total medida por grupo.
-(par)
-
-(par)
     En promedio, la heurística arrojó resultados **15.94%** mayores al óptimo, **3.2%** mayores en el mejor caso, **30.02%** en el peor.
 (par)
 
