@@ -22,19 +22,6 @@ void p_mergeRutas(const S_CVRP &G, p_solucion &S,int numeroRuta1, int numeroRuta
 	double nuevaCarga = S.cargas[numeroRuta1] + S.cargas[numeroRuta2];
 	//calculo el nuevo costo total
 	double nuevoCostoTotal = S.costoTotal + G.distanciaEntre(primerElemento,segundoElemento) - G.distanciaEntre(primerElemento,G.getDeposito()) - G.distanciaEntre(segundoElemento,G.getDeposito());
-	if(nuevoCostoTotal == numeric_limits<double>::max()){
-		cout << "INF" << endl;
-		cout << "ruta1: " << ruta1 << endl;
-		cout << "ruta2: " << ruta2 << endl;
-		cout << "costoTotal: " << S.costoTotal << endl;
-		cout << "primerElemento: " << primerElemento << endl;
-		cout << "segundoElemento: " << segundoElemento << endl;
-		cout << "numeroRuta1: " << numeroRuta1 << endl;
-		cout << "numeroRuta2: " << numeroRuta2 << endl;
-		cout << "Dist Prim elem, segund elem: " << G.distanciaEntre(primerElemento,segundoElemento) << endl;
-		cout << "Dist prim elem, deposito: " << G.distanciaEntre(primerElemento,G.getDeposito()) << endl;
-		cout << "Dist segund elem, deposito: " << G.distanciaEntre(segundoElemento,G.getDeposito()) << endl;
-	}
 	//actualizo la ruta1. Primero, saco el deposito al final de la ruta1
 	ruta1.erase(ruta1.end() - 1);
 	//saco el deposito al principio de la ruta2
@@ -109,7 +96,7 @@ p_solucion p_golosa(const S_CVRP &G){
 			int rutaPrimerElemento = p_rutaPertenece(pares[j][0], S.rutas);
 			int rutaSegundoElemento = p_rutaPertenece(pares[j][1], S.rutas);
 			if((rutaPrimerElemento != rutaSegundoElemento) && S.cargas[rutaPrimerElemento] + S.cargas[rutaSegundoElemento] <= G.getCapacidad()){
-				cout << "merge entre: " << pares[j][0] << "y " << pares[j][1] << endl;
+				//cout << "merge entre: " << pares[j][0] << "y " << pares[j][1] << endl;
 				p_mergeRutas(G,S,rutaPrimerElemento,rutaSegundoElemento);
 				insertado = true;
 			}
@@ -119,7 +106,7 @@ p_solucion p_golosa(const S_CVRP &G){
 		k++;
 	}
 	//cout << S.costoTotal << endl;
-	//S.imprimirRutas();
+	S.imprimirRutas();
 	return S;
 }
 
@@ -238,22 +225,10 @@ void p_correrInstanciasConocidasDeAUnaG(int nStart, int nEnd,ofstream& ofs1, voi
 int main(int argc, char** argv){
 
 	//recibo ruta del archivo
-	//string fileName(argv[1]);
-
+	string fileName(argv[1]);
 	//parseo el archivo con tsplib.h y lo guardo.
-	/*TspData archivo = cargarTSP(fileName);
+	TspData archivo = cargarTSP(fileName);
     S_CVRP G = S_CVRP(archivo);
-    p_golosa(G);*/
-    //Aleatorias
-    //ofstream Tgolosa("Tgolosa", ios::out);
-    //p_generarVectoresDeInstancias(3,1003,400,Tgolosa,p_medirYPromediarGolosa);
-
-    //instancias conocidas
-	//ofstream Tgolosa("ResGolosaSerieA", ios::out);
-    //p_correrInstanciasConocidasDeAUnaG(100,700,Tgolosa,p_medirResultadosGolosaConocido);
-
-    //caso patologicos
-    ofstream patologica1("patologica1", ios::out);
-    p_correrInstanciasConocidasDeAUnaG(1,10,patologica1,p_medirPatologicoCanYReal);    
+    p_golosa(G);
 	return 0;
 }

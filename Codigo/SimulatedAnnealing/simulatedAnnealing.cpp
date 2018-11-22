@@ -183,12 +183,13 @@ p_solucion p_simulatedAnnealing(S_CVRP &G,double Ts,int n, int cs){
 	}
 	//cout << Sb.costoTotal << endl;
 	//cout << i << endl;
+	Sb.imprimirRutas();
 	return Sb;
 }
 
 void p_medirYPromediarSA(vector<S_CVRP> &instancias,double Ts, int n,int cs, ofstream& ofs){
 	counter++;
-	cout << "medir: "<< counter<< endl; 
+	//cout << "medir: "<< counter<< endl; 
 	double tiempoTotal = 0;
 	for(auto &instancia : instancias){
 		auto start = chrono::steady_clock::now();
@@ -199,12 +200,12 @@ void p_medirYPromediarSA(vector<S_CVRP> &instancias,double Ts, int n,int cs, ofs
 		tiempoTotal += diffTiempo;
 	}
 	auto promedio = tiempoTotal / instancias.size();
-	ofs << instancias[0].getNodos().size() << "," << promedio << endl;
+	ofs << /*instancias[0].getNodos().size()*/n << "," << promedio << endl;
 }
 
 void p_medirResultados(vector<S_CVRP> &instancias,double Ts, int n,int cs, ofstream& ofs){
 	counter++;
-	cout << "medir: "<< counter<< endl; 
+	//cout << "medir: "<< counter<< endl; 
 	double total = 0;
 	vector<double> costos = vector<double>();
 	for(auto &instancia : instancias){
@@ -224,7 +225,7 @@ void p_medirResultados(vector<S_CVRP> &instancias,double Ts, int n,int cs, ofstr
 
 void p_promedioCanonicas(vector<S_CVRP> &instancias,ofstream& ofs){
 	counter++;
-	cout << "medir: "<< counter<< endl; 
+	//cout << "medir: "<< counter<< endl; 
 	double total = 0;
 	vector<double> costos = vector<double>();
 	for(auto &instancia : instancias){
@@ -250,9 +251,12 @@ void p_medirTiemposVariandoCS(vector<S_CVRP> &instancias, ofstream &cs0, ofstrea
 }
 
 void p_medirTiemposVariandoNIt(vector<S_CVRP> &instancias, ofstream &minimoIt, ofstream &medioIt,ofstream &maximoIt){
-	p_medirYPromediarSA(instancias,10,100,0,minimoIt);
-	p_medirYPromediarSA(instancias,10,1000,0,medioIt);
-	p_medirYPromediarSA(instancias,10,10000,0,maximoIt);
+	for(int i = 0; i <= 5000; i+= 500){
+		p_medirYPromediarSA(instancias,10,i,0,minimoIt);	
+	}
+
+	//p_medirYPromediarSA(instancias,10,1000,0,medioIt);
+	//p_medirYPromediarSA(instancias,10,10000,0,maximoIt);
 }
 
 void p_medirResultadosVariandoCS(vector<S_CVRP> &instancias, ofstream &cs0, ofstream &cs1,ofstream &cs2){
@@ -273,7 +277,7 @@ void p_promedioCanonicasWrapper(vector<S_CVRP> &instancias, ofstream &ofs1, ofst
 
 void p_medirAhorroPorcentualTs(vector<S_CVRP> &instancias,double Ts, int n,int cs, ofstream& ofs){
 	counter++;
-	cout << "medir: "<< counter<< endl; 
+	//cout << "medir: "<< counter<< endl; 
 	double total = 0;
 	double totalCanonico = 0;
 	vector<double> costos = vector<double>();
@@ -350,7 +354,7 @@ void p_parametrosOptimosConocidas(vector<pair<S_CVRP,double>> &instancias, ofstr
 	int maxCS = -1;
 	for(int k = 0; k <= 2; k++){
 		for(int i = 1000; i <= 15000; i+= 2000){
-			cout << "CS:" << k << ", " << "NIt: "<<i << endl;
+			//cout << "CS:" << k << ", " << "NIt: "<<i << endl;
 			for(int j = 2; j <= 9; j++){
 				double total = 0;
 				for(int w = 0; w < instancias.size();w++){
@@ -381,15 +385,6 @@ void p_parametrosOptimosConocidas(vector<pair<S_CVRP,double>> &instancias, ofstr
 	}
 	ofs << "CS" <<maxCS<<" NIt: " << maxNIt << " Ts: " << maxTs << endl;
 }
-/*
-void p_conocidasTs(vector<pair<S_CVRP,double>> &instancias, ofstream& ofs){
-	for(int i = 0; i <= 9; i++){
-		p_medirConocidasNIt(instancias,i,10000,0,ofs);
-	}
-	for(int i = 10; i<=200; i+=10){
-		p_medirConocidasNIt(instancias,i,10000,0,ofs);
-	}
-}*/
 
 void p_generarVectoresDeInstancias(int nStart, int nEnd, int numeroMediciones,ofstream& ofs1,ofstream& ofs2,ofstream& ofs3, void(*fMedicion)(vector<S_CVRP>&,ofstream&,ofstream&,ofstream&)){
 
@@ -421,7 +416,7 @@ void p_correrInstanciasConocidasDeAUna(int nStart, int nEnd,ofstream& ofs1, void
 		string i_string = to_string(i);
 		for(int j = 1; j <= 1; j++){
 			string j_string = to_string(j);
-			cout << i_string << endl;
+			//cout << i_string << endl;
 			//Ruta a getear. Cambienla si necesitan. No la pase por parametro porque es bien fea
 			string rutaVRP = "serieX/X-n" + i_string + ".vrp";
 			string rutaSol = "serieX/X-n" + i_string + ".sol";
@@ -466,87 +461,21 @@ void p_correrInstanciasConocidasJuntas(int nStart, int nEnd, ofstream& ofs1, voi
 	}
 	if(!instancias.empty()) fMedicion(instancias, ofs1);//p_medirTiempos(instancias,cs0,cs1,cs2);
 }
-/*
-p_medir(int nStart, int nEnd, int numeroInstancias, ofstream& ofs1, ofstream& ofs2, ofstream& ofs3){
-	p_generarVectoresDeInstancias(nStart,nEnd,numeroInstancias,ofs1,ofs2,ofs3,p_medirTiemposVariandoCS);
-}*/
 
 int main(int argc, char** argv){
-	//Correr una iteracion
+	if(argc < 5){
+		cout << "Uso: param1: ruta archivo.vrp, param2: Ts, param3: NIt, param4: CS" << endl;
+	}
 	//recibo ruta del archivo
-	/*string fileName(argv[1]);
+	string fileName(argv[1]);
 	TspData archivo = cargarTSP(fileName);
     S_CVRP G = S_CVRP(archivo);
-	p_solucion sol = p_simulatedAnnealing(G,1000,10000,1);
-	cout << sol.costoTotal << endl;*/
-
-	//parseo el archivo con tsplib.h y lo guardo.
-  	//p_simulatedAnnealing(G,10,100000,2);
-  	//Abro los archivos en modo append para no pisarme
-  	/*//Mediciones de tiempo variando CS
-	ofstream cs0("MedT-CS0", ios::out);
-	ofstream cs1("MedT-CS1", ios::out);
-	ofstream cs2("MedT-CS2", ios::out);
-    p_generarVectoresDeInstancias(3,1003,400,cs0,cs1,cs2,p_medirTiemposVariandoCS);*/
-
-  	//Mediciones de tiempo variando N iteraciones
-	/*ofstream it0("MedT-100it", ios::out);
-	ofstream it1("MedT-1000it", ios::out);
-	ofstream it2("MedT-10000it", ios::out);
-    p_generarVectoresDeInstancias(3,1000,400,it0,it1,it2,p_medirTiemposVariandoNIt);*/
-
-    //Mediciones de resultados variando CS
-    /*ofstream resCs0("ResCs0", ios::out);
-	ofstream resCs1("ResCs1", ios::out);
-	ofstream resCs2("ResCs2", ios::out);
-    p_generarVectoresDeInstancias(3,1003,400,resCs0,resCs1,resCs2,p_medirResultadosVariandoCS);*/
-
-	//Experimento Nit optimo
-	/*ofstream it1000("13000itCS1", ios::out);
-	ofstream it3000("15000itCS1", ios::out);
-	ofstream it5000("17000itCS1", ios::out);
-	p_generarVectoresDeInstancias(103,103,400,it1000,it3000,it5000,p_experimentoResVariandoNIt);*/
-
-	//Promedio canonicas
-	//ofstream promedioCanonicas("promedioCanonicas", ios::out);
-	//p_generarVectoresDeInstancias(3,1003,400,promedioCanonicas,promedioCanonicas,promedioCanonicas,p_promedioCanonicasWrapper);
-
-	//Medir resultados variando Ts
-    /*ofstream TsCs0("ResCs0_2a9_n=103", ios::out);
-	ofstream TsCs1("ResCs1_2a9_n=103", ios::out);
-	ofstream TsCs2("ResCs2_2a9_n=103", ios::out);
-	p_generarVectoresDeInstancias(103,103,400,TsCs0,TsCs1,TsCs2,p_medirResultadosVariandoTs);
-	TsCs0.close();
-	TsCs1.close();
-	TsCs2.close();*/
-    /*ofstream TsCs0_503("ResCs0_2a9_n=503", ios::out);
-	ofstream TsCs1_503("ResCs1_2a9_n=503", ios::out);
-	ofstream TsCs2_503("ResCs2_2a9_n=503", ios::out);
-	p_generarVectoresDeInstancias(503,503,400,TsCs0_503,TsCs1_503,TsCs2_503,p_medirResultadosVariandoTs);
-	TsCs0_503.close();
-	TsCs1_503.close();
-	TsCs2_503.close();*/
-    //ofstream TsCs0_1003("ResCs0_2a9_n=1003", ios::out);
-	//ofstream TsCs1_1003("ResCs1_2a9_n=1003", ios::out);
-	//ofstream TsCs2_1003("ResCs2_2a9_n=1003", ios::out);
-	//p_generarVectoresDeInstancias(1003,1003,400,TsCs0_1003,TsCs1_1003,TsCs2_1003,p_medirResultadosVariandoTs_1003);
-
-	//mido resultados
-	/*ofstream NIt_Res_303("NIt_Res_n=303", ios::out);
-	p_generarVectoresDeInstancias(303,303,400,NIt_Res_303,NIt_Res_303,NIt_Res_303,p_experimentoResVariandoNIt);
-
-	ofstream Ts_Res_303("Ts_Res_303",ios::out);
-	p_generarVectoresDeInstancias(303,303,400,Ts_Res_303,Ts_Res_303,Ts_Res_303,p_medirResultadosVariandoTs);*/
-
-	//Instancias conocidas
-	//NIt optima (COMO NO ESTOY PROMEDIANDO, EL OPTIMO PARA CADA INSTANCIA ES DISTINTO!)
-	//NO SE CUMPLE QUE A MAS NIt MEJOR ANDA, DEPENDE DE LA INSTANCIA PARTICULAR!
-	//TENGO QUE ENCONTRAR EL NIt OPTIMO PARA CADA INSTANCIA!
-	//ofstream conocidasNIt("encontrando_optimos",ios::out);
-	//p_correrInstanciasConocidasJuntas(32,80,conocidasNIt,p_conocidasTodo);
-	//Ts optima
-	ofstream XconParamA("XconParamA", ios::out);
-	p_correrInstanciasConocidasDeAUna(100,700,XconParamA,p_medirPorcentajeAlOptWrapper);
+    int cs = stoi(argv[4]);
+    if(cs < 0 || cs >= 3 ){
+    	cout << "Cooling Schedule debe estar entre 0 y 2" << endl;
+    	return 0;
+    }
+	p_simulatedAnnealing(G,stod(argv[2]),stoi(argv[3]),stoi(argv[4]));
 	return 0;
 }
 
