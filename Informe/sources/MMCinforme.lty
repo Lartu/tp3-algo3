@@ -1,6 +1,6 @@
 (pagebreak)
 
-****3.2.Heurística constructiva golosa: __Merge Más Cercanos__****
+****3.2. Heurística constructiva golosa: __Merge Más Cercanos__****
 
 ***3.2.1. El algoritmo***
 
@@ -57,10 +57,6 @@ Comprobemoslo realizando las mediciones directamente. Generamos 400 instancias d
 (/ps)
 
 ***3.2.3. Rendimiento para diferentes sets de instancias ***
-
-(todo)
-Asi como está lo paso muy por arriba el por qué de como medimos. Lo tengo bien explicado en SA. me parece que deberiamos explicarlo una sola vez
-(todo)
 
 (par)
 Veamos el rendimiento del algoritmo propuesto para los sets A, X y un set aleatorio de nuestra autoría. El set aleatorio consta de 400 instancias de grafo para cada tamaño desde __n__ = 3 hasta __n__ = 503, con saltos de a 50. Para las instancias aleatorias expresaremos el rendimiento como porcentaje ahorrado en promedio desde la solución canónica y en los sets en los que se conoce el óptimo lo haremos como porcentaje de la solución óptima.
@@ -124,7 +120,7 @@ Es importante aclarar que la trayectoria que determinan las curvas utilizadas pa
 (par)
 
 (par)
-Ahora ordenamos los pares de nodos por distancia de menor a mayor. Estos serán (R,A),(R,N),(A,N), (A,M),(R,M) y (M,N). Como R y A son el par de menor distancia, no pertenecen a la misma ruta y cumplen que la suma de sus demandas es menor que la capacidad del camión, realizamos un merge entre sus rutas, de la siguiente manera:
+Ahora ordenamos los pares de nodos por distancia de menor a mayor. Estos serán (R,A), (R,N), (A,N), (A,M), (R,M) y (M,N). Como R y A son el par de menor distancia, no pertenecen a la misma ruta y cumplen que la suma de sus demandas es menor que la capacidad del camión, realizamos un merge entre sus rutas, de la siguiente manera:
 (par)
 /imagesmall.SAcaso_patologico_2.png.imagesmall/
 
