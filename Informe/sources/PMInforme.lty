@@ -20,7 +20,34 @@
 (todo)explicar(todo)
 
 ****3.c. S_CVRP****
-(todo)explicar(todo)
+(par)
+Para el modelado del problema decidimos crear una clase la cual nos va a servir como interfaz para resolverlo. La misma provee toda la información necesaria para la implementación de nuestros algoritmos. S_CVRP hace uso de tsplib.h para recibir todos los datos de una instancia en particular para luego proceder a 
+
+(li)
+Reconocer el depósito y guardarlo en una variable.
+(li)
+(li)
+Guardar la capacidad de los camiones en otra variable.
+(li)
+(li)
+Mover todos los puntos para que el depósito quede centrado en el origen (facilita la implementación).
+(li)
+(li)
+Guardar cada nodo en un vector de nodos asignandole su id, coordenadas y demanda correspondiente.
+(li)
+(li)
+Generar la matriz de adyacencia en base a las distancias entre puntos.
+(li)
+(par)
+
+(par)
+Nota: Además de S_CVRP creamos un struct S_Nodo para representar los vertices del grafo. El mismo contiene el id del nodo, su demanda y sus coordenadas en el plano.
+(par)
+
+(par)
+Para acceder a estos datos, proveemos una serie de métodos básicos para la resolución del problema en cuestión. Los mismos se pueden ver en el archivo estructuras.h.
+(par)
+
 
 ****3.d. p_solucion****
 (todo)

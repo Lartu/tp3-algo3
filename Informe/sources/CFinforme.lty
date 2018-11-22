@@ -302,7 +302,7 @@ Por otro lado vemos que al dividir el algoritmo por una función cuadrática obt
 
 (par)
 Es relativamente fácil ver que este algoritmo tiene un problema y es que aunque clusterice en base a proximidad de puntos, el mismo solamente deja definido un cluster cuando agregar un nodo mas a este
-hace que un camión no pueda realizar el recorrido. Entonces, si nosotros tenemos dos clusters bien definidos, muy separados entre sí, pero la suma de las demandas de los dos no sobrepasa a la capacidad de nuestros camiones, el algoritmo los va a tomar como un único cluster y tendríamos un costo muy alto para ir desde un cluster hasta el otro cuando hubiese sido preferible usar un camión más y hacer un recorrido mayor (siempre y cuando el agregado de camiones no sea un problema). Podríamos tener en cuenta esta situación en la implementación para evitar que pase, aunque esto queda a criterio del programador que realice esta tarea.
+hace que un camión no pueda realizar el recorrido. Entonces, si nosotros tenemos dos clusters bien definidos, muy separados entre sí, pero la suma de las demandas de los dos no sobrepasa a la capacidad de nuestros camiones, el algoritmo los va a tomar como un único cluster y tendríamos un costo muy alto para ir desde un cluster hasta el otro cuando hubiese sido preferible usar un camión más y hacer un recorrido mayor. Notemos también que nos estamos limitando a hablar de solamente dos cluesters pero esto también podría extenderse a la cantidad de clusters que querramos siempre y cuando el peso de los mismos no exceda la capacidad de nuestros camiones. El punto a mostrar con este caso es que si nuestro objetivo principal al resolver el problema, es encontrar la solución más eficiente posible, __Sweep__ prioriza la mínima utilización de camiones por lo que podríamos obtener soluciones mejores ya sea modificando el algoritmo para este caso (por lo que dejaría de ser __Sweep__ para ser una suerte de variante) o tendríamos que considerar utilizar otro algoritmo, siempre y cuando la disponibilidad de camiones no sea un problema.
 (par)
 
 (img)casoPatologicoSweep.png(img) (caption)Caso patológico en Sweep(caption)
@@ -426,12 +426,11 @@ En cuanto a costos, el algoritmo no tiene una performance deseable para ninguna 
 
 (par)
 ***Sweep:***
-Podemos ver que __sweep__ tiene una performance relativamente buena tanto en tiempo como en costos, el algoritmo corre considerablemente mas rápido que nuestra otra opción de __CF-RS__, y da soluciones mucho
-mas cercanas al óptimo y alejadas del peor caso.
+Podemos ver que __Sweep__ tiene una performance relativamente buena tanto en tiempo como en costos, el algoritmo corre considerablemente más rápido que nuestra otra opción de __CF-RS__, y da soluciones mucho mas cercanas al óptimo y alejadas del peor caso.
 (par)
+
 (par)
- Como mostramos anteriormente tenemos un caso donde el algoritmo funciona de manera ineficiente ya que priorizamos clusterizar nodos que no se pasen de la demanda sin tener en cuenta sus distancias. Si es posible analizar la instancia previamente y nos damos cuenta que estamos en este caso sería preferible usar el algoritmo de ejes inconsistentes u otro que a costas de usar más camiones nos de una solución mejor
-(siempre que el uso de muchos camiones no sea un problema).En cualquier otro caso, si el problema se va a resolver con una heurística de __CF-RS__, en base a el análisis hecho, es preferible usar este algoritmo al otro.
+ Como mostramos anteriormente tenemos un caso donde el algoritmo funciona de manera ineficiente (en términos de costos) ya que priorizamos clusterizar nodos que no se pasen de la demanda sin tener en cuenta sus distancias. Si es posible analizar la instancia previamente y nos damos cuenta que estamos en este caso sería preferible usar el algoritmo de ejes inconsistentes u otro que clusterice en base a distancias en vez de a demanda (siempre que el uso de más camiones no sea un problema). En cualquier otro caso, si el problema se va a resolver con una heurística de __CF-RS__, en base a el análisis hecho, es preferible usar este algoritmo al otro.
 (par)
 
 
