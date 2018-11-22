@@ -17,7 +17,9 @@
 (par)
 
 ****3.b. tsplib.h****
-(todo)explicar(todo)
+(par)
+    Para cargar los archivos que contienen los casos de test sobre los que hemos decidido experimentar, hemos desarrollado el archivo `tsplib.h`, ubicado en la carpeta `Codigo/tsplib` del repositorio de este informe. El mismo provee de funciones de carga de archivos en el formato especificado por el documento __TSPLIB 95__, por Gerhard Reinelt, y una interfaz estática que permite acceder a la información contenida en estos de forma sencilla. Si se desea conocer más al respecto, el lector está invitado a echarle un vistazo al código.
+(par)
 
 ****3.c. S_CVRP****
 (par)
@@ -209,9 +211,6 @@ unirCaminos(rutas):
 (par)
 
 ***3.1.5. Caso patológico***
-(todo)
-    Poner dibujitos
-(todo)
 
 (par)
     Está claro por la sección **3.1.1** que, en el peor caso, esta heurística devolverá el caso canónico. Si no se tiene en cuenta las demandas de los clientes, esto podría suceder en casos donde se tenga dos nodos enfrentados en lados opuestos del depósito únicamente, ya que de haber por lo menos un nodo más por desigualdad triangular será más eficiente unir dos de ellos. En el caso con dos nodos mencionado, unirlos o presentar la solución canónica implica el mismo impacto en el trayecto a recorrer.
