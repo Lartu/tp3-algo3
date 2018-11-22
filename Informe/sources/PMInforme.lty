@@ -62,7 +62,7 @@ Para representar correctamente una solución al problema a nivel implementativo 
 ***3.1.1. El algoritmo***
 
 (par)
-    La heurística del próximo mínimo surge del precepto de que, a partir la unión de caminos cortos, podemos formar caminos cortos. Si bien este argumento es meramente hipotético, hemos tomado del paper __Scheduling of Vehicles from a Central Depot to a Number of Delivery Points__, de G. Clarke y J. W. Wright (__savings__) la idea de formar caminos minimales a partir de la unión de caminos preexistentes como la base para diseñar esta heurística. Esta consiste en tres pasos: __armado de caminos__, __corte de caminos__ y __unión de caminos__.
+    La heurística del próximo mínimo surge del precepto de que, a partir la unión de caminos cortos, podemos formar caminos cortos. Si bien este argumento es meramente hipotético, hemos tomado del paper __Scheduling of Vehicles from a Central Depot to a Number of Delivery Points__, de G. Clarke y J. W. Wright (__savings__) la idea de formar caminos minimales a partir de la unión de caminos preexistentes como la base para diseñar esta heurística. El resto ha sido __completamente diseñado por nosotros__. Esta consiste en tres pasos: __armado de caminos__, __corte de caminos__ y __unión de caminos__.
 (par)
 
 /codeblock.
@@ -186,9 +186,13 @@ unirCaminos(rutas):
 
 ***3.1.4. Rendimiento para instancias predefinidas***
 
-Promedio: 15.941404205859
-Mejor: 3.2018558444026
-Peor: 30.028512373941
+(par)
+    La heurística fue corrida sobre cada test válido disponible en el sitio provisto en la **sección 1.3**. A continuación se adjuntan tablas con cuatro resultados por cada grupo (a excepción del grupo F donde solo era válida una entrada). Debajo de cada tabla se indica el tamaño de la muestra total medida por grupo.
+(par)
+
+(par)
+    En promedio, la heurística arrojó resultados **15.94%** mayores al óptimo, **3.2%** mayores en el mejor caso, **30.02%** en el peor.
+(par)
 
 (table)
 (row)
@@ -303,7 +307,7 @@ Peor: 30.028512373941
 	(cell)22.576092673477(/cell)
 (/row)
 (/table)
-(caption)Mediciones del set Vrp-Set-F, cuatro aleatorias de un total de 1.(caption)
+(caption)Medición del set Vrp-Set-F.(caption)
 (table)
 (row)
 	(titlecell)Set Vrp-Set-M(/titlecell)
@@ -404,6 +408,8 @@ Peor: 30.028512373941
 (/table)
 (caption)Mediciones del set Vrp-Set-X, cuatro aleatorias de un total de 46.(caption)
 
+(pagebreak)
+
 ***3.1.5. Rendimiento para instancias aleatorias***
 
 (par)
@@ -441,5 +447,5 @@ Peor: 30.028512373941
 
 ***3.1.7. Conclusiones***
 (par)
-    La __heurística del próximo mínimo__ ejecuta en tiempo que escala de forma razonable al tamaño de su entrada y resulta en buenas soluciones si los puntos a visitar se encuentran cerca entre sí y sus demandas son bajas (llegando a costar el 59% del coste ofrecido por el caso canónico) y en soluciones aceptables para el promedio de los casos (aproximadamente el 63% de la solución canónica). Es sencillo de comprender y fácil de implementar, por lo que lo convierte en un acercamiento inicial tentador a la búsqueda de soluciones combinatorias para el CVRP.
+    La __heurística del próximo mínimo__ ejecuta en tiempo que escala de forma razonable al tamaño de su entrada y resulta en soluciones de excelentes a muy buenas en la mayoría de los casos, en promedio costando el **63%** de la solución canónica, **15.9%** más que el óptimo en casos conocidos, llegando a costar en los mejores casos el **59%** del coste ofrecido por el caso canónico, **3.2%** más que el óptimo en los tests de la cátedra (si los puntos a visitar se encuentran cerca entre sí y sus demandas son bajas). Es muy sencillo de comprender y de implementar, por lo que lo convierte en un acercamiento inicial muy tentador a la búsqueda de soluciones combinatorias para el CVRP.
 (par)
