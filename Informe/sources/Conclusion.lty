@@ -2,6 +2,10 @@
 
 *****4. Conclusión*****
 
-(todo)
-    Llenar esto. Comparar todos los casos.
-(todo)
+(par)
+    Dado que en promedio todas las heurísticas presentaron una diferencia de entre el 15% y el 30% de diferencia con el óptimo -en instancias conocidas- y entre un 40% un 14% de diferencia con el caso canónico -en instancias aleatorias-, concluimos que si se desea hacer una aproximación inicial con algoritmos relativamente sencillos a una solución heurística del CVRP, la mejor alternativa de entre las persentadas en el presente informe es la Heurística del Próximo Mínimo, por su facilidad de implementación y excelentes resultados.
+(par)
+
+(par)
+    Sin embargo, si se supiera que el conjunto de clientes sobre el que se desea aplicar el algoritmo se encuentra esparcido formando clusters y la cantidad de nodos a visistar es muy grande, es posible que sea conveniente optar por Sweep ya que su complejidad, en el peor caso, es de O(n^^2^^), una orden de magnitud menor que la de el método presentado en el párrafo anterior.
+(par)

@@ -1,0 +1,85 @@
+/parallelsection.
+	/parallel50.
+	.parallel50/
+	/parallel50.
+		/image.
+			logodc.png
+		.image/
+	.parallel50/
+.parallelsection/
+
+/break./break./halfbreak.
+
+/section.
+	/size4.Trabajo Práctico III.size4/
+	/linebreak./size3.CVRP.size3/
+	/line.
+	/right.
+		/size3.Algoritmos y Estructuras de Datos III.size3/
+		/linebreak.Segundo Cuatrimestre 2018
+	.right/
+.section/
+
+/break./break.
+
+/size1.
+
+/parallelsection.
+/parallel10.
+.parallel10/
+/parallel80.
+/parallelsection.
+	/parallel40.
+	/center./b.Integrante.b/.center/
+	/line.
+	Pedro Valentín Boitier
+	/halfbreak.Martín Javier del Río Llobera
+	/halfbreak.Santiago Tucci
+	.parallel40/
+
+	/parallel20.
+	/center./b.LU.b/.center/
+	/line.
+	/center.054/16
+	/halfbreak.401/15
+	/halfbreak.682/16.center/
+	.parallel20/
+
+	/parallel40.
+	/center./b.Correo Electrónico.b/.center/
+	/line.
+	/right.
+	pedrovboitier@gmail.com
+	/halfbreak.martinjavierdelrio@gmail.com
+	/halfbreak.stucci4@gmail.com
+	.right/
+	.parallel40/
+.parallelsection/
+.parallel80/
+
+/parallel10.
+.parallel10/
+.parallelsection/
+.size1/
+
+/break./break./break.
+
+/parallelsection.
+	/parallel.
+	/image.uba.png.image/
+	.parallel/
+
+
+	/parallel./right./break./break./break./break./break./break./break./break./break./break.
+		/size1.
+		Facultad de Ciencias Exactas y Naturales
+		/linebreak.Universidad de Buenos Aires.size1/
+		/size0.
+		/linebreak.Ciudad Universitaria - (Pabellón I/Planta Baja)
+		/linebreak.Intendente Güiraldes 2160 - C1428EGA
+		/linebreak.Ciudad Autónoma de Buenos Aires - Rep. Argentina
+		/linebreak.Tel/Fax: (54 11) 4576-3359
+		/linebreak.http://www.fcen.uba.ar
+		.size0/.right/
+	.parallel/
+.parallelsection/

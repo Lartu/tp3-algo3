@@ -1,0 +1,244 @@
+/*TODO:
+Para agregar los bordes de debug con js habría que 
+hacer un archivo debug.css que tenga solo los objetos 
+que tienen borde con sus bordes (y nada más) y se 
+agregue desde js cuando sea necesario.*/
+
+body{
+	font-family: "Times New Roman";
+	font-size:15px;
+	text-align:justify;
+	padding:20px;
+	background:white;
+	color:black;
+	/*max-width:595px; Ancho A4 en 72dpi*/
+	max-width:100%;
+	margin-left:auto;
+	margin-right:auto;
+	overflow:hidden;
+}
+
+pre{
+	white-space: pre-wrap;
+}
+
+.pagebreak {
+	page-break-before: always !important;
+}
+
+.section{
+	padding:0px;
+	margin:0px;
+	margin-top:0px;
+	margin-bottom:20px;
+	/*border:1px solid #17c0eb;*/
+}
+
+.li{
+	padding:0px;
+	margin:0px;
+	margin-left:12px;
+	margin-top:10px;
+	margin-bottom:10px;
+}
+
+.code_section{
+	page-break-inside: avoid !important;
+	display:block;
+	text-align:left;
+	padding:5px;
+	font-size: 13px;
+	background: #dadeea;
+	color: #192a56;
+	margin: 10px;
+	margin-top:0px;
+	margin-bottom:20px;
+}
+
+img{
+	margin:auto;
+	margin-top:0px;
+	margin-bottom:20px;
+	max-width:100%;
+}
+
+.right img{
+	margin:initial;
+	margin-left:auto;
+}
+
+.image{
+	page-break-inside: avoid !important;
+	display:block;
+	max-width: 100%;
+}
+
+.image_mid{
+	page-break-inside: avoid !important;
+	display:block;
+	max-width: 80%;
+}
+
+.image_small{
+	page-break-inside: avoid !important;
+	display:block;
+	max-width: 60%;
+}
+
+.image_tiny{
+	page-break-inside: avoid !important;
+	display:block;
+	max-width: 30%;
+}
+
+.image_inline{
+	display:inline-block;
+	max-height:3em;
+	margin:0px;
+	width:auto;
+	vertical-align:middle;
+}
+
+.right{
+	text-align:right;
+	margin:0px;
+}
+
+.center{
+	text-align:center;
+	margin:0px;
+}
+
+.size_4{
+	font-size:26px;
+	margin:0px;
+}
+
+.size_3{
+	font-size:20px;
+	margin:0px;
+}
+
+.size_2{
+	font-size:17px;
+	margin:0px;
+}
+
+.size_1{
+	font-size:14px;
+	margin:0px;
+}
+
+.size_0{
+	font-size:10px;
+	margin:0px;
+}
+
+.halfbreak{
+	margin:0px;
+	height:10px;
+	padding:0px;
+	/*border: 1px solid #ff4d4d;*/
+}
+
+.break{
+	margin:0px;
+	height:20px;
+	padding:0px;
+	/*border: 1px solid #ff3838;*/
+}
+
+hr{
+	border-bottom:1px solid black;
+	margin-top:10px;
+	margin-bottom:10px;
+}
+
+code{
+	display:inline-block;
+	font-family:"Droid Sans Mono";
+	font-size:12px;
+	color: #d63031;
+	background:#ffe5e9;
+}
+
+.image_footer{
+	margin-top:-15px;
+	font-size:0.8em;
+	text-align:center;
+	margin-bottom:20px;
+}
+
+table{
+	width: 100%;
+	margin:0px;
+	/*border: 1px solid #c56cf0;*/
+	font-size:inherit;
+}
+
+td{
+	width: 50%;
+	vertical-align:top;
+	text-align: justify;
+	overflow: hidden;
+	/*border: 1px solid #ffaf40;*/
+	font-size:inherit;
+}
+
+td .code_section{
+	page-break-inside: initial !important;
+	font-size: 13px;
+}
+
+.parallel90{
+	width: 90%;
+}
+
+.parallel80{
+	width: 80%;
+}
+
+.parallel70{
+	width: 70%;
+}
+
+.parallel60{
+	width: 60%;
+}
+
+.parallel50{
+	width: 50%;
+}
+
+.parallel40{
+	width: 40%;
+}
+
+.parallel33{
+	width: 33%;
+}
+
+.parallel30{
+	width: 30%;
+}
+
+.parallel25{
+	width: 25%;
+}
+
+.parallel20{
+	width: 20%;
+}
+
+.parallel10{
+	width: 10%;
+}
+
+.todo{
+	font-family:"Droid Sans Mono";
+	font-size:12px;
+	color: #e67e22;
+	background:#ffeaa7;
+	margin-top:0px;
+	margin-bottom:20px;
+}
