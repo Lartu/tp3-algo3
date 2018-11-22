@@ -8,12 +8,6 @@
 (par)
 
 ****2.2. Generador de clusters****
-(todo)
-    Adaptar esto al tp3
-(todo)
-(par)
-Los datasets que utilizaremos para testear y analizar los algoritmos implementados para este problema (sobre los cuales experimentaremos en las **secciones 3.3**, **3.4** y **3.5**) fueron obtenidos del sitio __cs.joensuu.fi/sipu/datasets__, bajo el subtítulo de __Shape Sets__. Dado que el formato en el que se encuentran disponibles los conjuntos no es compatible con el formato de entrada pedido por la cátedra, hemos desarrollado un conversor que nos permite transformar los txts descargables a archivos legibles por nuestro programa. Si se lo desea examinar, se encuentra en el directorio ``ejercicio_1/Formateador`` adjunto junto a este documento. Para ejecutarlo, se debe utilizar el comando ``php formatear.php <archivo a formatear>``. Un archivo compatible será creado en el directorio ``DatasetsFormateados`` con el mismo nombre que el archivo original.
-(par)
 
 (rightblock)
 (img)generador_datasets.png(img)
@@ -21,14 +15,11 @@ Los datasets que utilizaremos para testear y analizar los algoritmos implementad
 (rightblock)
 
 (par)
-Dado que los conjuntos disponibles no nos parecieron suficientes para testear el potencial de los algoritmos en situaciones particulares, y a raíz que nos fuera informado que los algoritmos probablemente no fueran, dada su naturaleza, a producir los resultados pronosticados en el sitio web mencionado en el párrafo anterior para los datasets provistos, fue decidido implementar un generador propio de datasets. El mismo se encuentra en el directorio ``ejercicio_1/Generador_Datasets``. Para ejecutarlo se debe abrir con un navegador web el archivo ``generador.html``. Para usarlo no hace falta más que hacer click en el lugar donde se quiera colocar un punto. La coordenada del punto será añadida al área de texto debajo del gráfico, que luego podrá ser copiada a un archivo de texto y provista al ejecutable del trabajo práctico por entrada estándar.
+Los datasets que utilizaremos para testear y analizar los heurísticas basdas en clustering (sobre las cuales hablaremos en la **sección 3.3**) fueron generadas utilizando un generador propio de datasets, diseñado para poder diseñar instancias a mano. El mismo se encuentra en el directorio ``Generador_Datasets_Cluster``. Para ejecutarlo se debe abrir con un navegador web el archivo ``generador.html``. Para usarlo no hace falta más que hacer click en el lugar donde se quiera colocar un punto. La coordenada del punto será añadida al área de texto debajo del gráfico, que luego podrá ser copiada a un archivo de texto, parseada, reestructurada conforme al estándar especificado por la TSPLib y provista al ejecutable del trabajo práctico por ``stdin``.
 (par)
 
 ****2.3. Generador de instancias****
-(todo)
-    Hablar del generador de instancias random y de qué clase de instancias genera
-(todo)
 
-(todo)
-	Estaria bueno hablar del equipo utilizado y de las mediciones. tambien deberiamos aclarar por qué medimos como medimos, es decir, por que en los casos aleatorios medimos como ahorro porcentual de la solución canónica y en los casos conocidos como porcentaje respecto del óptimo.
-(todo)
+(par)
+    Para poder evaluar nuestros algoritmos más allá de los casos de test provistos por la cátedra, en lo que llamamos __instancias desconocidas__, es decir, instancias de las cuales no se sabe nada (y por tanto, confiamos en que representan un caso genérico en el que se desee resolver un problema aplicando lógica de CVRP) hemos diseñado un generador de instancias aleatorias. Dados tres valores __n__, __m__ y __c__, el generador produce una serie de instancias de __[3, n]__ puntos, __m__ por cada __n__, con capacidad __c__ para los camiones. En nuestros experimentos hemos decidido medir utilizando __n = 200__, __m = 1000__ y __c__ aleatorio entre 70 y 150. Los puntos de las instancias aleatorias, como su nombre indica, se encuentran distribuidos de forma aleatoria sobre un espacio bidimencional y se adaptan al estándar TSPLib, con lo cual pueden ser alimentadas a nuestro trabajo práctico directamente por ``stdin``.
+(par)
