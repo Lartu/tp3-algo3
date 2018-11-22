@@ -14,21 +14,21 @@ Veamos el pseudocódigo de "Merge más cercanos":
 
 /codeblock.
 MergeMasCercanos(G grafo):
-rutas = solucionCanonica(G)
-pares = paresDePuntosPorDistancia(G)
-while (pares != vacio):
-    (a,b) = pares.primero()
-    rutaA = rutaALaQuePertenece(a)
-    rutaB = rutaALaQuePertenece(b)
-    if(sumatoriaDemandas(rutaA) + sumatoriaDemandas(rutaB) <= capacidad)
-        rutas[rutaA] = rutaA U rutaB
-		rutas = rutas - rutaB
+rutas ← solucionCanonica(G)
+pares ← paresDePuntosPorDistancia(G)
+while (pares != ∅):
+    (a,b) ← pares.primero()
+    rutaA ← rutaALaQuePertenece(a)
+    rutaB ← rutaALaQuePertenece(b)
+    if(Σ(demandas(rutaA)) + Σ(demandas(rutaB)) <= capacidad)
+        rutas[rutaA] ← rutaA U rutaB
+		rutas ← rutas - rutaB
     pares.desencolar()
 return rutas
 .codeblock/
 
 (par)
-Como podemos ver, el algoritmo es muy simple. Una aclaración importante es que la union entre las rutas une el último elemento no depósito de la rutaA con el primer elemento no depósito de la rutaB y luego descarta estos depósitos de manera que la ruta obtenida sea una ruta válida. Tampoco es menor enfatizar que no importa que nodos conformen el par más cercano entre sí; la unión será siempre entre el último nodo de la ruta del primer elemento y el primer elemento de la ruta del segundo elemento.
+Como podemos ver, el algoritmo es muy simple. Una aclaración importante es que la unión entre las rutas une el último elemento no depósito de ``rutaA`` con el primer elemento no depósito de ``rutaB`` y luego descarta estos depósitos de manera que la ruta obtenida sea una ruta válida. Tampoco es menor enfatizar que no importa qué nodos conformen el par más cercano, la unión será siempre entre el último nodo de la ruta del primer elemento y el primer nodo de la ruta del segundo elemento.
 (par)
 
 ***3.2.2. Análisis de complejidad temporal***
@@ -37,36 +37,127 @@ Como podemos ver, el algoritmo es muy simple. Una aclaración importante es que 
 Descompongamos el pseudocódigo en pasos:
 (par)
 
-(li)La solución Canónica se puede obtener fácilmente en O(n).(li)
-(li)Dado que el grafo de entrada está implementado como una Matriz de Distancias, la manera menos costosa de obtener todos los pares de puntos ordenados por distancia es recorrer toda la matriz formando los pares y colocandolos en un vector, y luego ordenar el vector con algún algoritmo eficiente. Esto nos cuesta O(n^2) para recorrer la matriz y O(n^2 * log(n^2)) para ordenarla, por lo tanto todo el procedimiento es O(n^2 * log(n^2)).(li)
-(li)Como el ``while`` se utiliza sobre una estructura que contiene n^2 elementos en la que para cada uno llamamos a ``rutaALaQuePertenece``, y dado que nuestra implementación actual de esta función es una búsqueda lineal, el procedimiento  es O(|rutas|). O(|rutas|) puede ser O(n) en el caso en el que no es posible realizar ningún merge, por lo que el while sin tener en cuenta el merge es O(n^3) en el peor caso. Los merge no cambian esta complejidad asíntotica dado que la complejidad de la unión entre rutaA y rutaB es O(|rutaA|), que pertenece a O(n).(li)
-(li)Podemos concluir entonces que el algoritmo pertenece a O(n^3)(li)
+(li)La solución Canónica se puede obtener fácilmente en __O(n)__.(li)
+(li)Dado que el grafo de entrada está implementado como una Matriz de Distancias, la manera menos costosa de obtener todos los pares de puntos ordenados por distancia es recorrer toda la matriz formando los pares y colocandolos en un vector, y luego ordenar el vector con algún algoritmo eficiente. Esto nos cuesta __O(n^^2^^)__ para recorrer la matriz y __O(n^^2^^ * log(n^^2^^))__ para ordenarla, por lo tanto todo el procedimiento es __O(n^^2^^ * log(n^^2^^))__ = __O(n^^2^^ * log(n))__.(li)
+(li)Como el ``while`` se utiliza sobre una estructura que contiene __n^^2^^__ elementos en la que para cada uno llamamos a ``rutaALaQuePertenece``, y dado que nuestra implementación actual de esta función es una búsqueda lineal, el procedimiento  es __O(|rutas|)__. __O(|rutas|)__ puede ser __O(n)__ en el caso en el que no es posible realizar ningún merge, por lo que el while sin tener en cuenta el merge es __O(n^^3^^)__ en el peor caso. Los merge no cambian esta complejidad asíntotica dado que la complejidad de la unión entre ``rutaA`` y ``rutaB`` es __O(|rutaA|)__, que pertenece a __O(n)__.(li)
+(li)Podemos concluir entonces que el algoritmo pertenece a __O(n^^3^^)__(li)
 
 (par)
-Comprobemoslo realizando las mediciones directamente. Generamos 400 instancias de grafo de para cada tamaño desde n = 3 hasta n = 453, con saltos de a 50 y promediamos el tiempo obtenido. Los resultados se pueden ver a continuación: 
+Comprobemoslo realizando las mediciones directamente. Generamos 400 instancias de grafo de para cada tamaño desde __n__ = 3 hasta __n__ = 453, con saltos de a 50 y promediamos el tiempo obtenido. Los resultados se pueden ver a continuación: 
 (par)
 
-(img)Tgolosa.png(img)
+(ps)
+	(p50)
+		(img)Tgolosa.png(img)
+	(/p50)
+	(p50)
+		(img)TgolosaDividido.png(img)
+		(caption)Tiempo de ejecución del algoritmo dividido n^^3^^(caption)
+	(/p50)
+(/ps)
 
 ***3.2.3. Rendimiento para diferentes sets de instancias ***
 
-(todo)hablar de los resultados(todo)
+(todo)
+Asi como está lo paso muy por arriba el por qué de como medimos. Lo tengo bien explicado en SA. me parece que deberiamos explicarlo una sola vez
+(todo)
 
 (par)
-Veamos el rendimiento del algoritmo propuesto para los sets A, X y un set aleatorio de nuestra autoría. El set aleatorio consta de 400 instancias de grafo para cada tamaño desde n = 3 hasta n = 503, con saltos de a 50. Para las instancias aleatorias expresaremos el rendimiento como porcentaje ahorrado en promedio desde la solución canónica y en los sets en los que se conoce el óptimo lo haremos como porcentaje de la solución óptima.
+Veamos el rendimiento del algoritmo propuesto para los sets A, X y un set aleatorio de nuestra autoría. El set aleatorio consta de 400 instancias de grafo para cada tamaño desde __n__ = 3 hasta __n__ = 503, con saltos de a 50. Para las instancias aleatorias expresaremos el rendimiento como porcentaje ahorrado en promedio desde la solución canónica y en los sets en los que se conoce el óptimo lo haremos como porcentaje de la solución óptima.
 (par)
 
-(img)MMCCasoAleatorio.png(img)
-(img)MMCdistOptimoA.png(img)
-(img)MMCdistOptimoX.png(img)
+/imagesmall.MMCCasoAleatorio.png.imagesmall/
 
-(todo) Explicación detallada y ejemplo del caso patológico(todo)
+(par)
+Como podemos apreciar, para la mayoría de los tamaños probados el porcentaje de ahorro ronda el 35%, y no parece depender fuertemente del número de clientes de la instancia. Sin embargo suponer  que su rendimiento sí depende de la distribución de los puntos en el plano ya __n__ = 153 resultó en un rendimiento muy pobre. Esto nos da un indicio de la posibilidad de casos patológicos, ya que como calculamos el porcentaje de ahorro de 400 instancias diferentes y resultó ser tan malo, debe haber varias distribuciones posibles de clientes que resulten en malos rendimientos.
+(par)
+
+(par)
+Dudamos que el mal rendimiento esté relacionado puntualmente a los grafos de __n__ = 153, ya que ninguna parte del algoritmo depende directamente de la cantidad de clientes, si no a la relación posicional entre ellos. Además, si hubiera alguna relación entre el rendimiento y el tamaño probablemente habría evidencia de ello en los tamaños de instancias cercanas anteriores y posteriores (o sea __n__ = 103, __n__ = 203).
+(par)
+
+(par)
+Veamos ahora los rendimientos para el Set A:
+(par)
+/imagesmall.MMCdistOptimoA.png.imagesmall/
+
+(par)
+La distancia porcentual al óptimo va entre 25% y 40% para la mayoría de las instancias, lo cual no parece ser particularmente buen rendimiento dado que son instancias de tamaño pequeño. Sin embargo, dado que las instancias de A son generadas aleatoriamente sin ninguna especie de patrón o criterio particular, es entendible que el rendimiento no sea muy bueno.
+(par)
+
+(par)
+Es importante destacar el caso de la instancia __n__ = 36 cuyo rendimiento fue muy malo, proveyéndonos de más evidencia para nuestra hipótesis de la existencia de casos patológicos.
+(par)
+
+(par)
+Por último analizemos los resultados del algoritmo aplicado al Set X:
+(par)
+
+(par)
+Con este set de instancias obtuvimos resultados bastante mejores que con el Set A. Hay una gran cantidad de instancias rondando el 15% del óptimo y otra rondando el 30%. Sigue habiendo casos muy poco eficientes, notablemente __n__ = 120 que ronda el 70% de distancia porcentual al óptimo. 
+(par)
+/imagesmall.MMCdistOptimoX.png.imagesmall/
+
 ***3.2.4. Caso patológico***
 
 (par)
-Detengámonos a analizar un caso de Grafo para el cual la heurística propuesta resulta en malas soluciones. La posibilidad de tener casos patológicos se debe al hecho de que si bien estamos utilizando los pares de clientes más cercanos, la unión entre las rutas se da entre el último elemento de una ruta y el primero de la otra, por lo que si estos dos elementos son lejanos, se generará una ruta con una arista muy larga. 
+Dada la abundante evidencia de que hay casos para los cuales la heurística tiene un mal rendimiento, veamos si podemos determinar qué características de la distribución de los clientes lo causa. Nuestra hipótesis es que tener casos patológicos se debe al hecho de que si bien estamos utilizando los pares de clientes más cercanos disponibles, la unión entre las rutas se da entre el último elemento de una ruta y el primero de la otra, por lo que si estos dos elementos son lejanos, se generará una ruta con un tramo de gran distancia. 
 (par)
 
 (par)
+Veamos paso a paso la ejecución del algoritmo en un caso de estas características:
+(par)
+/imagesmall.SAcaso_patologico_0.png.imagesmall/
 
 (par)
+En esta instancia de problema tenemos un depósito identificado con el color negro y cuatro clientes que son el resto de los nodos del grafo. De ahora en más los llamaremos por la inicial del color que los identifica, es decir, serán R para el Rojo, N para el Naranja, A para el Azul y M para el marrón. El valor de sus demandas no es de importancia, lo único que nos importa es que un sólo vehículo pueda cargar con la suma de las cuatro demandas.
+(par)
+
+(par)
+Acorde al primer paso del algoritmo calculamos la solución canónica, formando las siguientes rutas:
+(par)
+/imagesmall.SAcaso_patologico_1.png.imagesmall/
+
+
+(par)
+Es importante aclarar que la trayectoria que determinan las curvas utilizadas para mostrar las rutas no son representaciones adecuadas de los movimientos del vehículo, si no que las dibujamos de esta manera para que sean más fácilmente distinguibles. La trayectoria de los camiones será una línea recta.
+(par)
+
+(par)
+Ahora ordenamos los pares de nodos por distancia de menor a mayor. Estos serán (R,A),(R,N),(A,N), (A,M),(R,M) y (M,N). Como R y A son el par de menor distancia, no pertenecen a la misma ruta y cumplen que la suma de sus demandas es menor que la capacidad del camión, realizamos un merge entre sus rutas, de la siguiente manera:
+(par)
+/imagesmall.SAcaso_patologico_2.png.imagesmall/
+
+(par)
+Seguimos iterando por la lista de pares. El próximo par es (R,N). Como no pertenecen a la misma ruta y la suma de las demandas lo permite, mergeamos la ruta que pasa por R y A con la ruta que pasa por N. Por cómo está definido el merge, uniremos el último nodo de la primer ruta con el primero de la segunda ruta, resultando en lo siguiente:
+(par)
+/imagesmall.SAcaso_patologico_3.png.imagesmall/
+
+(par)
+Es una ruta que sale del depósito pasando primero por R, luego por A y finalmente por N antes de regresar al depósito.
+(par)
+
+(par)
+Viendo nuestra lista de pares, el siguiente en línea es (A,N), pero ambos ya pertenecen a la misma ruta, por lo que seguimos con (A,M). Realizando el merge, unimos el último elemento de la primera ruta con el primero de la segunda, generando el siguiente grafo:
+(par)
+/imagesmall.SAcaso_patologico_4.png.imagesmall/
+
+(par)
+Luego de esta iteración, no habrá más cambios a las rutas dado que como todos los nodos pertenecen a la misma ruta, no hay más merge posibles.Como se puede observar, generamos una ruta muy ineficiente para un recorrido fácilmente realizable con recorridos más cortos. Por ejemplo, se podrían haber utilizado dos vehículos (uno que pase por A y M y otro por R y N) para dar una solución mejor.
+(par)
+
+(par)
+Ejecutando una instancia análoga a este caso con las posiciones cartesianas Deposito = (50,50), R = (60,50), A = (45,50), N = (80,50) y
+M = (0,50) resultó en un recorrido total igual de extenso que la solución canónica, efectivamente ganando nada de la ejecución del algoritmo excepto la utilización de un único camión en vez de cuatro.
+(par)
+
+(par)
+Podemos concluir entonces que los casos patológicos son muy devastadores para el rendimiento de la heurística. Dado que la distribución de puntos necesaria para formar uno de estos casos es de generación relativamente común en una instancia aleatoria no nos sorprende que el rendimiento del algoritmo pueda ser bastante malo para un grupo grande de casos aleatorios.
+(par)
+
+***3.2.5. Conclusiones***
+
+(par)
+La heurística "Merge más cercanos" es una heurística simple de tiempo de ejecución razonable (al menos para grafos no masivamente grandes) que resulta en buenas soluciones si la distribución de los puntos del grafo es la adecuada, en soluciones de mediana calidad (entre 15% y 30% más que el óptimo) para la mayor parte de las instancias con las que la probamos y en muy malas soluciones en sus casos patológicos que son relativamente comunes. Sin embargo no deja de ser una herramienta más que podría resultar útil para un grafo particular o familia de grafos que comparten ciertas características.
+(par)
+

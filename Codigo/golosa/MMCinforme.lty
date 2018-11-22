@@ -1,0 +1,106 @@
+(pagebreak)
+
+****3.2.Heurística constructiva golosa: __Merge Más Cercanos__****
+
+***3.2.1. El algoritmo***
+
+(par)
+La heurística constructiva golosa que hemos llamado Merge más cercanos consiste en unir rutas en función de la cercanía de sus puntos. Se parte desde la solución canónica al problema para obtener rutas iniciales y luego se van realizando uniones entre las rutas que contengan los dos puntos más cercanos que no pertenecen a la misma ruta. 
+(par)
+
+(par)
+Veamos el pseudocódigo de "Merge más cercanos":
+(par)
+
+/codeblock.
+MergeMasCercanos(G grafo):
+rutas = solucionCanonica(G)
+pares = paresDePuntosPorDistancia(G)
+while (pares != vacio):
+    (a,b) = pares.primero()
+    rutaA = rutaALaQuePertenece(a)
+    rutaB = rutaALaQuePertenece(b)
+    if(sumatoriaDemandas(rutaA) + sumatoriaDemandas(rutaB) <= capacidad)
+        rutas[rutaA] = rutaA U rutaB
+		rutas = rutas - rutaB
+    pares.desencolar()
+return rutas
+.codeblock/
+
+(par)
+Como podemos ver, el algoritmo es muy simple. Una aclaración importante es que la union entre las rutas une el último elemento no depósito de ``rutaA`` con el primer elemento no depósito de ``rutaB`` y luego descarta estos depósitos de manera que la ruta obtenida sea una ruta válida. Tampoco es menor enfatizar que no importa que nodos conformen el par más cercano entre sí; la unión será siempre entre el último nodo de la ruta del primer elemento y el primer elemento de la ruta del segundo elemento.
+(par)
+
+***3.2.2. Análisis de complejidad temporal***
+
+(par)
+Descompongamos el pseudocódigo en pasos:
+(par)
+
+(li)La solución Canónica se puede obtener fácilmente en O(n).(li)
+(li)Dado que el grafo de entrada está implementado como una Matriz de Distancias, la manera menos costosa de obtener todos los pares de puntos ordenados por distancia es recorrer toda la matriz formando los pares y colocandolos en un vector, y luego ordenar el vector con algún algoritmo eficiente. Esto nos cuesta O(n^2) para recorrer la matriz y O(n^^2^^ * log(n^^2^^)) para ordenarla, por lo tanto todo el procedimiento es O(n^^2^^ * log(n^^2^^)) = O(n^^2^^ * log(n)).(li)
+(li)Como el ``while`` se utiliza sobre una estructura que contiene n^2 elementos en la que para cada uno llamamos a ``rutaALaQuePertenece``, y dado que nuestra implementación actual de esta función es una búsqueda lineal, el procedimiento  es O(|rutas|). O(|rutas|) puede ser O(n) en el caso en el que no es posible realizar ningún merge, por lo que el while sin tener en cuenta el merge es O(n^^3^^) en el peor caso. Los merge no cambian esta complejidad asíntotica dado que la complejidad de la unión entre ``rutaA`` y ``rutaB`` es O(|rutaA|), que pertenece a O(n).(li)
+(li)Podemos concluir entonces que el algoritmo pertenece a O(n^^3^^)(li)
+
+(par)
+Comprobemoslo realizando las mediciones directamente. Generamos 400 instancias de grafo de para cada tamaño desde n = 3 hasta n = 453, con saltos de a 50 y promediamos el tiempo obtenido. Los resultados se pueden ver a continuación: 
+(par)
+
+(img)Tgolosa.png(img)
+
+***3.2.3. Rendimiento para diferentes sets de instancias ***
+
+(todo)Agregar algun set de instancias en el que dé bien?(todo)
+
+(todo)
+Asi como está lo paso muy por arriba el por qué de como medimos. Lo tengo bien explicado en SA. me parece que deberiamos explicarlo una sola vez
+(todo)
+
+(par)
+Veamos el rendimiento del algoritmo propuesto para los sets A, X y un set aleatorio de nuestra autoría. El set aleatorio consta de 400 instancias de grafo para cada tamaño desde n = 3 hasta n = 503, con saltos de a 50. Para las instancias aleatorias expresaremos el rendimiento como porcentaje ahorrado en promedio desde la solución canónica y en los sets en los que se conoce el óptimo lo haremos como porcentaje de la solución óptima.
+(par)
+
+(img)MMCCasoAleatorio.png(img)
+
+(par)
+Como podemos apreciar, para la mayoría de los tamaños probados el porcentaje de ahorro ronda el 35%, y no parece depender fuertemente del número de clientes de la instancia. Sin embargo suponer  que su rendimiento sí depende de la distribución de los puntos en el plano ya n = 153 resultó en un rendimiento muy pobre. Esto nos da un indicio de la posibilidad de casos patológicos, ya que como calculamos el porcentaje de ahorro de 400 instancias diferentes y resultó ser tan malo, debe haber varias distribuciones posibles de clientes que resulten en malos rendimientos.
+(par)
+
+(par)
+Dudamos que el mal rendimiento esté relacionado puntualmente a los grafos de n = 153, ya que ninguna parte del algoritmo depende directamente de la cantidad de clientes, si no a la relación posicional entre ellos. Además, si hubiera alguna relación entre el rendimiento y el tamaño probablemente habría evidencia de ello en los tamaños de instancias cercanas anteriores y posteriores (o sea n = 103, n = 203).
+(par)
+
+(par)
+Veamos ahora los rendimientos para el Set A:
+(par)
+(img)MMCdistOptimoA.png(img)
+
+(par)
+La distancia porcentual al óptimo va entre 25% y 40% para la mayoría de las instancias, lo cual no parece ser particularmente buen rendimiento dado que son instancias de tamaño pequeño. Sin embargo, dado que las instancias de A son generadas aleatoriamente sin ninguna especie de patrón o criterio particular, es entendible que el rendimiento no sea muy bueno.
+(par)
+
+(par)
+Es importante destacar el caso de la instancia n = 36 cuyo rendimiento fue muy malo, proveyéndonos de más evidencia para nuestra hipótesis de la existencia de casos patológicos.
+(par)
+
+(par)
+Por último analizemos los resultados del algoritmo aplicado al Set X:
+(par)
+
+(par)
+Con este set de instancias obtuvimos resultados bastante mejores que con el Set A. Hay una gran cantidad de instancias rondando el 15% del óptimo y otra rondando el 30%. Sigue habiendo casos muy poco eficientes, notablemente n = 120 que ronda el 70% de distancia porcentual al óptimo. 
+(par)
+(img)MMCdistOptimoX.png(img)
+
+(todo) Explicación detallada y ejemplo del caso patológico(todo)
+***3.2.4. Caso patológico***
+
+(par)
+Dada la abundante evidencia de que hay casos para los cuales la heurística tiene un mal rendimiento, veamos si podemos determinar qué características de la distribución de los clientes lo causa. Nuestra hipótesis es que tener casos patológicos se debe al hecho de que si bien estamos utilizando los pares de clientes más cercanos disponibles, la unión entre las rutas se da entre el último elemento de una ruta y el primero de la otra, por lo que si estos dos elementos son lejanos, se generará una ruta con un tramo de gran distancia. 
+(par)
+
+(par)
+
+(par)
+
+***3.2.5. Conclusiones***

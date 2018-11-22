@@ -21,51 +21,63 @@ Para dar esta variabilidad seleccionaremos la próxima solución en base a un pa
 (par)
 
 (par)
-Cómo disminuye la temperatura a lo largo de la ejecución se denomina **Cooling Schedule** y es fundamental para el desempeño del algoritmo. Hay muchas opciones posibles que varían en efectividad dependiendo del tipo de problema y de las instancias particulares.
+Cómo disminuye la temperatura a lo largo de la ejecución se denomina función de enfriamiento o **Cooling Schedule** y es fundamental para el desempeño del algoritmo. Hay muchas opciones posibles que varían en efectividad dependiendo del tipo de problema y de las instancias particulares.
 (par)
 
 (par)
 Veamos el pseudocódigo de un esquema de Simulated Annealing:
 (par)
 
-(todo) poner la imagen del pseudocodigo de las diapos (todo)
+/codeblock.
+Entrada:
+S0: solución inicial, E: función energía, N: vecindario
+Ts: Temperatura inicial, Tf: Temperatura final, CS: función que enfría
+la temperatura, P: función de probabilidad de aceptación de una transición.
 
+S* ← S0
+S ← S*
+T ← Ts
+while(T > Tf)
+    Tomar S'∈ N(S)
+    if P(S, S', T) >= random(0,1):
+        S ← S'
+    if E(S) <= E(S*) : S* ← S
+    enfriar(T)
+return S*
+.codeblock/
 (par)
-(todo)Esto asume que ya explicamos como está compuesta una solucion. O sea, que es un vector de vectores de clientes.(todo)
 En nuestra implementación la función de vecindario que utilizaremos será **1-interchange**. El vecindario utilizando esta función está definido de la siguiente manera:
 (par)
 
-(todo)se puede escribir esto de manera mas linda (a nivel formato)(todo)
-
 (par)
-Sean S y S' soluciones. S' ∈ N(S) <=> ∃ i,j con i != j , i y j <= |rutas(S)|, ∃ c ∈ rutas(i), c != deposito tal que shift(rutas(S)[i],rutas(S)[j],c) == rutas(S') ∨ existe c1 ∈ rutas(i) ∧ c2 ∈ rutas(j), c1,c2 != deposito exchange(rutas(S)[i],rutas(S)[j],c1,c2) == rutas(S'). 
+Sean S y S' soluciones. S' ∈ N(S) <=> ∃ i, j con i != j , i y j <= |rutas(S)|, ∃ c ∈ rutas[i], c != deposito(S) tal que shift(rutas(S)[i], rutas(S)[j], c) == rutas(S') ∨ ∃ c1 ∈ rutas[i] ∧ c2 ∈ rutas[j], c1,c2 != deposito(S) exchange(rutas(S)[i], rutas(S)[j], c1, c2) == rutas(S'). 
 (par)
 
 (par)
-Siendo ``shift`` y ``exchange`` los siguientes procedimientos:
+Siendo ``Shift`` y ``Exchange`` los siguientes procedimientos:
  
 /codeblock.
-shift(vector<Ruta> rutas ,Ruta ruta1, Ruta ruta2, cliente c, Grafo G)
-    if (rutas[ruta1][c].demanda + Σ(demandas(ruta2)) <= G.capacidad_total)
-	    w* <- w ∈ rutas[ruta2] / minArg(G.distanciaEntre(rutas[ruta1][c], rutas[ruta2][w]) + G.distanciaEntre(rutas[ruta2][w+1],rutas[ruta1][c]))
-	    rutas[ruta2] = rutas[ruta2][1..w] ∪ rutas[ruta1][c] ∪ rutas[ruta2][w+1..|rutas[ruta2|-1]
-	    rutas[ruta1] = rutas[ruta1] - c
+Shift(vector<Ruta> rutas ,Ruta ruta1, Ruta ruta2, cliente c, Grafo G)
+    if (rutas[ruta1][c].demanda + Σ(demandas(ruta2)) <= G.capacidad_total):
+	    w* ← w ∈ rutas[ruta2] / minArg(G.distanciaEntre(rutas[ruta1][c], rutas[ruta2][w]) + G.distanciaEntre(rutas[ruta2][w+1],rutas[ruta1][c]))
+	    rutas[ruta2] ← rutas[ruta2][1..w] ∪ rutas[ruta1][c] ∪ rutas[ruta2][w+1..|rutas[ruta2|-1]
+	    rutas[ruta1] ← rutas[ruta1] - c
     return rutas
 .codeblock/
 
 
 /codeblock. 
-exchange(vector<Ruta> rutas, Ruta ruta1, Ruta ruta2,c1,c2, Grafo G)
+Exchange(vector<Ruta> rutas, Ruta ruta1, Ruta ruta2,c1,c2, Grafo G)
 	if(Σ(demandas(ruta1)) - rutas[ruta1][c1].demanda + rutas[ruta2][c2].demanda <= G.capacidad_total &&
-	Σ(demandas(ruta2)) - rutas[ruta2][c2].demanda + rutas[ruta1][c1] < G.capacidad_total)
-        temp = rutas[ruta1][c1]
-        rutas[ruta1][c1] = rutas[ruta2][c2]
-        rutas[ruta2][c2] = temp
+	Σ(demandas(ruta2)) - rutas[ruta2][c2].demanda + rutas[ruta1][c1] < G.capacidad_total):
+        temp ← rutas[ruta1][c1]
+        rutas[ruta1][c1] ← rutas[ruta2][c2]
+        rutas[ruta2][c2] ← temp
     return rutas
 .codeblock/
 
-siendo shift un procedimiento tal que dadas dos rutas de la solución, remueve un cliente de una ruta y lo inserta en otra (siempre que la demanda del cliente insertado no exceda la capacidad del camión que recorre esa ruta) y exchange un swap entre dos clientes de dos rutas (siempre que las capacidades de los camiones de ambas rutas no sea excedido).
-En la operación shift la inserción siempre se realizará de manera que la suma del costo de las aristas agregadas menos la arista removida sea mínimo.
+Como podemos ver, ``Shift`` es un procedimiento tal que dadas dos rutas de la solución, remueve un cliente de una ruta y lo inserta en otra (siempre que la demanda del cliente insertado no exceda la capacidad del camión que recorre esa ruta) y ``Exchange`` un swap entre dos clientes de dos rutas (siempre que las capacidades de los camiones de ambas rutas no sea excedido).
+En la operación ``Shift`` la inserción siempre se realizará de manera que la suma del costo de las aristas agregadas menos la arista removida sea mínimo.
 (par)
 
 (par)
@@ -90,22 +102,56 @@ Como **Cooling Schedule** tendremos varias opciones con diferente efectividad. M
 
 
 (par)
-Nuestra función de probabilidad será P = e^-Δ/Ti siendo Δ = E(S') - E(S) siendo E la función de energía de una solución que en nuestro caso corresponde al valor de la solución, es decir, la suma total de la distancia recorrida por cada camión. Notemos que a medida que Ti disminuye el valor de P también lo hace, cumpliendo la regla general "a menos temperatura, menos aceptación" mencionada previamente. En __P__ también tenemos en cuenta el valor de delta; si es negativo quiere decir que __S'__ es menor que __S__ y por lo tanto __P__ dará un número mayor que uno de manera que aceptaremos __S'__ como solución. En cambio si delta es positivo, su aceptación dependerá de su magnitud y de la temperatura, efectivamente cumpliendo que si __S'__ es considerablemente peor que __S__ sólo se acepte bajo altas temperaturas. 
+Nuestra función de probabilidad será P = e^-Δ/Ti siendo Δ = E(S') - E(S) y E la función de energía de una solución que en nuestro caso corresponde al valor de la solución, es decir, la suma total de la distancia recorrida por cada camión. Notemos que a medida que Ti disminuye el valor de P también lo hace, cumpliendo la regla general "a menos temperatura, menos aceptación" mencionada previamente. En __P__ también tenemos en cuenta el valor de delta; si es negativo quiere decir que __S'__ es menor que __S__ y por lo tanto __P__ dará un número mayor que uno de manera que aceptaremos __S'__ como solución. En cambio si delta es positivo, su aceptación dependerá de su magnitud y de la temperatura, efectivamente cumpliendo que si __S'__ es considerablemente peor que __S__ sólo se acepte bajo altas temperaturas. 
 (par)
 
 (par)
-Demos un pseudocódigo completo para nuestra implementación de Simulated Annealing:
-(todo)Dar pseudocódigo completo (obviamente formal, pero usando P, CS y eso con sus valores reales)(todo)
+El único parámetro que nos queda por elegir es la heurística inicial (S0) a ser utilizada. Para S0 se puede elegir cualquier heurística, pero decidimos utilizar la solución a la que llamaremos canónica, en la que la ruta de cada vehículo consiste únicamente en ir a un único cliente y volver al depósito. Si bien esta heurística nos provee con una primera solución muy ineficiente, nos permite observar más fácilmente las ganancias de rendimiento de Simulated Annealing y en muchos casos ha resultado en soluciones mejores que otras heurísticas iniciales.
 (par)
 
+(par)
+Es importante aclarar que realizamos una leve modificación al esquema de Simulated Annealing propuesto. En vez de determinar la finalización de la búsqueda cuando la temperatura llegue a un determinado valor, hemos agregado un nuevo parámetro __NIt__ que nos indica el número de iteraciones a realizar. Este parámetro es útil ya que nos permite modificar la curva descrita por el Cooling Schedule y nos provee una cota superior de iteraciones para hacer análisis de tiempo de ejecución más fácilmente.
+(par)
 
 ***3.4.2. Analisis de complejidad***
 (par)
-(todo)explicarlo mejor con el pseudocódigo. No hay cota simple mas ajustada no?(todo) Dado que todas las operaciones se realizan en tiempo constante excepto shift que en su peor caso inserta en una ruta con todos los elementos menos uno, una cota simple del peor caso sería __n__ * __NIt__ donde n es la cantidad de nodos del grafo y __NIt__ es la cantidad de iteraciones. Es una cota brusca porque la probabilidad de inserciones en rutas grandes disminuye a medida que aumenta la cantidad de clientes (porque mientras más clientes tiene una ruta, menos probable es que siga teniendo espacio), pero dar una cota más ajustada es complejo porque depende de la instancia particular.
+ Dado que todas las operaciones se realizan en tiempo constante excepto el cálculo de la solución canónica que es O(n) y ``Shift`` que en su peor caso inserta en una ruta con todos los elementos menos uno, una cota simple del peor caso sería __n__ * __NIt__ donde n es la cantidad de nodos del grafo y __NIt__ es la cantidad de iteraciones. Es una cota brusca porque la probabilidad de inserciones en rutas grandes disminuye a medida que aumenta la cantidad de clientes (porque mientras más clientes tiene una ruta, menos probable es que no se exceda la capacidad del vehículo), pero dar una cota más ajustada es complejo porque depende de la instancia particular.
 (par)
 
-(todo)Mostrar los graficos que muestran que el algoritmo es lineal en funcion del nro de iteraciones(todo)
+(par)
+Para corroborar esta cota, veamos que Simulated Annealing es lineal en función de __n__ y de __NIt__:
+(par)
 
+(ps)
+    (p33)
+        (img)SAtiempo100.png(img)
+    (/p33)
+    (p33)
+        (img)SAtiempo1000.png(img)
+    (/p33)
+    (p33)
+        (img)SATiempo10000.png(img)
+    (/p33)
+(/ps)
+
+(par)
+Fijando __NIt__ en un valor constante, vemos como el algoritmo es lineal en función de __n__.
+(par)
+(ps)
+    (p33)
+        (img)SATiempoVariandoNIt103.png(img)
+    (/p33)
+    (p33)
+        (img)SATiempoVariandoNIt203.png(img)
+    (/p33)
+    (p33)
+        (img)SATiempoVariandoNIt303.png(img)
+    (/p33)
+(/ps)
+
+(par)
+Fijando __n__ en un valor constante, vemos como el algoritmo es lineal en función de __NIt__.
+(par)
 ***3.4.3. Búsqueda de parámetros óptimos: caso aleatorio***
 
 (par)
@@ -116,10 +162,8 @@ Busquemos el valor óptimo de los parámetros de nuestro algoritmo de Simulated 
 Para esto realizaremos una serie de experimentos, comenzando por un análisis de cómo el número de iteraciones realizadas (__Nit__) afecta el resultado. Sabemos que mientras más iteraciones realizemos mejor será el resultado ya que a fin de cuentas estamos realizando una búsqueda local, pero la pregunta que intentaremos responder es ¿Cuántas iteraciones tiene sentido medir? ¿Hay un punto a partir del cual la mejora obtenida de realizar más iteraciones no justifica el costo en tiempo de ejecución?
 (par)
 
-(todo)aclarar como fueron generadas las instancias, supongo que lo voy a aclarar una sola vez!(todo)
-
 (par)
-El experimento consistirá en medir el ahorro porcentual con respecto a la solución canónica  promedio obtenido luego de __Nit__ iteraciones para 400 instancias aleatorias del problema ), con un varios n fijos. Decidimos comparar con la solución canónica para poder comparar los resultados de diferentes n más claramente. La diferencia en efectividad observada utilizando las tres variantes de Cooling schedule dieron resultados muy similares, por lo que decidimos utilizar un único Cooling Schedule para la medición por practicidad. A continuación mostramos los resultados obtenidos:
+El experimento consistirá en medir el ahorro porcentual con respecto a la solución canónica  promedio obtenido luego de __Nit__ iteraciones para 400 instancias aleatorias del problema ), con un varios n fijos. Decidimos comparar con la solución canónica para poder comparar los resultados de instancias de tamaños diferentes más claramente. La diferencia en efectividad observada utilizando las tres variantes de Cooling schedule dieron resultados muy similares, por lo que decidimos utilizar un único Cooling Schedule para la medición por practicidad. A continuación mostramos los resultados obtenidos:
 (par)
 
 (ps)
@@ -129,7 +173,7 @@ El experimento consistirá en medir el ahorro porcentual con respecto a la soluc
     (/p50)
     (p50)
         (img)SANIt503.png(img)
-        (caption)Ahorro porcentual de la solución canónica en función de NIt, __n__ = 503caption)
+        (caption)Ahorro porcentual de la solución canónica en función de NIt, __n__ = 503(caption)
     (/p50)
 (/ps)
 
@@ -139,8 +183,11 @@ Como podemos apreciar en los gráficos nuestras predicciones fueron correctas. A
 (par)
 
 (par)
-(todo)aclarar como son "las instancias"(todo)
+<<<<<<< HEAD
 Teniendo en cuenta las caracteristicas de las instancias que mediremos y que no disponemos de tiempo ilimitado para realizar las mediciones, decidimos que __Nit__ = 10.000 es suficientemente grande para ser representativo del resultado del algoritmo y suficientemente pequeño para poder realizar el resto de las mediciones en un tiempo razonable.
+=======
+Teniendo en cuenta que no disponemos de tiempo ilimitado para realizar las mediciones, decidimos que __Nit__ = 10.000 es suficientemente grande para ser representativo del resultado del algoritmo y suficientemente pequeño para poder realizar el resto de las mediciones en un tiempo razonable.
+>>>>>>> 419812510afcca07d1b4e26995dcd1d9e254468b
 (par)
 
 (par)
@@ -174,12 +221,11 @@ Se puede ver que __CS0__ y __CS1__ se comportan de manera identica excepto por l
 Es importante destacar que a medida que aumenta n, todos las variantes de Cooling Schedule bajan en efectividad. Esto puede deberse al número de iteraciones, que como vimos anteriormente, debería ser mayor para dar mejores resultados en instancias de mayor tamaño.
 (par)
 
-(todo)Explicar como son las instancias del set A (a menos que se haga antes en el informe)(todo)
-
 ***3.4.4. Búsqueda de parámetros óptimos: Set A***
 
+(todo)Si antes se aclara cómo medimos, esta aclaracion esta al pedo, puedo referenciar a lo otro.(todo)
 (par)
-Busquemos ahora los parámetros óptimos para el set de instancias "Set A" propuesto por Augerat en 1995. Son instancias en las que se conoce el óptimo, por lo que en vez de medir los resultados como ahorro porcentual de la solución canónica los mediremos como distancia porcentual de la solución óptima; es decir, cuánto porciento mayor es nuestra solución comparada a la solución óptima. Esta manera de medir los resultados nos resulta más significativa que el ahorro porcentual de la solución canónica , que si bien es una medida aceptable para los casos aleatorios porque no tenemos información del óptimo, no es una medida de qué tan buena es la solución con respecto al mejor resultado posible.
+Busquemos ahora los parámetros óptimos para el set de instancias "Set A" propuesto por Augerat en 1995. Consta de aproximadamente 20 instancias pequeñas que poseen entre 30 y 80 puntos distribuidos aleatoriamente, muy similar la generadas por nuestro generador. Al ser instancias en las que se conoce el óptimo, en vez de medir los resultados como ahorro porcentual de la solución canónica los mediremos como distancia porcentual de la solución óptima; es decir, cuánto porciento mayor es nuestra solución comparada a la solución óptima. Esta manera de medir los resultados nos resulta más significativa que el ahorro porcentual de la solución canónica , que si bien es una medida aceptable para los casos aleatorios porque no tenemos información del óptimo, no es una medida de qué tan buena es la solución con respecto al mejor resultado posible.
 (par)
 
 (par)
@@ -189,21 +235,18 @@ La búsqueda de los parámetros óptimos se realizó calculando la distancia por
 (par)
 La configuración óptima resultante fue como Cooling Schedule CS1, como temperatura inicial __Ts__ = 8 y número de iteraciones __NIt__ = 15000. Veamos a continuación la distancia porcentual al óptimo para cada instancia del set con la configuración óptima:
 (par)
-
-(img)SAdistOptimoA.png(img)
+/imagesmall.SAdistOptimoA.png.imagesmall/
 
 ***3.4.5. Búsqueda de parámetros óptimos: Set X***
 
 (par)
-(todo)Explicar como son las instancias del set X (a menos que se haga antes en el informe)(todo)
 Busquemos los parámetros óptimos para el set de instancias "Set X" propuesto por Uchoa et al. en 2014. Lo haremos de manera análoga a como lo hicimos para el Set A previamente.
 (par)
 
 (par)
 Los resultados obtenidos fueron como Cooling Schedule __CS1__, __Ts__ = 20 y __NIt__ = 15000. Presentamos a continuación la distancia porcentual al óptimo para cada instancia del set con ésta configuración:
 (par)
-
-(img)SAdistOptimoX.png(img)
+/imagesmall.SAdistOptimoX.png.imagesmall/
 
 ***3.4.5. Conclusiones de la experimentación***
 

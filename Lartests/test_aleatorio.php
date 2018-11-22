@@ -1,6 +1,6 @@
 <?php
-    $maxn = 100;
-    $maxm = 100;
+    $maxn = 200;
+    $maxm = 1000;
     $rutaExe = "../Codigo/proxMinimo/proxMinimoMediciones";
 
     //Verifico que todos los archivos existan
@@ -30,6 +30,8 @@
             $mediciones = $mediciones .  shell_exec("nice -n 0 $rutaExe $rutaArchivo");
         }
     }
+    
+    str_replace("%", "", $mediciones);
     
     //Guardo el resultado
     file_put_contents("resultados_aleatorios.txt", $mediciones);

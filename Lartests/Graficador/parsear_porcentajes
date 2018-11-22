@@ -1,0 +1,5 @@
+cp ../resultados_aleatorios.txt resultados.txt
+awk -f parseador_porcentajes.awk resultados.txt > medias.txt
+rm resultados.txt
+python3 graficador_porcentajes.py
+rm medias.txt

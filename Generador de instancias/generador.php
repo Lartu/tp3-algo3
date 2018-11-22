@@ -20,18 +20,17 @@
     $c1 = $argv[3];
     $c2 = $argv[4];
     
-    if(!file_exists("./instancias_generadas")) 
-        mkdir("./instancias_generadas");
+    if(!file_exists("../Instancias_Aleatorias")) 
+        mkdir("../Instancias_Aleatorias");
     
     // - Ciclo por cada n generando m instancias
     for($n = 3; $n <= $max_elems; ++$n)
     {
         echo "$n";
-        if(!file_exists("./instancias_generadas/$n-elementos")) 
-            mkdir("./instancias_generadas/$n-elementos");
+        if(!file_exists("../Instancias_Aleatorias/$n-elementos")) 
+            mkdir("../Instancias_Aleatorias/$n-elementos");
         for($m = 1; $m <= $cant_inst; ++$m)
         {
-            echo ".";
             // - Genero una instancia nueva -
             $instancia = "NAME : LPS-n$n-m$m\n";
             $instancia = $instancia . "COMMENT : (Lartu-Peter-Santi Plot, instance " . (($n-3) * $cant_inst + ($m)) . " out of " . (($max_elems-2) * $cant_inst) . ". $n customers.)\n";
@@ -62,7 +61,7 @@
                 $instancia = $instancia . "$p $peso\n";
             }
             $instancia = $instancia . "DEPOT_SECTION\n 1\n -1\nEOF\n";
-            file_put_contents("./instancias_generadas/$n-elementos/LPS-n$n-m$m.vrp", $instancia);
+            file_put_contents("../Instancias_Aleatorias/$n-elementos/LPS-n$n-m$m.vrp", $instancia);
         }
         echo "\n";
     }
