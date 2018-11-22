@@ -306,6 +306,11 @@ p_solucion l_heuristicaProxMinimo(const S_CVRP & grafo)
 
 int main(int argc, char** argv)
 {
+    if(argc < 2){
+        cout << "Uso: proxMinimo <set>" << endl;
+        return 1;
+    }
+    
     // - cargo archivo -
 	string fileName(argv[1]);
     
