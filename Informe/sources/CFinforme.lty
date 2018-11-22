@@ -336,7 +336,7 @@ la segunda el mejor __f_t__ encontrado y la ultima el mejor __d__. (img)tablaEI.
 ***Caso aleatorio:***
 
 (par)
-En este caso los algoritmos fueron corridos con instancias de tamaño 1 al 100 habiendo 400 instancias de tamaño 1 &le; n &le; 100.
+En este caso los algoritmos fueron corridos con instancias de tamaño 1 al 1000 habiendo 400 instancias de tamaño 1 &le; n &le; 1000.
 (par)
 (par)
 ***Ejes inconsistentes:***
@@ -426,8 +426,13 @@ Teniendo en cuenta todo el análisis previo podemos ver que en __EI__ tanto para
 Al tener mas puntos en el plano queremos agrupar los que esten a una distancia mas corta ya que queremos que nuestros clusters queden bien definidos, achicar el __f_t__ en este caso nos agruparía puntos que a simple vista no serían clusterizables. Esto no sucede en el __caso A__ porque al ser menor la cantidad de puntos, es mas vaga la definición a simple vista de los clusters, por eso el __f_t__ es menor.
 (par)
 (par)
+Entendemos que la performance a comparación del otro algoritmo de clusterización es considerablemente peor pero esto lo adjudicamos a que la clusterización
+de este algoritmo no está pensada para este problema sino que la adaptamos para que funcione en el mismo.
+(par)
+(par)
 Por último podemos observar que en el caso aletorio el __d__ se achica en una unidad y el __f_t__ baja. Concluímos que esto es debido a que los clusters en este set no siguen ninguna distribución en particular (respetando la aleatoreidad) por lo que nuestro criterio de clusterización es lo mas laxo posible.
 (par)
+
 
 (par)
 En cuanto a costos, el algoritmo no tiene una performance deseable para ninguna de los 3 conjuntos. Más teniendo en cuenta tenemos otro algoritmo que realiza el mismo procedimiento __(cluster-first route-second)__ que este y se comporta de manera mucho mas eficiente tanto en tiempo como en calidad de soluciones.
