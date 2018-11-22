@@ -186,7 +186,7 @@ p_solucion l_heuristicaProxMinimo(const S_CVRP & grafo)
                     
                     // - Guardo lo que todavía no recorrí en la otra -
                     else{
-                        if(k == 1) cout << "Parto en 0. Demanda " << demandaNodo  << endl;
+                        //if(k == 1) cout << "Parto en 0. Demanda " << demandaNodo  << endl;
                         nuevaRuta2.push_back(rutas[j][k]);
                     }
                 }
@@ -218,7 +218,7 @@ p_solucion l_heuristicaProxMinimo(const S_CVRP & grafo)
         
         //TODO poner linda esta parte
         // - Veo si es posible combinar rutas -  (n^2)
-        cout << "[*] Busco rutas combinables..." << endl;
+        //cout << "[*] Busco rutas combinables..." << endl;
         vector<pair<double, pair<int, int>>> posiblesCombinaciones; //Peso, camino 1 - camino 2
         for(int i = 0; i < cargas.size(); ++i)
         {
@@ -242,7 +242,7 @@ p_solucion l_heuristicaProxMinimo(const S_CVRP & grafo)
         }
         
         reduje = true;
-        cout << "=> Selecciono rutas de esas que sean mutualmente excluyentes..." << endl;
+        //cout << "=> Selecciono rutas de esas que sean mutualmente excluyentes..." << endl;
         double ahorroTotal = 0;
         if(!posiblesCombinaciones.empty()){
             //TODO poner linda esta parte
@@ -257,22 +257,22 @@ p_solucion l_heuristicaProxMinimo(const S_CVRP & grafo)
                 {
                     combinacionesHechas[primerCamino] = true;
                     combinacionesHechas[segundoCamino] = true;
-                    cout << " - Los caminos " << comb.second.first << " y " << comb.second.second << " son combinables";
-                    cout << " - Me ahorro: " << comb.first << ". Los combino." << endl;
+                    //cout << " - Los caminos " << comb.second.first << " y " << comb.second.second << " son combinables";
+                    //cout << " - Me ahorro: " << comb.first << ". Los combino." << endl;
                     l_combinarCaminos(rutas, primerCamino, segundoCamino);
                     reduje = true;
                     ahorroTotal += comb.first;
                 }
             }
             
-            cout << "[*] Me ahorré " << ahorroTotal << ", soy re capo" << endl;
+            //cout << "[*] Me ahorré " << ahorroTotal << ", soy re capo" << endl;
             
             //TODO poner esto lindo
             //Borro rutas que dejé vacías
             auto it = rutas.begin();
             while(it != rutas.end()){
                 if(it->empty()){
-                    cout << " - Borro un camino vacío dejado por el paso anterior..." << endl;
+                    //cout << " - Borro un camino vacío dejado por el paso anterior..." << endl;
                     rutas.erase(it);
                     it = rutas.begin();
                 }else{
@@ -287,10 +287,10 @@ p_solucion l_heuristicaProxMinimo(const S_CVRP & grafo)
                 cargas.push_back(l_calcularCosteRuta(grafo, rutaActual));
             }
             
-            cout << "[*] Busco de nuevo." << endl;
+            //cout << "[*] Busco de nuevo." << endl;
         }
     }while(!reduje);
-    cout << "[*] Listo, optimizado como se pudo." << endl;
+    //cout << "[*] Listo, optimizado como se pudo." << endl;
     
     // - Calculo la distancia total recorrida -
     double costoTotal = 0;
@@ -306,6 +306,11 @@ p_solucion l_heuristicaProxMinimo(const S_CVRP & grafo)
 
 int main(int argc, char** argv)
 {
+    if(argc < 2){
+        cout << "Uso: proxMinimo <set>" << endl;
+        return 1;
+    }
+    
     // - cargo archivo -
 	string fileName(argv[1]);
     
@@ -316,9 +321,9 @@ int main(int argc, char** argv)
     S_CVRP grafo = S_CVRP(archivo);
     
     // - Obtengo lo que me costaría sin optimizar -
-    double costeSinOptimizar = l_costeSinOptimizar(grafo);
+    /*double costeSinOptimizar = l_costeSinOptimizar(grafo);
     cout << "\033[1;36mCoste sin optimizar\033[m: ";
-    cout << costeSinOptimizar << endl;
+    cout << costeSinOptimizar << endl;*/
     
     // - Obtengo una solución heurística por proxMinimo -
     p_solucion l_sol = l_heuristicaProxMinimo(grafo);
@@ -327,11 +332,11 @@ int main(int argc, char** argv)
     l_sol.imprimirRutas();
     
     // - Imprimo mejora porcentual -
-    double porcentaje = l_sol.costoTotal * 100 / costeSinOptimizar;
+    /*double porcentaje = l_sol.costoTotal * 100 / costeSinOptimizar;
     cout << "\033[1;37mPorcentaje de coste final\033[m: ";
-    cout << porcentaje << "%" << endl;
+    cout << porcentaje << "%" << endl;*/
     
     // - Reviso que la solución sea válida -
-    cout << "Es solución: ";
-    cout << (l_sol.esSolucion(grafo) ? "sí" : "no") << endl;
+    //     cout << "Es solución: ";
+    //     cout << (l_sol.esSolucion(grafo) ? "sí" : "no") << endl;
 }
