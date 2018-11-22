@@ -20,9 +20,18 @@ no excede la capacidad de nuestros camiones.
 (par)
 
 (par)
+El archivo donde fue implementado este algoritmo se encuentra en la carpeta Codigo/Cluster-First/ClusterFirstSweep.cpp. Luego de ser compilado, al momento de la ejecución toma dos parámetros, la instancia del problema a resolver y el punto inicial (entero mayor o igual que cero y menor que el tamaño de la instancia).
+(par)
+
+(par)
 ***Cluster-First por ejes inconsistentes:***
 Como segunda opción de clusterización, vamos a usar el algoritmo ya implementado en nuestro previo trabajo de investigación, el cual clusteriza transformando el grafo original en un __AGM__ y chequeando que si un eje de nuestro __AGM__ es considerablemente mas largo que sus vecinos este mismo se elimina quedando dos partes del grafo claramente separadas. Cabe aclarar que en caso de haber generado clusters que exceden la capacidad máxima de nuestros camiones, estos mismos van a ser reclusterizados hasta que los nuevos clusters cumplan con la restricción, ya que este clusterizador no esta diseñado específicamente para resolver __CVRP__
 (par)
+
+(par)
+El archivo donde fue implementado este algoritmo se encuentra en la carpeta Codigo/Cluster-First/ClusterFirstEI.cpp. Luego de ser compilado, al momento de la ejecución toma tres parámetros, la instancia del problema a resolver, f_t (un float mayor o igual que cero) y el d (un entero mayor que cero) a utilizar.
+(par)
+
 
 (par)
 ***Route-Second:***
