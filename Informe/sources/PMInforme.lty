@@ -159,7 +159,12 @@ unirCaminos(rutas):
     Hecho esto, tenemos en rutas una serie de caminos que cumplen con la capacidad de los camiones y cuya distancia es igual o menor a la del caso canónico. Cada ruta es disjunta con cualquier otra ruta (a excepción de los depósitos) y la cantidad de camiones a utilizar es la misma que la cantidad de rutas a recorrer.
 (par)
 
-***3.1.2. Análisis de complejidad temporal***
+***3.1.2. Ejecutable***
+(par)
+    Esta heurística se encuentra en directorio ``Codigo/proxMinimo``, es el archivo ``proxMinimo``. Para ejecutarla basta con escribir el comando ``./proxMinimo <set>`` con algún archivo de set de TSPLib. Su código fuente es ``proxMinimo.cpp``.
+(par)
+
+***3.1.3. Análisis de complejidad temporal***
 (par)
     Partiendo de las secciones del algoritmo explicitadas en la **sección 3.1.1**, analicemos la complejidad de la heurística.
 (par)
@@ -180,12 +185,12 @@ unirCaminos(rutas):
     Dado que de los tres pasos, ``unirCaminos`` es el más costoso, la complejidad de esta heurística acaba siendo __O(n^^3^^)__.
 (par)
 
-***3.1.3. Rendimiento para instancias predefinidas***
+***3.1.4. Rendimiento para instancias predefinidas***
 (todo)
     Hacer
 (todo)
 
-***3.1.4. Rendimiento para instancias aleatorias***
+***3.1.5. Rendimiento para instancias aleatorias***
 
 (par)
     Para estabilizar la medición, la heurística fue ejecutada sobre ciento noventa y ocho mil instancias generadas aleatoriamente por el generador mencionado en la **sección 2.3**, __1000__ para cada cantidad de nodos entre __3__ y __200__. Se midió el tiempo de ejecución de la heurística para cada caso evaluado y se plasmó el resultado en el gráfico presentado a la derecha de este párrafo. La medición total, en el equipo mencionado en la **sección 2.1** llevó aproximadamente una hora y cuarenta minutos.
@@ -210,7 +215,7 @@ unirCaminos(rutas):
     En lo que respecta a la calidad de las soluciones, para el caso aleatorio el ahorro porcentual representó, en promedio, un 37% de ahorro con respecto a la solución canónica. En los mejores casos este ahorro fue del 41%, mientras que en los casos más patológicos -presentados principalmente cuando la instancia contaba con poca cantidad de nodos- el ahorro fue nulo.
 (par)
 
-***3.1.5. Caso patológico***
+***3.1.6. Caso patológico***
 
 (par)
     Está claro por la sección **3.1.1** que, en el peor caso, esta heurística devolverá el caso canónico. Si no se tiene en cuenta las demandas de los clientes, esto podría suceder en casos donde se tenga dos nodos enfrentados en lados opuestos del depósito únicamente, ya que de haber por lo menos un nodo más por desigualdad triangular será más eficiente unir dos de ellos. En el caso con dos nodos mencionado, unirlos o presentar la solución canónica implica el mismo impacto en el trayecto a recorrer.
@@ -220,7 +225,7 @@ unirCaminos(rutas):
     Cuando la capacidad de los camiones comienza a entrar en juego, sin embargo, se presentan una serie más de casos que pueden acabar en la solución canónica, y es cuando no es posible unir caminos de nodos de forma que su demanda sea menor a la capacidad de nuestro camión. Esto significa que todo par de nodos __i__, __j__ cumple que __i + j > capacidad__, entonces nos encontraremos en un peor caso. Esto ocurre cuando para cada nodo __i__ vale que __demanda(i) > capacidad / 2__.
 (par)
 
-***3.1.6. Conclusiones***
+***3.1.7. Conclusiones***
 (par)
     La __heurística del próximo mínimo__ ejecuta en tiempo que escala de forma razonable al tamaño de su entrada y resulta en buenas soluciones si los puntos a visitar se encuentran cerca entre sí y sus demandas son bajas (llegando a costar el 59% del coste ofrecido por el caso canónico) y en soluciones aceptables para el promedio de los casos (aproximadamente el 63% de la solución canónica). Es sencillo de comprender y fácil de implementar, por lo que lo convierte en un acercamiento inicial tentador a la búsqueda de soluciones combinatorias para el CVRP.
 (par)
