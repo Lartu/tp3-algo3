@@ -3,12 +3,18 @@
 *****3. Soluciones Aproximadas*****
 
 ****3.a. Introducción****
-(todo)
-    Explicar qué hacemos con estas soluciones y eso. Ley de grandes números va acá.
-(todo)
-(todo)
-	Estaria bueno hablar del equipo utilizado y de las mediciones. tambien deberiamos aclarar por qué medimos como medimos, es decir, por que en los casos aleatorios medimos como ahorro porcentual de la solución canónica y en los casos conocidos como porcentaje respecto del óptimo.
-(todo)
+
+(par)
+    Nuestro objetivo en esta sección será medir la eficacia de las heurísticas que implementamos. Para esto compararemos los resultados de aplicar cada una de ellas sobre los casos de test ofrecidos por la cátedra (de los cuales una solución óptima o, cuando menos, una cota inferior es conocida) y sobre casos aleatorios propios, por los motivos explicitados en la **sección 1.4**. Los resultados obtenidos sobre casos de óptimo conocido serán dados en porcentaje de diferencia con el óptimo, es decir, qué tanto más grandes que el óptimo son. Un resultado que sea 50% más grande que el óptimo será el óptimo y medio, mientras que uno que sea 200% será el doble.
+(par)
+
+(par)
+    Los resultados obtenidos sobre casos aleatorios, por el contrario, al no disponer de una cota inferior se miden en porcentaje de distancia con el caso canónico, es decir, qué porcentaje del caso canónico representan. Esto puede darse así ya que la solución nunca será peor que el caso canónico y, por tanto, nunca se superará el 100%. Esto ya ha sido visto en detalle en la **sección 1.5**.
+(par)
+
+(par)
+    Las mediciones no han sido realizadas un número estándar de veces, sino que su repetición ha sido adaptada por algoritmo. Si bien la base elegida ha sido la mencionada en la **sección 2.3**, es decir, mil mediciones por conjunto de instancias, este valor ha variado ulteriormente según la heurística tratada. Se ha intentado decidir por un valor que minimice la presencia de ruido en nuestros resultados, pero se ha tenido en consideración el tiempo requerido para realizar dichos experimentos.
+(par)
 
 ****3.b. tsplib.h****
 (todo)explicar(todo)
