@@ -9,13 +9,25 @@
     De entre todo el abanico de problemas presentado, este trabajo focalizará el **problema de ruteo de vehículos con capacidad** (__CVRP__). El mismo consiste en lo siguiente: se tiene una serie de clientes distribuídos en un plano, cuya posición se determina por sus coordenadas X e Y. Cada cliente ha realizado un pedido de una determinada cantidad de mercancía (__demanda__) que habremos de suplir con nuestra flota de camiones, a priori infinita. Cada vehículo de nuestra flota, sin embargo, contará con una capacidad de carga máxima. Un punto extra, el __depósito__ existe como comienzo y final del recorrido de nuestros camiones. Se desea minimizar la distancia recorrida en total, siempre asegurando que las demandas de los clientes sean cubiertas y que, además, cada cliente sea visitado una única vez.
 (par)
 
+(ps)
+    (p50)
+    (img)cvrp1.png(img)
+    (caption)Figura 1(caption)
+    (/p50)
+    
+    (p50)
+    (img)cvrp2.png(img)
+    (caption)Figura 2(caption)
+    (/p50)
+(/ps)
+
+(par)
+    En la **figura 1** se puede observar un ejemplo de CVRP. En naranja se encuentran marcados los clientes, mientras que en azul, el depósito. Si bien uno podría visitar a los clientes como quisiera -siempre y cuando la capacidad nuestro vehículo fuese suficiente- en la **figura 2** se presenta la solución **óptima** al problema, en la cual la distancia a recorrer es mínima. Con nuestras heurísticas intentaremos aproximar lo más posible a una solución de estas características.
+(par)
+
 (par)
     Si bien es sabido que este problema pertenece a la categoría de problemas __NP__-hard, en el presente informe no buscaremos dar con la solución óptima sino con una heurística suficientemente eficiente como para obtener resultados de buena calidad tanto para instancias individuales como para instancias desconocidas.
 (par)
-
-(todo)
-    Dar ejemplos de CVRP y sus soluciones (casos de test, no cosas de la vida cotidiana eh). Poner algún caso piola de la página con grafiquitos de la página y eso. Mostrar posibles caminos óptimos y subóptimos y algunos mejores que otros pero peores que el óptimo.
-(todo)
 
 ****1.2. CVRP en la vida cotidiana****
 (par)
@@ -33,6 +45,8 @@
 (par)
     Las posibilidades son infinitas: una tarde perdida de trámite en trámite de una punta a otra de la ciudad podría transformarse en una diligencia de unas pocas horas aplicando correctamente una heurística. Instalaciones como una cañería distribuidora de gas, una cloaca o una tubería de agua podrían ahorrar material, tiempo y esfuerzo implementativo si su trayecto se diseñase modelado como un CVRP. Y estas son tan solo algunas de las aplicaciones, en un caso hipotético. Empresas como **Rappi**, **Glovo**, **Gofer**, **MercadoEnvíos**, **Uber**, ruteadores de GPS (__"a continuación, gire a la derecha__), etc., probablemente lleven a cabo análisis como los que plantearemos a continuación para disminuir sus costos operacionales. Se trata de un problema no exclusivo al mundo de la abstracción científica, sino probablemente surgido - y tanto así aplicado - a partir de una necesidad palpable y material.
 (par)
+
+(pagebreak)
 
 ****1.3. Problemas a resolver****
 
@@ -58,10 +72,7 @@ Los puntos de los casos generados se encuentran distribuidos aleatoriamente y he
 (par)
 
 ****1.5. Caso canónico****
-(rightblock)
-    (img)canonico.png(img)
-    (caption)Ejemplo de caso canónico(caption)
-(rightblock)
+
 (par)
     Para facilitar la comunicación de nuestras ideas y, por lo tanto, la lectura de este documento, hemos definido el __caso canónico__. El caso canónico no es más que la solución trivial a un problema de CVRP, que consiste en tantas rutas como clientes haya, enviando un camión a cada cliente, que entrega la mercadería y regresa al depósito.
 (par)
@@ -69,3 +80,8 @@ Los puntos de los casos generados se encuentran distribuidos aleatoriamente y he
 (par)
     La importancia del caso canónico radica en que es la peor solución posible a un problema de CVRP como los que estamos tratando y es además evidente. Nos intereza porque podemos utilizarla como parámetro para analizar la eficacia de una heurística sobre un caso del que no se sabe nada: podremos desconocer el óptimo, pero podemos calcular y afirmar que nuestra heurística es __n%__ mejor que el caso canónico. Esto da entonces lugar a que una heurística absolutamente inútil sea __0%__ mejor que el caso canónico (es decir que tardó el __100%__ de lo que tardó el caso canónico), mientras que una muy buena pueda ahorrar un __99%__ de la distancia del caso canónico (es decir, ejecutarse en el __1%__ del tiempo que tarda la solución trivial).
 (par)
+
+(center)
+    /imagemid.canonico.png.imagemid/
+    (caption)Ejemplo de caso canónico(caption)
+(center)
